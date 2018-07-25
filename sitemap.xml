@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/about/index.html</loc>
+    
+    <lastmod>2018-07-25T13:44:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2018/07/25/Netty%E5%85%A5%E9%97%A8%E6%B5%85%E6%9E%90(2)/</loc>
     
     <lastmod>2018-07-25T11:10:57.000Z</lastmod>
