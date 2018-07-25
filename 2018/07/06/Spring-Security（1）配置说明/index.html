@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32*32.ico?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16*16.ico?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Spring Security 模块   核心模块 - spring-security-core.jar：包含核心验证和访问控制类和接口，远程支 持的基本配置API，是基本模块   远程调用 - spring-security-remoting.jar：提供与 Spring Remoting 集成   网页 - spring-security-web.jar：包括网站安全的模块，提供网站认证服务和">
+<meta name="keywords" content="Java,Spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Security（1）配置说明">
+<meta property="og:url" content="http://yoursite.com/2018/07/06/Spring-Security（1）配置说明/index.html">
+<meta property="og:site_name" content="hhbbz-Blog">
+<meta property="og:description" content="Spring Security 模块   核心模块 - spring-security-core.jar：包含核心验证和访问控制类和接口，远程支 持的基本配置API，是基本模块   远程调用 - spring-security-remoting.jar：提供与 Spring Remoting 集成   网页 - spring-security-web.jar：包括网站安全的模块，提供网站认证服务和">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-07-07T13:00:31.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring Security（1）配置说明">
+<meta name="twitter:description" content="Spring Security 模块   核心模块 - spring-security-core.jar：包含核心验证和访问控制类和接口，远程支 持的基本配置API，是基本模块   远程调用 - spring-security-remoting.jar：提供与 Spring Remoting 集成   网页 - spring-security-web.jar：包括网站安全的模块，提供网站认证服务和">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/06/Spring-Security（1）配置说明/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Spring Security（1）配置说明 | hhbbz-Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">hhbbz-Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/06/Spring-Security（1）配置说明/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="hhbbz">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/TOM.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hhbbz-Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spring Security（1）配置说明
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-07-06 18:35:40" itemprop="dateCreated datePublished" datetime="2018-07-06T18:35:40+08:00">2018-07-06</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-07 21:00:31" itemprop="dateModified" datetime="2018-07-07T21:00:31+08:00">2018-07-07</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1>Spring Security 模块</h1>
+<ul>
+<li>
+<p><strong>核心模块</strong> - spring-security-core.jar：包含核心验证和访问控制类和接口，远程支 持的基本配置API，是基本模块</p>
+</li>
+<li>
+<p><strong>远程调用</strong> - spring-security-remoting.jar：提供与 Spring Remoting 集成</p>
+</li>
+<li>
+<p><strong>网页</strong> - spring-security-web.jar：包括网站安全的模块，提供网站认证服务和基于URL访问控制</p>
+</li>
+<li>
+<p><strong>配置</strong> - spring-security-config.jar：包含安全命令空间解析代码，若使用XML进行配置则需要</p>
+</li>
+<li>
+<p><strong>LDAP</strong> - spring-security-ldap.jar：LDAP 验证和配置，若需要LDAP验证和管理LDAP用户实体</p>
+</li>
+<li>
+<p><strong>ACL访问控制表</strong> - spring-security-acl.jar：ACL专门领域对象的实现</p>
+</li>
+<li>
+<p><strong>CAS</strong> - spring-security-cas.jar：CAS客户端继承，若想用CAS的SSO服务器网页验证</p>
+</li>
+<li>
+<p><strong>OpenID</strong> - spring-security-openid.jar：OpenID网页验证支持</p>
+</li>
+<li>
+<p><strong>Test</strong> - spring-security-test.jar：支持Spring Security的测试</p>
+</li>
+</ul>
+<h1>默认执行顺序</h1>
+<h2>UsernamePasswordAuthenticationFilter</h2>
+<ol>
+<li>用户通过url：/login 登录，该过滤器接收表单用户名密码</li>
+<li>判断用户名密码是否为空</li>
+<li>生成 UsernamePasswordAuthenticationToken</li>
+<li>将Authentiction 传给 AuthenticationManager接口的 authenticate 方法进行认证处理</li>
+<li>AuthenticationManager 默认是实现类为 ProviderManager ，ProviderManager 委托给 AuthenticationProvider 进行处理</li>
+<li>UsernamePasswordAuthenticationFilter 继承了 AbstractAuthenticationProcessingFilter 抽象类，AbstractAuthenticationProcessingFilter 在 successfulAuthentication 方法中对登录成功进行了处理，通过 SecurityContextHolder.getContext().setAuthentication() 方法将 Authentication 认证信息对象绑定到 SecurityContext</li>
+<li>下次请求时，在过滤器链头的 SecurityContextPersistenceFilter 会从 Session 中取出用户信息并生成 Authentication（默认为 UsernamePasswordAuthenticationToken），并通过 SecurityContextHolder.getContext().setAuthentication() 方法将 Authentication 认证信息对象绑定到 SecurityContext</li>
+<li>需要权限才能访问的请求会从 SecurityContext 中获取用户的权限进行验证
+DaoAuthenticationProvider （实现了 AuthenticationProvider）：
+通过 UserDetailsService 获取 UserDetails
+将 UserDetails 和 UsernamePasswordAuthentionToken 进行认证匹配用户名密码是否正确
+若正确则通过 UserDetails 中用户的权限、用户名等信息生成一个新的 Authentication 认证对象并返回</li>
+</ol>
+<h2>DaoAuthenticationProvider （实现了 AuthenticationProvider）</h2>
+<ol>
+<li>通过 UserDetailsService 获取 UserDetails</li>
+<li>将 UserDetails 和 UsernamePasswordAuthentionToken 进行认证匹配用户名密码是否正确</li>
+<li>若正确则通过 UserDetails 中用户的权限、用户名等信息生成一个新的 Authentication 认证对象并返回</li>
+</ol>
+<h1>相关类</h1>
+<h2>WebSecurityConfigurerAdapter</h2>
+<ul>
+<li>为创建 WebSecurityConfigurer 实例提供方便的基类，重写它的 configure 方法来设置安全细节
+<ul>
+<li>configure(HttpSecurity http)：重写该方法，通过 http 对象的 authorizeRequests()方法定义URL访问权限，默认会为 formLogin() 提供一个简单的测试HTML页面</li>
+<li>_configureGlobal(AuthenticationManagerBuilder auth) _：通过 auth 对象的方法添加身份验证</li>
+</ul>
+</li>
+</ul>
+<h2>SecurityContextHolder</h2>
+<ul>
+<li>SecurityContextHolder 用于存储安全上下文信息（如操作用户是谁、用户是否被认证、用户权限有哪些），它用 ThreadLocal 来保存 SecurityContext，者意味着 Spring Security 在用户登录时自动绑定到当前现场，用户退出时，自动清除当前线程认证信息，SecurityContext 中含有正在访问系统用户的详细信息</li>
+</ul>
+<h2>AuthenticationManagerBuilder</h2>
+<ul>
+<li>用于构建认证 AuthenticationManager 认证，允许快速构建内存认证、LDAP身份认证、JDBC身份验证，添加 userDetailsService（获取认证信息数据） 和 AuthenticationProvider's（定义认证方式）</li>
+<li>内存验证：
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(AuthenticationManagerBuilder auth)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">      auth.inMemoryAuthentication()</span><br><span class="line">            .withUser(<span class="string">"user"</span>).password(<span class="string">"123"</span>).roles(<span class="string">"USER"</span>).and()</span><br><span class="line">            .withUser(<span class="string">"admin"</span>).password(<span class="string">"456"</span>).roles(<span class="string">"USER"</span>,<span class="string">"ADMIN"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>JDBC 验证：
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> DataSource dataSource;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(AuthenticationManagerBuilder auth)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    auth.jdbcAuthentication()</span><br><span class="line">            .dataSource(dataSource)</span><br><span class="line">            .withDefaultSchema()</span><br><span class="line">            .withUser(<span class="string">"linyuan"</span>).password(<span class="string">"123"</span>).roles(<span class="string">"USER"</span>).and()</span><br><span class="line">            .withUser(<span class="string">"linyuan2"</span>).password(<span class="string">"456"</span>).roles(<span class="string">"ADMIN"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>userDetailsService(T userDetailsService)：传入自定义的 UserDetailsService 获取认证信息数据</li>
+<li>authenticationProvider(AuthenticationProvider authenticationProvider) ：传入自定义认证过程</li>
+</ul>
+<h2>UserDetailsService</h2>
+<ul>
+<li>该接口仅有一个方法 loadUserByUsername，Spring Security 通过该方法获取.可自定义。</li>
+</ul>
+<h2>UserDetails</h2>
+<ul>
+<li>我们可以实现该接口来定义自己认证用户的获取方式（如数据库中获取），认证成功后会将 UserDetails 赋给 Authentication 的 principal 属性，然后再把 Authentication 保存到 SecurityContext 中，之后需要实用用户信息时通过 SecurityContextHolder 获取存放在 SecurityContext 中的 Authentication 的 principal。</li>
+</ul>
+<h2>Authentication</h2>
+<ul>
+<li>Authentication 是一个接口，用来表示用户认证信息，在用户登录认证之前相关信息（用户传过来的用户名密码）会封装为一个 Authentication 具体实现类对象，默认情况下为 UsernamePasswordAuthenticationToken，登录之后（通过AuthenticationManager认证）会生成一个更详细的、包含权限的对象，然后把它保存在权限线程本地的 SecurityContext 中，供后续权限鉴定用</li>
+</ul>
+<h2>GrantedAuthority</h2>
+<ul>
+<li>GrantedAuthority 是一个接口，它定义了一个 getAuthorities() 方法返回当前 Authentication 对象的拥有权限字符串，用户有权限是一个 GrantedAuthority 数组，每一个 GrantedAuthority 对象代表一种用户</li>
+<li>通常搭配 SimpleGrantedAuthority 类使用</li>
+</ul>
+<h2>AuthenticationManager</h2>
+<ul>
+<li>AuthenticationManager 是用来处理认证请求的接口，它只有一个方法 authenticate()，该方法接收一个 Authentication 作为对象，如果认证成功则返回一个封装了当前用户权限信息的 Authentication 对象进行返回</li>
+<li>它默认的实现是 ProviderManager，但它不处理认证请求，而是将委托给 AuthenticationProvider 列表，然后依次使用 AuthenticationProvider 进行认证，如果有一个 AuthenticationProvider 认证的结果不为null，则表示成功（否则失败，抛出 ProviderNotFoundException），之后不在进行其它 AuthenticationProvider 认证，并作为结果保存在 ProviderManager</li>
+<li>认证校验时最常用的方式就是通过用户名加载 UserDetails，然后比较 UserDetails 密码与请求认证是否一致，一致则通过，Security 内部的 DaoAuthenticationProvider 就是实用这种方式</li>
+<li>认证成功后加载 UserDetails 来封装要返回的 Authentication 对象，加载的 UserDetails 对象是包含用户权限等信息的。认证成功返回的 Authentication 对象将会保存在当前的 SecurityContext 中</li>
+</ul>
+<h2>AuthenticationProvide</h2>
+<ul>
+<li>
+<p>AuthenticationProvider 是一个身份认证接口，实现该接口来定制自己的认证方式，可通过 UserDetailsSevice 对获取数据库中的数据</p>
+</li>
+<li>
+<p>该接口中有两个需要实现的方法：</p>
+<ul>
+<li>Authentication authenticate(Authentication authentication)：认证处理，返回一个 Authentication 的实现类则代表成功，返回 null 则为认证失败</li>
+<li>supports(Class&lt;?&gt; aClass)：如果该 AuthenticationProvider 支持传入的 Authentication 认证对象，则返回 true ，如：return aClass.equals(UsernamePasswordAuthenticationToken.class);</li>
+</ul>
+</li>
+</ul>
+<h2>AuthorityUtils</h2>
+<ul>
+<li>是一个工具包，用于操作 GrantedAuthority 集合的实用方法：
+<ul>
+<li>commaSeparatedStringToAuthorityList(String authorityString)：从逗号分隔符中创建 GrantedAuthority 对象数组</li>
+</ul>
+</li>
+</ul>
+<h2>AbstractAuthenticationProcessingFilter</h2>
+<ul>
+<li>该抽象类继承了 GenericFilterBean，是处理 form 登录的过滤器，与 form 登录相关的所有操作都在该抽象类的子类中进行（UsernamePasswordAuthenticationFilter 为其子类），比如获取表单中的用户名、密码，然后进行认证等操作</li>
+<li>该类在 doFilter 方法中通过 attemptAuthentication() 方法进行用户信息逻辑认证，认证成功会将用户信息设置到 Session 中</li>
+</ul>
+<h2>UserDetails</h2>
+<ul>
+<li>代表了Spring Security的用户实体类，带有用户名、密码、权限特性等性质，可以自己实现该接口，供 Spring Security 安全认证使用，Spring Security 默认使用的是内置的 User 类</li>
+<li>将从数据库获取的 User 对象传入实现该接口的类，并获取 User 对象的值来让类实现该接口的方法</li>
+<li>通过 Authentication.getPrincipal() 的返回类型是 Object，但很多情况下其返回的其实是一个 UserDetails 的实例</li>
+</ul>
+<h2>HttpSecurity</h2>
+<ul>
+<li>用于配置全局 Http 请求的权限控制规则，对哪些请求进行验证、不验证等</li>
+<li>常用方法：</li>
+<li>authorizeRequests()：返回一个配置对象用于配置请求的访问限制</li>
+<li>formLogin()：返回表单配置对象，当什么都不指定时会提供一个默认的，如配置登录请求，还有登录成功页面</li>
+<li>logout()：返回登出配置对象，可通过logoutUrl设置退出url</li>
+<li>antMatchers：匹配请求路径或请求动作类型，如：.antMatchers(&quot;/admin/**&quot;)</li>
+<li>addFilterBefore: 在某过滤器之前添加 filter</li>
+<li>addFilterAfter：在某过滤器之后添加 filter</li>
+<li>addFilterAt：在某过滤器相同位置添加 filter，不会覆盖相同位置的 filter</li>
+<li>hasRole：结合 antMatchers 一起使用，设置请求允许访问的角色权限或IP，如：</li>
+</ul>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.antMatchers(<span class="string">"/admin/**"</span>).hasAnyRole(<span class="string">"ROLE_ADMIN"</span>,<span class="string">"ROLE_USER"</span>)</span><br></pre></td></tr></table></figure></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">方法名</th>
+<th style="text-align:left">用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">access(String)</td>
+<td style="text-align:left">SpringEL表达式结果为true时可访问</td>
+</tr>
+<tr>
+<td style="text-align:left">anonymous()</td>
+<td style="text-align:left">匿名可访问</td>
+</tr>
+<tr>
+<td style="text-align:left">denyAll()</td>
+<td style="text-align:left">用户不可以访问</td>
+</tr>
+<tr>
+<td style="text-align:left">fullyAuthenticated()</td>
+<td style="text-align:left">用户完全认证访问（非remember me下自动登录）</td>
+</tr>
+<tr>
+<td style="text-align:left">hasAnyAuthority(String…)</td>
+<td style="text-align:left">参数中任意权限可访问</td>
+</tr>
+<tr>
+<td style="text-align:left">hasAnyRole(String…)</td>
+<td style="text-align:left">参数中任意角色可访问</td>
+</tr>
+<tr>
+<td style="text-align:left">hasAuthority(String)</td>
+<td style="text-align:left">某一权限的用户可访问</td>
+</tr>
+<tr>
+<td style="text-align:left">hasRole(String)</td>
+<td style="text-align:left">某一角色的用户可访问</td>
+</tr>
+<tr>
+<td style="text-align:left">permitAll()</td>
+<td style="text-align:left">所有用户可访问</td>
+</tr>
+<tr>
+<td style="text-align:left">rememberMe()</td>
+<td style="text-align:left">允许通过remember me登录的用户访问</td>
+</tr>
+<tr>
+<td style="text-align:left">authenticated()</td>
+<td style="text-align:left">用户登录后可访问</td>
+</tr>
+<tr>
+<td style="text-align:left">hasIpAddress(String)</td>
+<td style="text-align:left">用户来自参数中的IP可访问</td>
+</tr>
+</tbody>
+</table>
+<h2>注解与Spring EL</h2>
+<ul>
+<li><strong>@EnableWebSecurity</strong>：开启 Spring Security 注解</li>
+<li><strong>@EnableGlobalMethodSecurity(prePostEnabled=true)</strong>：开启security方法注解</li>
+<li><strong>@PreAuthorize</strong>：在方法调用前，通过SpringEL表达式限制方法访问</li>
+</ul>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PreAuthorize</span>(<span class="string">"hasRole('ROLE_ADMIN')"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addUser</span><span class="params">(User user)</span></span>&#123;</span><br><span class="line">    <span class="comment">//如果具有权限 ROLE_ADMIN 访问该方法</span></span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><strong>@PostAuthorize</strong>：允许方法调用，但时如果表达式结果为false抛出异常</li>
+</ul>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//returnObject可以获取返回对象user，判断user属性username是否和访问该方法的用户对象的用户名一样。不一样则抛出异常。</span></span><br><span class="line"><span class="meta">@PostAuthorize</span>(<span class="string">"returnObject.user.username==principal.username"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> User <span class="title">getUser</span><span class="params">(<span class="keyword">int</span> userId)</span></span>&#123;</span><br><span class="line">   <span class="comment">//允许进入</span></span><br><span class="line">...</span><br><span class="line">    <span class="keyword">return</span> user;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><strong>@PostFilter</strong>：允许方法调用，但必须按表达式过滤方法结果</li>
+</ul>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将结果过滤，即选出性别为男的用户</span></span><br><span class="line"><span class="meta">@PostFilter</span>(<span class="string">"returnObject.user.sex=='男' "</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> List&lt;User&gt; <span class="title">getUserList</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//允许进入</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">return</span> user;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><strong>@PreFilter</strong>：允许方法调用，但必须在进入方法前过滤输入值</li>
+</ul>
+<h2>Spring EL 表达式</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">表达式</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">hasRole ([role])</td>
+<td style="text-align:left">当前用户是否拥有指定角色</td>
+</tr>
+<tr>
+<td style="text-align:left">hasAnyRole([role1,role2])</td>
+<td style="text-align:left">多个角色是一个以逗号进行分隔的字符串。如果当前用户拥有指定角色中的任意一个则返回true</td>
+</tr>
+<tr>
+<td style="text-align:left">hasAuthority ([auth])</td>
+<td style="text-align:left">等同于hasRole</td>
+</tr>
+<tr>
+<td style="text-align:left">hasAnyAuthority([auth1,auth2])</td>
+<td style="text-align:left">等同于 hasAnyRole</td>
+</tr>
+<tr>
+<td style="text-align:left">Principle</td>
+<td style="text-align:left">代表当前用户的 principle对象</td>
+</tr>
+<tr>
+<td style="text-align:left">authentication</td>
+<td style="text-align:left">直接从 Security context获取的当前 Authentication对象</td>
+</tr>
+<tr>
+<td style="text-align:left">permitAll</td>
+<td style="text-align:left">总是返回true,表示允许所有的访问</td>
+</tr>
+<tr>
+<td style="text-align:left">denyAll</td>
+<td style="text-align:left">总是返回false,表示拒绝所有的访问访问</td>
+</tr>
+<tr>
+<td style="text-align:left">isAnonymous()</td>
+<td style="text-align:left">当前用户是否是一个匿名用户</td>
+</tr>
+<tr>
+<td style="text-align:left">isRememberMe</td>
+<td style="text-align:left">表示当前用户是否是通过remember - me自动登录的</td>
+</tr>
+<tr>
+<td style="text-align:left">isAuthenticated()</td>
+<td style="text-align:left">表示当前用户是否已经登录认证成功了</td>
+</tr>
+<tr>
+<td style="text-align:left">isFullAuthenticated()</td>
+<td style="text-align:left">如果当前用户既不是一个匿名用户,同时又不是通过Remember-Me自动登录的,则返回true</td>
+</tr>
+</tbody>
+</table>
+<h2>密码加密（PassWordEncoder）</h2>
+<ul>
+<li>Spring 提供的一个用于对密码加密的接口，首选实现类为 BCryptPasswordEncoder</li>
+<li>通过@Bean注解将它注入到IOC容器：</li>
+</ul>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> PasswordEncoder <span class="title">passwordEncoder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> BCryptPasswordEncoder();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2>过滤器链</h2>
+<h3>SecurityContextPersistenceFilter</h3>
+<ul>
+<li>过滤器链头，是从 SecurityContextRepository 中取出用户认证信息，默认实现为 HttpSessionSecurityContextRepository，它会从 Session 中取出已认证的用户信息，提高效率，避免每次请求都要查询用户认证信息</li>
+<li>取出之后会放入 SecurityContextHolder 中，以便其它 filter 使用，SecurityContextHolder 使用 ThreadLocal 存储用户认证信息，保证线程之间信息隔离，最后再 finally 中清除该信息</li>
+</ul>
+<h3>WebAsyncManagerIntegrationFilter</h3>
+<ul>
+<li>提供了对 SecurityContext 和 WebAsyncManager 的集成，会把 SecurityContext 设置到异步线程，使其也能获取到用户上下文认证信息</li>
+</ul>
+<h3>HanderWriterFilter</h3>
+<ul>
+<li>会往请求的 Header 中添加相应的信息</li>
+</ul>
+<h3>CsrfFilter</h3>
+<ul>
+<li>跨域请求伪造过滤器，通过客户端穿来的 token 与服务端存储的 token 进行对比来判断请求</li>
+</ul>
+<h3>LogoutFilter</h3>
+<ul>
+<li>匹配URL，默认为 /logout，匹配成功后则会用户退出，清除认证信息，若有自己的退出逻辑，该过滤器可以关闭</li>
+</ul>
+<h3>UsernamePasswordAuthenticationFilter</h3>
+<ul>
+<li>登录认证过滤器，默认是对 /login 的 POST 请求进行认证，首先该方法会调用 attemptAuthentication 尝试认证获取一个 Authentication 认证对象，然后通过 sessionStrategy.onAuthentication 执行持久化，也就是保存认证信息，然后转向下一个 Filter，最后调用 successfulAuthentication 执行认证后事件</li>
+<li>attemptAuthentication 该方法是认证的主要方法，认证基本流程为 UserDeatilService 根据用户名获取到用户信息，然后通过 UserDetailsChecker.check 对用户状态进行校验，最后通过 additionalAuthenticationChecks 方法对用户密码进行校验完后认证后，返回一个认证对象</li>
+</ul>
+<h3>DefaultLoginPageGeneratingFilter</h3>
+<ul>
+<li>当请求为登录请求时，生成简单的登录页面，可以关闭</li>
+</ul>
+<h3>BasicAuthenticationFilter</h3>
+<ul>
+<li>Http Basci 认证的支持，该认证会把用户名密码使用 base64 编码后放入 header 中传输，认证成功后会把用户信息放入 SecurityContextHolder 中</li>
+</ul>
+<h3>RequestCacheAwareFilter</h3>
+<ul>
+<li>恢复被打断时的请求</li>
+</ul>
+<h3>SecurityContextHolderAwareRequestFilter</h3>
+<ul>
+<li>针对 Servlet api 不同版本做一些包装</li>
+</ul>
+<h3>AnonymousAuthenticationFIlter</h3>
+<ul>
+<li>SecurityContextHolder 中认证信息为空，则会创建一个匿名用户到 SecurityContextHolder 中</li>
+</ul>
+<h3>SessionManagementFilter</h3>
+<ul>
+<li>与登录认证拦截时作用一样，持久化用户登录信息，可以保存到 Session 中，也可以保存到 cookie 或 redis 中</li>
+</ul>
+<h3>ExceptionTranslationFilter</h3>
+<ul>
+<li>异常拦截，处于 Filter 链条后部，只能拦截其后面的节点并着重处理 AuthenticationException 与 AccessDeniedException 异常</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechat.png" alt="hhbbz 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/03/使用Docker容器部署ELK/" rel="next" title="使用Docker容器部署ELK">
+                <i class="fa fa-chevron-left"></i> 使用Docker容器部署ELK
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/07/Spring Security（2）流程详解/" rel="prev" title="Spring Security（2）流程详解">
+                Spring Security（2）流程详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/TOM.jpg"
+                alt="hhbbz" />
+            
+              <p class="site-author-name" itemprop="name">hhbbz</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/hhbbz" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:hhbbz@outlook.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://coding.net/u/hhbbz" target="_blank" title="Coding"><i class="fa fa-fw fa-github-alt"></i>Coding</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/hhbbz" target="_blank" title="知乎"><i class="fa fa-fw fa-bookmark"></i>知乎</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hhbbz</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Power By HEXO</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
