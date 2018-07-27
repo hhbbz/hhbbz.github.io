@@ -1930,7 +1930,7 @@ InnoDB: 写多读少，支持事务，不加锁读取，支持外键，
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/25/Mysql索引注意事项以及关键字优化/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/27/锁与事务的问答对话/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="hhbbz">
@@ -1949,8 +1949,8 @@ InnoDB: 写多读少，支持事务，不加锁读取，支持外键，
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/11/25/Mysql索引注意事项以及关键字优化/" itemprop="url">
-                  Mysql索引注意事项以及关键字优化
+                <a class="post-title-link" href="/2017/11/27/锁与事务的问答对话/" itemprop="url">
+                  锁与事务的问答对话
                 </a>
               
             
@@ -1976,7 +1976,7 @@ InnoDB: 写多读少，支持事务，不加锁读取，支持外键，
                 
               
 
-              <time title="创建时间：2017-11-25 18:08:46" itemprop="dateCreated datePublished" datetime="2017-11-25T18:08:46+08:00">2017-11-25</time>
+              <time title="创建时间：2017-11-27 14:54:02" itemprop="dateCreated datePublished" datetime="2017-11-27T14:54:02+08:00">2017-11-27</time>
             
 
             
@@ -1993,7 +1993,7 @@ InnoDB: 写多读少，支持事务，不加锁读取，支持外键，
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2017-11-29 11:10:33" itemprop="dateModified" datetime="2017-11-29T11:10:33+08:00">2017-11-29</time>
+                <time title="修改时间：2017-11-27 18:28:30" itemprop="dateModified" datetime="2017-11-27T18:28:30+08:00">18:28:30</time>
               
             
           </span>
@@ -2046,19 +2046,23 @@ InnoDB: 写多读少，支持事务，不加锁读取，支持外键，
       
         
           
-          MySQL 索引使用的注意事项
+          简介
+以通俗的语言和说法，让大家更好的理解锁和事务之间的关系以及相关概念。
+描述
 
+什么是锁?（先发制人）
 
-索引不会包含有NULL的列
-只要列中包含有NULL值，都将不会被包含在索引中，复合索引中只要有一列含有NULL值，那么这一列对于此符合索引就是无效的。
+一种保护机制，在多线程的情况下，保证操作数据的正确性/一致性，
 
+眼镜男：有哪几种分类？
 
-使用短索引
-对串列进行索引，如果可以就应该指定一个前缀长度。例如，如果有一个char（255）的列，如果在前
+悲观锁，乐观锁，独占锁，共享锁，公平锁，非公平锁，分布式锁，自旋锁
+
+讲讲乐观锁悲观锁吧（顺藤摸瓜
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/11/25/Mysql索引注意事项以及关键字优化/#more" rel="contents">
+            <a class="btn" href="/2017/11/27/锁与事务的问答对话/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2150,7 +2154,7 @@ InnoDB: 写多读少，支持事务，不加锁读取，支持外键，
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-count">25</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2206,7 +2210,9 @@ InnoDB: 写多读少，支持事务，不加锁读取，支持外键，
                     
                       
                     
-                    <span class="site-state-item-count">13</span>
+                      
+                    
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
