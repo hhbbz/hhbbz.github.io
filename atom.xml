@@ -617,9 +617,9 @@ docker pull sebp/elk&lt;/p&gt;
       <category term="后端" scheme="http://yoursite.com/categories/%E5%90%8E%E7%AB%AF/"/>
     
     
-      <category term="Mysql" scheme="http://yoursite.com/tags/Mysql/"/>
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
     
-      <category term="JAVA" scheme="http://yoursite.com/tags/JAVA/"/>
+      <category term="Mysql" scheme="http://yoursite.com/tags/Mysql/"/>
     
   </entry>
   
