@@ -112,31 +112,31 @@
 <meta name="keywords" content="Redis">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis缓存穿透、并发、失效">
-<meta property="og:url" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/index.html">
+<meta property="og:url" content="https://hhbbz.github.i/2018/01/26/Redis缓存穿透、并发、失效/index.html">
 <meta property="og:site_name" content="hhbbz-Blog">
 <meta property="og:description" content="初次谈穿透、并发、失效 缓存穿透    注： 上面三个图会有什么问题呢？ 我们在项目中使用缓存通常都是先检查缓存中是否存在，如果存在直接返回缓存内容，如果不存在就直接查询数据库然后再缓存查询结果返回。这个时候如果我们查询的某一个数据在缓存中一直不存在，就会造成每一次请求都查询DB，这样缓存就失去了意义，在流量大时，可能DB就挂掉了。 那这种问题有什么好办法解决呢？ 要是有人利用不存在的key频繁攻">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/1.png">
-<meta property="og:image" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/2.png">
-<meta property="og:image" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/3.png">
-<meta property="og:image" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/4.png">
-<meta property="og:image" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/5.png">
-<meta property="og:image" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/6.png">
-<meta property="og:image" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/7.png">
-<meta property="og:image" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/8.png">
-<meta property="og:image" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/8.png">
+<meta property="og:image" content="https://hhbbz.github.i/2018/01/26/Redis缓存穿透、并发、失效/1.png">
+<meta property="og:image" content="https://hhbbz.github.i/2018/01/26/Redis缓存穿透、并发、失效/2.png">
+<meta property="og:image" content="https://hhbbz.github.i/2018/01/26/Redis缓存穿透、并发、失效/3.png">
+<meta property="og:image" content="https://hhbbz.github.i/2018/01/26/Redis缓存穿透、并发、失效/4.png">
+<meta property="og:image" content="https://hhbbz.github.i/2018/01/26/Redis缓存穿透、并发、失效/5.png">
+<meta property="og:image" content="https://hhbbz.github.i/2018/01/26/Redis缓存穿透、并发、失效/6.png">
+<meta property="og:image" content="https://hhbbz.github.i/2018/01/26/Redis缓存穿透、并发、失效/7.png">
+<meta property="og:image" content="https://hhbbz.github.i/2018/01/26/Redis缓存穿透、并发、失效/8.png">
+<meta property="og:image" content="https://hhbbz.github.i/2018/01/26/Redis缓存穿透、并发、失效/8.png">
 <meta property="og:updated_time" content="2018-01-27T02:30:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis缓存穿透、并发、失效">
 <meta name="twitter:description" content="初次谈穿透、并发、失效 缓存穿透    注： 上面三个图会有什么问题呢？ 我们在项目中使用缓存通常都是先检查缓存中是否存在，如果存在直接返回缓存内容，如果不存在就直接查询数据库然后再缓存查询结果返回。这个时候如果我们查询的某一个数据在缓存中一直不存在，就会造成每一次请求都查询DB，这样缓存就失去了意义，在流量大时，可能DB就挂掉了。 那这种问题有什么好办法解决呢？ 要是有人利用不存在的key频繁攻">
-<meta name="twitter:image" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/1.png">
+<meta name="twitter:image" content="https://hhbbz.github.i/2018/01/26/Redis缓存穿透、并发、失效/1.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/"/>
+  <link rel="canonical" href="https://hhbbz.github.i/2018/01/26/Redis缓存穿透、并发、失效/"/>
 
 
 
@@ -319,7 +319,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/">
+    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.i/2018/01/26/Redis缓存穿透、并发、失效/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="hhbbz">
