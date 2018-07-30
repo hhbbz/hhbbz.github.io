@@ -512,9 +512,9 @@
         <title>gradle-distDocker插件构建SpringBoot的Docker镜像</title>
         <pubTime>2017-11-07T10:11:24.000Z</pubTime>
         
-        <tag>Docker</tag>
-         
         <tag>Java</tag>
+         
+        <tag>Docker</tag>
          
         <tag>Gradle</tag>
          
