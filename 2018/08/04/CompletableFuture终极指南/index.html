@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="hhbbz-Blog">
 <meta property="og:description" content="一、简介 java.util.concurrent.CompletableFuture继承于java.util.concurrent.Future，它本身具备Future的所有特性，并且基于JDK1.8的流式编程以及Lambda表达式等实现一元操作符、异步性以及事件驱动编程模型，它的灵活性和更强大的功能是Future无法比拟的。它提供了一共有50多种Api，这些Api的注释比较少，命名也比较生涩，">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-04T05:24:46.000Z">
+<meta property="og:updated_time" content="2018-08-06T02:01:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CompletableFuture终极指南">
 <meta name="twitter:description" content="一、简介 java.util.concurrent.CompletableFuture继承于java.util.concurrent.Future，它本身具备Future的所有特性，并且基于JDK1.8的流式编程以及Lambda表达式等实现一元操作符、异步性以及事件驱动编程模型，它的灵活性和更强大的功能是Future无法比拟的。它提供了一共有50多种Api，这些Api的注释比较少，命名也比较生涩，">
@@ -368,7 +368,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-08-04 13:24:46" itemprop="dateModified" datetime="2018-08-04T13:24:46+08:00">13:24:46</time>
+                <time title="修改时间：2018-08-06 10:01:44" itemprop="dateModified" datetime="2018-08-06T10:01:44+08:00">2018-08-06</time>
               
             
           </span>
@@ -545,6 +545,7 @@
 <p>其实如果微服务设计得足够好，下面三个外部接口的信息一定是不相关联的，也就是可以并行获取，三个接口的结果都获取完毕之后做一次数据聚合到DTO即可，也就是聚合的耗时大致是这三个接口中耗时最长的接口的响应时间。修改后的代码如下：</p>
 <p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OrderDetailService</span> </span>&#123;</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 建立一个线程池专门交给CompletableFuture使用</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> ThreadPoolExecutor executor = <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">10</span>, <span class="number">20</span>, <span class="number">0</span>, TimeUnit.SECONDS,</span><br><span class="line">			<span class="keyword">new</span> ArrayBlockingQueue&lt;&gt;(<span class="number">100</span>));</span><br><span class="line">	<span class="meta">@Autowired</span></span><br><span class="line">	<span class="keyword">private</span> UserService userService;</span><br><span class="line">	<span class="meta">@Autowired</span></span><br><span class="line">	<span class="keyword">private</span> OrderService orderService;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> OrderDetailDTO <span class="title">getOrderDetail</span><span class="params">(Long userId, String orderId)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		CompletableFuture&lt;UserInfo&gt; userInfoCompletableFuture = CompletableFuture.supplyAsync(() -&gt; userService.getUserInfo(userId), executor);</span><br><span class="line">		CompletableFuture&lt;OrderInfo&gt; orderInfoCompletableFuture = CompletableFuture.supplyAsync(() -&gt; orderService.getOrderInfo(orderId), executor);</span><br><span class="line">		CompletableFuture&lt;OrderDetailDTO&gt; result</span><br><span class="line">				= userInfoCompletableFuture.thenCombineAsync(orderInfoCompletableFuture, OrderDetailDTO::<span class="keyword">new</span>, executor);</span><br><span class="line">		<span class="keyword">return</span> result.get();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>上面的代码还没有考虑到外部的微服务异常的情况，但是相对串行的拉取外部信息的接口的操作方式，这种并行的方式显然是更加高效的，而且CompletableFuture的supplyAsync方法可以传入Supplier接口实例，也就是允许任何参数类型的表达式，这点是什么方便的。当然，其实用ExecutorService的invokeAll方法也可以达到相同的效果.</p>
+<p><a href="http://www.importnew.com/10815.html" target="_blank" rel="noopener">参考</a></p>
 
       
     </div>
