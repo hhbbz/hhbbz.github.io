@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32*32.ico?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16*16.ico?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="简介 Elasticsearch 是一款稳定高效的分布式搜索和分析引擎，它的底层基于 Lucene，并提供了友好的 RESTful API 来对数据进行操作，还有比较重要的一点是， Elasticsearch 开箱即可用，上手也比较容易。 目前 Elasticsearch 在搭建企业级搜索（如日志搜索、商品搜索等）平台中很广泛，官网也提供了不少案例，比如： * GitHub 使用 Elastics">
+<meta name="keywords" content="Elasticsearch,Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Elasticsearch初体验">
+<meta property="og:url" content="https://hhbbz.github.io/2018/08/20/Elasticsearch初体验/index.html">
+<meta property="og:site_name" content="hhbbz-Blog">
+<meta property="og:description" content="简介 Elasticsearch 是一款稳定高效的分布式搜索和分析引擎，它的底层基于 Lucene，并提供了友好的 RESTful API 来对数据进行操作，还有比较重要的一点是， Elasticsearch 开箱即可用，上手也比较容易。 目前 Elasticsearch 在搭建企业级搜索（如日志搜索、商品搜索等）平台中很广泛，官网也提供了不少案例，比如： * GitHub 使用 Elastics">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://hhbbz.github.io/2018/08/20/Elasticsearch初体验/1.png">
+<meta property="og:updated_time" content="2018-08-20T12:17:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Elasticsearch初体验">
+<meta name="twitter:description" content="简介 Elasticsearch 是一款稳定高效的分布式搜索和分析引擎，它的底层基于 Lucene，并提供了友好的 RESTful API 来对数据进行操作，还有比较重要的一点是， Elasticsearch 开箱即可用，上手也比较容易。 目前 Elasticsearch 在搭建企业级搜索（如日志搜索、商品搜索等）平台中很广泛，官网也提供了不少案例，比如： * GitHub 使用 Elastics">
+<meta name="twitter:image" content="https://hhbbz.github.io/2018/08/20/Elasticsearch初体验/1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://hhbbz.github.io/2018/08/20/Elasticsearch初体验/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Elasticsearch初体验 | hhbbz-Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">hhbbz-Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">hhbbz</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2018/08/20/Elasticsearch初体验/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="hhbbz">
+      <meta itemprop="description" content="摘抄和记录的地方">
+      <meta itemprop="image" content="/images/TOM.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hhbbz-Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Elasticsearch初体验
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-08-20 19:08:54" itemprop="dateCreated datePublished" datetime="2018-08-20T19:08:54+08:00">2018-08-20</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-08-20 20:17:40" itemprop="dateModified" datetime="2018-08-20T20:17:40+08:00">20:17:40</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1>简介</h1>
+<p>Elasticsearch 是一款稳定高效的分布式搜索和分析引擎，它的底层基于 Lucene，并提供了友好的 RESTful API 来对数据进行操作，还有比较重要的一点是， Elasticsearch 开箱即可用，上手也比较容易。
+目前 Elasticsearch 在搭建企业级搜索（如日志搜索、商品搜索等）平台中很广泛，官网也提供了不少案例，比如：</p>
+<pre><code>* GitHub 使用 Elasticsearch 检索超过 800 万的代码库
+* eBay 使用 Elasticsearch 搜索海量的商品数据
+* Netflix 使用 Elasticsearch 来实现高效的消息传递系统
+</code></pre>
+<p>本文主要介绍 Elasticsearch 的基本概念及入门使用。</p>
+<h1>安装</h1>
+<p>在安装 Elasticsearch 之前，请确保你的计算机已经安装了 Java。目前 Elasticsearch 的最新版是 5.2，需要安装 Java 8，如果你用的是老版本的 Elasticsearch，如 2.x 版，可用 Java 7，但还是推荐使用 Java 8。</p>
+<p>可以使用如下的命令检查 Java 的版本：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> java -version</span><br></pre></td></tr></table></figure></p>
+<p>接着，下载最新版本的 Elasticsearch，可使用 wget 下载，如下：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.2.2.tar.gz</span><br></pre></td></tr></table></figure></p>
+<p>Windows 用户也可以下载 .zip 格式的安装包。</p>
+<p>下载完后进行解压：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> tar -zxvf elasticsearch-5.2.2.tar.gz</span><br></pre></td></tr></table></figure></p>
+<h2>运行</h2>
+<p>首先，Elasticsearch不允许通过root管理员运行，所以我们要新建一个非管理员用户。</p>
+<ol>
+<li>useradd yourname ：新建账户</li>
+<li>passwd yourname ：设置密码</li>
+<li>su yourname：切换到新建账户</li>
+</ol>
+<p>然后，我们进入到刚刚解压出来的目录中：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> cd elasticsearch-5.2.2</span><br></pre></td></tr></table></figure></p>
+<p>接着，使用如下命令启动 Elasticsearch：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> bin/elasticsearch -d</span><br></pre></td></tr></table></figure></p>
+<p>此时，如果正常的话，你可以在终端看到类似如下的输出：</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[2018-08-19T23:25:09,961][INFO ][o.e.n.Node               ] [] initializing ...</span><br><span class="line">[2018-08-19T23:25:10,073][INFO ][o.e.e.NodeEnvironment    ] [yO11WLM] using [1] data paths, mounts [[/ (/dev/disk0s2)]], net usable_space [141.1gb], net total_space [232.9gb], spins? [unknown], types [hfs]</span><br><span class="line">[2018-08-19T23:25:10,074][INFO ][o.e.e.NodeEnvironment    ] [yO11WLM] heap size [1.9gb], compressed ordinary object pointers [true]</span><br><span class="line">[2018-08-19T23:25:10,095][INFO ][o.e.n.Node               ] node name [yO11WLM] derived from node ID [yO11WLMOQDuAOpZbYZYjzw]; set [node.name] to override</span><br><span class="line">[2018-08-19T23:25:10,100][INFO ][o.e.n.Node               ] version[5.2.2], pid[7607], build[db0d481/2017-02-09T22:05:32.386Z], OS[Mac OS X/10.11.5/x86_64], JVM[Oracle Corporation/Java HotSpot(TM) 64-Bit Server VM/1.8.0_102/25.102-b14]</span><br><span class="line">[2018-08-19T23:25:11,363][INFO ][o.e.p.PluginsService     ] [yO11WLM] loaded module [aggs-matrix-stats]</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>上面的命令是在前台运行的，如果想在后台以守护进程模式运行，可以加 -d 参数。
+Elasticsearch 启动后，也启动了两个端口 9200 和 9300：</p>
+<p>9200 端口：HTTP RESTful 接口的通讯端口
+9300 端口：TCP 通讯端口，用于集群间节点通信和与 Java 客户端通信的端口</p>
+<p>现在，让我们做一些测试。在浏览器访问链接 http://localhost:9200/ ，或使用 curl 命令：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> curl 'http://localhost:9200/?pretty'</span><br></pre></td></tr></table></figure></p>
+<p>我们可以看到类似如下的输出：</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span> : <span class="string">"yO11WLM"</span>,</span><br><span class="line">  <span class="attr">"cluster_name"</span> : <span class="string">"elasticsearch"</span>,</span><br><span class="line">  <span class="attr">"cluster_uuid"</span> : <span class="string">"yC8BGwzlSnu_zGbKL918Xg"</span>,</span><br><span class="line">  <span class="attr">"version"</span> : &#123;</span><br><span class="line">    <span class="attr">"number"</span> : <span class="string">"5.2.1"</span>,</span><br><span class="line">    <span class="attr">"build_hash"</span> : <span class="string">"db0d481"</span>,</span><br><span class="line">    <span class="attr">"build_date"</span> : <span class="string">"2017-02-09T22:05:32.386Z"</span>,</span><br><span class="line">    <span class="attr">"build_snapshot"</span> : <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">"lucene_version"</span> : <span class="string">"6.4.1"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"tagline"</span> : <span class="string">"You Know, for Search"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1>概念</h1>
+<p>在进一步使用 Elasticsearch 之前，让我们先了解几个关键概念。</p>
+<p>在逻辑层面：</p>
+<ul>
+<li>Index (索引)：这里的 Index 是名词，一个 Index 就像是传统关系数据库的 Database，它是 Elasticsearch 用来存储数据的逻辑区域</li>
+<li>Document (文档)：Elasticsearch 使用 JSON 文档来表示一个对象，就像是关系数据库中一个 Table 中的一行数据</li>
+<li>Type (类型)：文档归属于一种 Type，就像是关系数据库中的一个 Table。(目前官方不推荐使用)</li>
+<li>Field (字段)：每个文档包含多个字段，类似关系数据库中一个 Table 的列</li>
+</ul>
+<p>我们用一个表格来做类比，如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Elasticsearch</th>
+<th style="text-align:left">MySQL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Index</td>
+<td style="text-align:left">Database</td>
+</tr>
+<tr>
+<td style="text-align:left">Type</td>
+<td style="text-align:left">Table</td>
+</tr>
+<tr>
+<td style="text-align:left">Document</td>
+<td style="text-align:left">Row</td>
+</tr>
+<tr>
+<td style="text-align:left">Field</td>
+<td style="text-align:left">Column</td>
+</tr>
+</tbody>
+</table>
+<p>在物理层面：</p>
+<ul>
+<li>Node (节点)：node 是一个运行着的 Elasticsearch 实例，一个 node 就是一个单独的 server</li>
+<li>Cluster (集群)：cluster 是多个 node 的集合</li>
+<li>Shard (分片)：数据分片，一个 index 可能会存在于多个 shard</li>
+</ul>
+<h1>使用</h1>
+<p>接下来，我们看看如何建立索引、创建文档等，就好比在 MySQL 中进行诸如创建数据库，插入数据等操作。</p>
+<h2>添加文档</h2>
+<p>下面，我们将创建一个存储电影信息的 Document：</p>
+<ul>
+<li>Index 的名称为 movie</li>
+<li>Type 为 adventure</li>
+<li>Document 有两个字段：name 和 actors</li>
+</ul>
+<p>我们使用 Elasticsearch 提供的 RESTful API 来执行上述操作，如图所示：</p>
+<p><img src="/2018/08/20/Elasticsearch初体验/1.png" title="图片"></p>
+<ul>
+<li>用 url 表示一个资源，比如 /movie/adventure/1 就表示一个 index 为 movie，type 为 adventure，id 为 1 的 document</li>
+<li>用 http 方法操作资源，如使用 GET 获取资源，使用 POST、PUT 新增或更新资源，使用 DELETE 删除资源等</li>
+</ul>
+<p>我们可以使用 curl 命令来执行上述操作：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> curl -i -X PUT "localhost:9200/movie/adventure/1" -d '&#123;"name": "Life of Pi", "actors": ["Suraj", "Irrfan"]&#125;'</span><br></pre></td></tr></table></figure></p>
+<p>不过，本文推荐使用 httpie，类似 curl，但比 curl 更好用，将上面的命令换成 httpie，如下：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> http put :9200/movie/adventure/1 name="Life of Pi" actors:='["Suraj", "Irrfan"]'</span><br></pre></td></tr></table></figure></p>
+<p>上面的命令结果如下：</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 201 Created</span><br><span class="line">Location: /movie/adventure/1</span><br><span class="line">content-encoding: gzip</span><br><span class="line">content-type: application/json; charset=UTF-8</span><br><span class="line">transfer-encoding: chunked</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"_id"</span>: <span class="string">"1"</span>,</span><br><span class="line">    <span class="attr">"_index"</span>: <span class="string">"movie"</span>,</span><br><span class="line">    <span class="attr">"_shards"</span>: &#123;</span><br><span class="line">        <span class="attr">"failed"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"successful"</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="attr">"total"</span>: <span class="number">2</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"_type"</span>: <span class="string">"adventure"</span>,</span><br><span class="line">    <span class="attr">"_version"</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">"created"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">"result"</span>: <span class="string">"created"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，我们已经成功创建了一个 <strong>_index</strong> 为 movie，<strong>_type</strong> 为 adventure，<strong>_id</strong> 为 1 的文档。</p>
+<p>我们通过 GET 请求来查看这个文档的信息：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> http :9200/movie/adventure/1</span><br></pre></td></tr></table></figure></p>
+<p>结果如下：</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">content-encoding: gzip</span><br><span class="line">content-type: application/json; charset=UTF-8</span><br><span class="line">transfer-encoding: chunked</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"_id"</span>: <span class="string">"1"</span>,</span><br><span class="line">    <span class="attr">"_index"</span>: <span class="string">"movie"</span>,</span><br><span class="line">    <span class="attr">"_source"</span>: &#123;</span><br><span class="line">        <span class="attr">"actors"</span>: [</span><br><span class="line">            <span class="string">"Suraj"</span>,</span><br><span class="line">            <span class="string">"Irrfan"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">"name"</span>: <span class="string">"Life of Pi"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"_type"</span>: <span class="string">"adventure"</span>,</span><br><span class="line">    <span class="attr">"_version"</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">"found"</span>: <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，原始的文档数据存在了 <strong>_source</strong> 字段中。</p>
+<p>如果我们的数据没有 id，也可以让 Elasticsearch 自动为我们生成，此时要使用 POST 请求，形式如下：</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">POST /movie/adventure/</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"name"</span>: <span class="string">"Life of Pi"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2>更新整个文档</h2>
+<p>当我们使用 PUT 方法指明文档的 <strong>_index</strong>, <strong>_type</strong> 和 <strong>_id</strong>时，如果 <strong>_id</strong> 已存在，则新文档会替换旧文档，此时文档的 <strong>_version</strong> 会增加 1，并且 <strong>_created</strong> 字段为 false。比如：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> http put :9200/movie/adventure/1 name="Life of Pi"</span><br></pre></td></tr></table></figure></p>
+<p>结果如下：</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">content-encoding: gzip</span><br><span class="line">content-type: application/json; charset=UTF-8</span><br><span class="line">transfer-encoding: chunked</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"_id"</span>: <span class="string">"1"</span>,</span><br><span class="line">    <span class="attr">"_index"</span>: <span class="string">"movie"</span>,</span><br><span class="line">    <span class="attr">"_shards"</span>: &#123;</span><br><span class="line">        <span class="attr">"failed"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"successful"</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="attr">"total"</span>: <span class="number">2</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"_type"</span>: <span class="string">"adventure"</span>,</span><br><span class="line">    <span class="attr">"_version"</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="attr">"created"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">"result"</span>: <span class="string">"updated"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用 GET 请求查看新文档的数据：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> http :9200/movie/adventure/1</span><br></pre></td></tr></table></figure></p>
+<p>结果如下：</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">content-encoding: gzip</span><br><span class="line">content-type: application/json; charset=UTF-8</span><br><span class="line">transfer-encoding: chunked</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"_id"</span>: <span class="string">"1"</span>,</span><br><span class="line">    <span class="attr">"_index"</span>: <span class="string">"movie"</span>,</span><br><span class="line">    <span class="attr">"_source"</span>: &#123;</span><br><span class="line">        <span class="attr">"name"</span>: <span class="string">"Life of Pi"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"_type"</span>: <span class="string">"adventure"</span>,</span><br><span class="line">    <span class="attr">"_version"</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="attr">"found"</span>: <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，actors 这个字段已经不存在了，文档的 <strong>_version</strong> 变成了 2。
+因此，为了避免在误操作的情况下，原文档被替换，我们可以使用 <strong>_create</strong> 这个 API，表示只在文档不存在的情况下才创建新文档（返回 201 Created），如果文档存在则不做任何操作（返回 409 Conflict），命令如下：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> http put :9200/movie/adventure/1/_create name="Life of Pi"</span><br></pre></td></tr></table></figure></p>
+<p>由于文档 id 存在，会返回 409 Conflict。</p>
+<h2>局部更新</h2>
+<p>在有些情况下，我们只想更新文档的局部，而不是整个文档，这时我们可以使用 <strong>_update</strong> 这个 API。</p>
+<p>现在，待更新的文档信息如下：</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"_id"</span>: <span class="string">"1"</span>,</span><br><span class="line">    <span class="attr">"_index"</span>: <span class="string">"movie"</span>,</span><br><span class="line">    <span class="attr">"_source"</span>: &#123;</span><br><span class="line">        <span class="attr">"name"</span>: <span class="string">"Life of Pi"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"_type"</span>: <span class="string">"adventure"</span>,</span><br><span class="line">    <span class="attr">"_version"</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="attr">"found"</span>: <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>最简单的 update 请求接受一个局部文档参数 <strong>doc</strong>，它会合并到现有文档中：将对象合并在一起，存在的标量字段被覆盖，新字段被添加。</p>
+<p>形式如下：</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">POST /movie/adventure/1/_update</span><br><span class="line">&#123;</span><br><span class="line">   <span class="attr">"doc"</span>: &#123;</span><br><span class="line">      <span class="attr">"name"</span>: <span class="string">"life of pi"</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>由于有嵌套字段，我们可以这样使用 http（这里需要注意使用 POST 方法）：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> echo '&#123;"doc": &#123;"actors": ["Suraj", "Irrfan"]&#125;&#125;' | http post :9200/movie/adventure/1/_update</span><br></pre></td></tr></table></figure></p>
+<p>上面的命令中，我们添加了一个新的字段：actors，结果如下：</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">content-encoding: gzip</span><br><span class="line">content-type: application/json; charset=UTF-8</span><br><span class="line">transfer-encoding: chunked</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"_id"</span>: <span class="string">"1"</span>,</span><br><span class="line">    <span class="attr">"_index"</span>: <span class="string">"movie"</span>,</span><br><span class="line">    <span class="attr">"_shards"</span>: &#123;</span><br><span class="line">        <span class="attr">"failed"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"successful"</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="attr">"total"</span>: <span class="number">2</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"_type"</span>: <span class="string">"adventure"</span>,</span><br><span class="line">    <span class="attr">"_version"</span>: <span class="number">3</span>,</span><br><span class="line">    <span class="attr">"result"</span>: <span class="string">"updated"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，_version 增加了 1，result 的结果是 updated。</p>
+<h2>检索文档</h2>
+<h3>检索某个文档</h3>
+<p>要检索某个文档很简单，我们只需使用 GET 请求并指出文档的 index, type, id 就可以了，比如：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> http :9200/movie/adventure/1/</span><br></pre></td></tr></table></figure></p>
+<p>响应内容会包含文档的元信息，文档的原始数据存在 <strong>_source</strong> 字段中。</p>
+<p>我们也可以直接检索出文档的 <strong>_source</strong> 字段，如下：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> http :9200/movie/adventure/1/_source</span><br></pre></td></tr></table></figure></p>
+<h3>检索所有文档</h3>
+<p>我们可以使用 <strong>_search</strong> 这个 API 检索出所有的文档，命令如下：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> http :9200/movie/adventure/_search</span><br></pre></td></tr></table></figure></p>
+<p>返回结果如下：</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"_shards"</span>: &#123;</span><br><span class="line">        <span class="attr">"failed"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"successful"</span>: <span class="number">5</span>,</span><br><span class="line">        <span class="attr">"total"</span>: <span class="number">5</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"hits"</span>: &#123;</span><br><span class="line">        <span class="attr">"hits"</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"_id"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"_index"</span>: <span class="string">"movie"</span>,</span><br><span class="line">                <span class="attr">"_score"</span>: <span class="number">1.0</span>,</span><br><span class="line">                <span class="attr">"_source"</span>: &#123;</span><br><span class="line">                    <span class="attr">"actors"</span>: [</span><br><span class="line">                        <span class="string">"Suraj"</span>,</span><br><span class="line">                        <span class="string">"Irrfan"</span></span><br><span class="line">                    ],</span><br><span class="line">                    <span class="attr">"name"</span>: <span class="string">"Life of Pi"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">"_type"</span>: <span class="string">"adventure"</span></span><br><span class="line">            &#125;</span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">"max_score"</span>: <span class="number">1.0</span>,</span><br><span class="line">        <span class="attr">"total"</span>: <span class="number">1</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"timed_out"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">"took"</span>: <span class="number">299</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，<strong>hits</strong> 这个 object 包含了 hits 数组，total 等字段，其中，hits 数组包含了所有的文档，这里只有一个文档，total 表明了文档的数量，默认情况下会返回前 10 个结果。我们也可以设定 <strong>From/Size</strong> 参数来获取某一范围的文档，可参考这里，比如：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> http :9200/movie/adventure/_search?from=1&amp;size=5</span><br></pre></td></tr></table></figure></p>
+<p>当不指定 from 和 size 时，会使用默认值，其中 from 的默认值是 0，size 的默认值是 10。</p>
+<h3>检索某些字段</h3>
+<p>有时候，我们只需检索文档的个别字段，这时可以使用 <strong>_source</strong> 参数，多个字段可以使用逗号分隔，如下所示：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> http :9200/movie/adventure/1?_source=name</span><br><span class="line"><span class="meta">$</span> http :9200/movie/adventure/1?_source=name,actors</span><br></pre></td></tr></table></figure></p>
+<h3>query string 搜索</h3>
+<p>query string 搜索以 <strong>q=field:value</strong> 的形式进行查询，比如查询 name 字段含有 life 的电影：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> http :9200/movie/adventure/_search?q=name:life</span><br></pre></td></tr></table></figure></p>
+<h3>DSL 搜索</h3>
+<p>上面的 query string 搜索比较轻量级，只适用于简单的场合。Elasticsearch 提供了更为强大的 DSL（Domain Specific Language）查询语言，适用于复杂的搜索场景，比如全文搜索。我们可以将上面的 query string 搜索转换为 DSL 搜索，如下：</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /movie/adventure/_search</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"query"</span> : &#123;</span><br><span class="line">        <span class="attr">"match"</span> : &#123;</span><br><span class="line">            <span class="attr">"name"</span> : <span class="string">"life"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果使用 httpie，可以这样：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> echo '&#123;"query": &#123;"match": &#123;"name": "life"&#125;&#125;&#125;' | http get :9200/movie/adventure/_search</span><br></pre></td></tr></table></figure></p>
+<p>如果使用 curl，可以这样：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> curl -X GET "127.0.0.1:9200/movie/adventure/_search" -d '&#123;"query": &#123;"match": &#123;"name": "life"&#125;&#125;&#125;'</span><br></pre></td></tr></table></figure></p>
+<h2>文档是否存在</h2>
+<p>使用 HEAD 方法查看文档是否存在：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> http head :9200/movie/adventure/1</span><br></pre></td></tr></table></figure></p>
+<p>如果文档存在则返回 200，否则返回 404。</p>
+<h2>删除文档</h2>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> http delete :9200/movie/adventure/1</span><br></pre></td></tr></table></figure></p>
+<h1>小结</h1>
+<ul>
+<li>Elasticsearch 通过简单的 RESTful API 来隐藏 Lucene 的复杂性，从而让全文搜索变得简单</li>
+<li>在创建文档时，我们可以用 POST 方法指定将文档添加到某个 <strong>_index/_type</strong> 下，来让 Elasticsearch自动生成唯一的 <strong>_id</strong>；而用 PUT 方法指定将文档的 <strong>_index/_type/_id</strong></li>
+</ul>
+<h1>参考资料</h1>
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/getting-started.html" target="_blank" rel="noopener">Elasticsearch Reference</a></li>
+<li><a href="https://legacy.gitbook.com/book/looly/elasticsearch-the-definitive-guide-cn/details" target="_blank" rel="noopener">Elasticsearch 权威指南</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechat.png" alt="hhbbz 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Elasticsearch/" rel="tag"># Elasticsearch</a>
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/19/ThreadLocal线程安全机制与坑/" rel="next" title="ThreadLocal线程安全机制与坑">
+                <i class="fa fa-chevron-left"></i> ThreadLocal线程安全机制与坑
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/TOM.jpg"
+                alt="hhbbz" />
+            
+              <p class="site-author-name" itemprop="name">hhbbz</p>
+              <p class="site-description motion-element" itemprop="description">摘抄和记录的地方</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">28</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/hhbbz" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:hhbbz@outlook.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://coding.net/u/hhbbz" target="_blank" title="Coding" rel="external nofollow"><i class="fa fa-fw fa-github-alt"></i>Coding</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/hhbbz" target="_blank" title="知乎" rel="external nofollow"><i class="fa fa-fw fa-bookmark"></i>知乎</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hhbbz</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Power By HEXO</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
