@@ -108,25 +108,30 @@
 
 
 
-  <meta name="description" content="简介 以通俗的语言和说法，让大家更好的理解锁和事务之间的关系以及相关概念。 描述  什么是锁?（先发制人）  一种保护机制，在多线程的情况下，保证操作数据的正确性/一致性，  眼镜男：有哪几种分类？  悲观锁，乐观锁，独占锁，共享锁，公平锁，非公平锁，分布式锁，自旋锁  讲讲乐观锁悲观锁吧（顺藤摸瓜）  一般喜欢放在数据库来讲(其实这两个概念是属于计算机的，不要被误导)，就说mysql吧，悲观锁，">
-<meta name="keywords" content="Java,Mysql">
+  <meta name="description" content="简述 分布式事务指事务的操作位于不同的节点上，需要保证事务的 AICD 特性。 例如在下单场景下，库存和订单如果不在同一个节点上，就涉及分布式事务。 解决方案 在分布式系统中，要实现分布式事务，无外乎那几种解决方案。 一、两阶段提交（2PC） 两阶段提交（Two-phase Commit，2PC），通过引入协调者（Coordinator）来协调参与者的行为，并最终决定这些参与者是否要真正执行事务。">
+<meta name="keywords" content="分布式,MQ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="锁与事务的问答对话">
-<meta property="og:url" content="https://hhbbz.github.io/2017/11/27/锁与事务的问答对话/index.html">
+<meta property="og:title" content="分布式事务的四种解决方案">
+<meta property="og:url" content="https://hhbbz.github.io/2018/09/06/分布式事务的四种解决方案/index.html">
 <meta property="og:site_name" content="hhbbz-Blog">
-<meta property="og:description" content="简介 以通俗的语言和说法，让大家更好的理解锁和事务之间的关系以及相关概念。 描述  什么是锁?（先发制人）  一种保护机制，在多线程的情况下，保证操作数据的正确性/一致性，  眼镜男：有哪几种分类？  悲观锁，乐观锁，独占锁，共享锁，公平锁，非公平锁，分布式锁，自旋锁  讲讲乐观锁悲观锁吧（顺藤摸瓜）  一般喜欢放在数据库来讲(其实这两个概念是属于计算机的，不要被误导)，就说mysql吧，悲观锁，">
+<meta property="og:description" content="简述 分布式事务指事务的操作位于不同的节点上，需要保证事务的 AICD 特性。 例如在下单场景下，库存和订单如果不在同一个节点上，就涉及分布式事务。 解决方案 在分布式系统中，要实现分布式事务，无外乎那几种解决方案。 一、两阶段提交（2PC） 两阶段提交（Two-phase Commit，2PC），通过引入协调者（Coordinator）来协调参与者的行为，并最终决定这些参与者是否要真正执行事务。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-27T10:28:30.000Z">
+<meta property="og:image" content="https://hhbbz.github.io/2018/09/06/分布式事务的四种解决方案/1.jpg">
+<meta property="og:image" content="https://hhbbz.github.io/2018/09/06/分布式事务的四种解决方案/2.jpg">
+<meta property="og:image" content="https://hhbbz.github.io/2018/09/06/分布式事务的四种解决方案/3.jpg">
+<meta property="og:image" content="https://hhbbz.github.io/2018/09/06/分布式事务的四种解决方案/4.png">
+<meta property="og:updated_time" content="2018-09-06T11:07:39.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="锁与事务的问答对话">
-<meta name="twitter:description" content="简介 以通俗的语言和说法，让大家更好的理解锁和事务之间的关系以及相关概念。 描述  什么是锁?（先发制人）  一种保护机制，在多线程的情况下，保证操作数据的正确性/一致性，  眼镜男：有哪几种分类？  悲观锁，乐观锁，独占锁，共享锁，公平锁，非公平锁，分布式锁，自旋锁  讲讲乐观锁悲观锁吧（顺藤摸瓜）  一般喜欢放在数据库来讲(其实这两个概念是属于计算机的，不要被误导)，就说mysql吧，悲观锁，">
+<meta name="twitter:title" content="分布式事务的四种解决方案">
+<meta name="twitter:description" content="简述 分布式事务指事务的操作位于不同的节点上，需要保证事务的 AICD 特性。 例如在下单场景下，库存和订单如果不在同一个节点上，就涉及分布式事务。 解决方案 在分布式系统中，要实现分布式事务，无外乎那几种解决方案。 一、两阶段提交（2PC） 两阶段提交（Two-phase Commit，2PC），通过引入协调者（Coordinator）来协调参与者的行为，并最终决定这些参与者是否要真正执行事务。">
+<meta name="twitter:image" content="https://hhbbz.github.io/2018/09/06/分布式事务的四种解决方案/1.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="https://hhbbz.github.io/2017/11/27/锁与事务的问答对话/"/>
+  <link rel="canonical" href="https://hhbbz.github.io/2018/09/06/分布式事务的四种解决方案/"/>
 
 
 
@@ -136,7 +141,7 @@
   };
 </script>
 
-  <title>锁与事务的问答对话 | hhbbz-Blog</title>
+  <title>分布式事务的四种解决方案 | hhbbz-Blog</title>
   
 
 
@@ -309,7 +314,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2017/11/27/锁与事务的问答对话/">
+    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2018/09/06/分布式事务的四种解决方案/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="hhbbz">
@@ -326,7 +331,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">锁与事务的问答对话
+          <h2 class="post-title" itemprop="name headline">分布式事务的四种解决方案
               
             
           </h2>
@@ -351,7 +356,7 @@
                 
               
 
-              <time title="创建时间：2017-11-27 14:54:02" itemprop="dateCreated datePublished" datetime="2017-11-27T14:54:02+08:00">2017-11-27</time>
+              <time title="创建时间：2018-09-06 18:50:40" itemprop="dateCreated datePublished" datetime="2018-09-06T18:50:40+08:00">2018-09-06</time>
             
 
             
@@ -368,7 +373,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2017-11-27 18:28:30" itemprop="dateModified" datetime="2017-11-27T18:28:30+08:00">18:28:30</time>
+                <time title="修改时间：2018-09-06 19:07:39" itemprop="dateModified" datetime="2018-09-06T19:07:39+08:00">19:07:39</time>
               
             
           </span>
@@ -419,70 +424,73 @@
       
 
       
-        <h1>简介</h1>
-<p>以通俗的语言和说法，让大家更好的理解锁和事务之间的关系以及相关概念。</p>
-<h1>描述</h1>
+        <h1>简述</h1>
+<p>分布式事务指事务的操作位于不同的节点上，需要保证事务的 AICD 特性。</p>
+<p>例如在下单场景下，库存和订单如果不在同一个节点上，就涉及分布式事务。</p>
+<h1>解决方案</h1>
+<p>在分布式系统中，要实现分布式事务，无外乎那几种解决方案。</p>
+<h2>一、两阶段提交（2PC）</h2>
+<p>两阶段提交（Two-phase Commit，2PC），通过引入协调者（Coordinator）来协调参与者的行为，并最终决定这些参与者是否要真正执行事务。</p>
+<h3>1. 运行过程</h3>
+<h4>1.1 准备阶段</h4>
+<p>协调者询问参与者事务是否执行成功，参与者发回事务执行结果。</p>
+<p><img src="/2018/09/06/分布式事务的四种解决方案/1.jpg" title="图片"></p>
+<h4>1.2 提交阶段</h4>
+<p>如果事务在每个参与者上都执行成功，事务协调者发送通知让参与者提交事务；否则，协调者发送通知让参与者回滚事务。</p>
+<p>需要注意的是，在准备阶段，参与者执行了事务，但是还未提交。只有在提交阶段接收到协调者发来的通知后，才进行提交或者回滚。</p>
+<p><img src="/2018/09/06/分布式事务的四种解决方案/2.jpg" title="图片"></p>
+<h3>2. 存在的问题</h3>
+<p><strong>2.1 同步阻塞</strong>
+所有事务参与者在等待其它参与者响应的时候都处于同步阻塞状态，无法进行其它操作。</p>
+<p><strong>2.2 单点问题</strong>
+协调者在 2PC 中起到非常大的作用，发生故障将会造成很大影响。特别是在阶段二发生故障，所有参与者会一直等待状态，无法完成其它操作。</p>
+<p><strong>2.3 数据不一致</strong>
+在阶段二，如果协调者只发送了部分 Commit 消息，此时网络发生异常，那么只有部分参与者接收到 Commit 消息，也就是说只有部分参与者提交了事务，使得系统数据不一致。</p>
+<p><strong>2.4 太过保守</strong>
+任意一个节点失败就会导致整个事务失败，没有完善的容错机制。</p>
+<h2>二、补偿事务（TCC）</h2>
+<p>TCC 其实就是采用的补偿机制，其核心思想是：针对每个操作，都要注册一个与其对应的确认和补偿（撤销）操作。它分为三个阶段：</p>
 <ul>
-<li>什么是锁?（先发制人）</li>
+<li>
+<p>Try 阶段主要是对业务系统做检测及资源预留</p>
+</li>
+<li>
+<p>Confirm 阶段主要是对业务系统做确认提交，Try阶段执行成功并开始执行 Confirm阶段时，默认 Confirm阶段是不会出错的。即：只要Try成功，Confirm一定成功。</p>
+</li>
+<li>
+<p>Cancel 阶段主要是在业务执行错误，需要回滚的状态下执行的业务取消，预留资源释放。</p>
+</li>
 </ul>
-<p>一种保护机制，在多线程的情况下，保证操作数据的正确性/一致性，</p>
-<ul>
-<li>眼镜男：有哪几种分类？</li>
-</ul>
-<p>悲观锁，乐观锁，独占锁，共享锁，公平锁，非公平锁，分布式锁，自旋锁</p>
-<ul>
-<li>讲讲乐观锁悲观锁吧（顺藤摸瓜）</li>
-</ul>
-<p>一般喜欢放在数据库来讲(其实这两个概念是属于计算机的，不要被误导)，就说mysql吧，悲观锁，主要是表锁，行锁还有间隙锁，叶锁，读锁，因为这些锁在被触发的时候势必引起线程阻塞，所以叫悲观
-另外乐观锁其实在mysql本身中不存在的，但是mysql提供了种mvcc的机制，支持乐观锁机制，</p>
-<ul>
-<li>mvcc是咋回事？（诱敌深入）</li>
-</ul>
-<p>只是在innodb引擎下存在，mvcc是为了满足事务的隔离，通过版本号的方式，避免同一数据不同事务间的竞争，所说的乐观锁只在事务级别为读未提交读提交，才会生效。</p>
-<ul>
-<li>具体mvcc机制有什么？（穷追不舍）</li>
-</ul>
-<p>多版本并发控制，保证数据操作在多线程过程中，保证事务隔离的机制，可以降低锁竞争的压力，保证比较高并发量，这个过程。在每开启一个事务时，会生成一个事务的版本号，被操作的数据会生成一条新的数据行（临时），但是在提交前对其他事务是不可见的，对于数据的更新操作成功，会将这个版本号更新到数据的行中,事务提交成功，将新的版本号，更新到此数据行（永久）中，这样保证了每个事务操作的数据，都是相互不影响的，也不存在锁的问题；</p>
-<ul>
-<li>那么在多个事务（操作同一条数据）并发过程中，谁先成功?</li>
-</ul>
-<p>mysql判断，其实就是谁先提交成功算谁的</p>
-<ul>
-<li>说到事务了，聊聊事务，</li>
-</ul>
-<p>事务常说一系列操作作为一个整体要么都成功要么都失败，主要特性acid，事务的的实现主要依赖两个log redo-log,undo-log,每次事务都会记录数据修改前的数据undo-log，修改后的数据放入redo-log,提出成功则使用redo-log 更新到磁盘，失败则使用undo-log将数据恢复到事务之前的数据</p>
-<p>眼镜男，嗯，再说说独占锁，共享锁吧（转移阵地）
-（嗯，独占，共享，公平，非公平，自旋锁这些都是广泛的概念，很多语言都有，包括操作系统，js的同学请回避）
-独占锁很明显就是持锁的线程只能有一个，共享锁则可以有多个</p>
-<ul>
-<li>独占可以理解，共享的意义在哪里？</li>
-</ul>
-<p>共享锁是为了提高程序的效率，举个例子数据的操作有读写之分，对于写的操作加锁，保证数据正确性，而对于读的操作如果不加锁，在写读操作同时进行时，读的数据有可能不是最新数据，如果对读操作加独占锁，面对读多写少的程序肯定效率很低，所有就出现了共享锁，对于读的的操作就使用共享的概念，但是对于写的操作则是互斥的，保证了读写的数据操作都一致，在java中上述的锁叫读写锁</p>
-<ul>
-<li>读写锁的机制是什么呢？（佯攻）</li>
-</ul>
-<p>在java中读写锁（ReadWritelock）的机制是基于AQS的一种实现，保证读读共享，读写互斥，写写互斥，如果要说机制的话，还要从AQS说起，这是java实现的一种锁机制，互斥锁，读者写锁，条件产量，信号量，栅栏的都是它的衍生物，主要工作基于CHL队列，voliate关键字修饰的状态符stat，线程去修改状态符成功了就是获取成功，失败了就进队列等待，等待唤醒，AQS中还有很重要的一个概念是自旋，在等待唤醒的时候，很多时候会使用自旋（while（!cas()））的方式，不停的尝试获取锁，直到被其他线程获取成功
-共享与独占的区别就在于，CHL队列中的节点的模式是EXCLUSIVE还是SHARED，当一个线程成功修改了stat状态，表示获取了锁，如果线程所在的节点为SHARED，将开始一个读锁传递的过程，从头结点，向队列后续节点传递唤醒，直到队列结束或者遇到了EXCLUSIVE的节点，等待所有激活的读操作完成，然后进入到独享模式（这部分尽力了，大家还是看源码）
-公平与非公平的区别就在于线程第一次获取锁时，也就是执行修改stat操作时，是进队列还是直接修改状态，这是基本的工作机制，详细的估计可以再聊好几集</p>
-<ul>
-<li>java 除了AQS 还有其他的锁支持么（佯攻未遂，寻找突破）</li>
-</ul>
-<p>在java中，synchronized关键字，是语言自带的，也叫内置锁，synchronized关键字，我们都知道被synchronized修饰的方法或者代码块，在同一时间内，只允许一个线程执行，是明显的独享锁，synchronized的实现机制？可以参考AQS的实现方式，只是AQS使用显示的用lock.lock()调用，而sync作为关键字修饰，你可以认为在synchronized修饰的地方，自动添加了lock方法，结束的地方进行了unlock释放锁的方法，只是被隐藏了，我们看不到。
-它本身实现有两部分：monitor对象，线程，工作机制还是线程抢占对象使用权，对象都有自己的对象头，存储了对象的很多信息，其中有一个是标识被哪个线程持有，对比AQS，线程从修改stat，变为修改monitor的对象头，线程的等待区域动 AQS中的队列，变为monitor对象中的某个区域，</p>
-<ul>
-<li>能细说么？（贴脸）</li>
-</ul>
-<p>锁一直是围绕线程安全来实现的，比如独占锁，它在内存里面的操作是怎么样的
-这个地方涉及到一个概念，内存模型（这个和jvm不要混淆，The Java memory model used internally in the JVM divides memory between thread stacks and the heap. This diagram illustrates the Java memory model from a logic perspective），是JVM用来区别线程栈和堆的内存方式，每个线程在运行的时候，所操作的数据存储空间有两个，一个是主内存 一个是工作内存，主内存其实就是jvm中堆，工作内存就是线程的栈，每次的数据操作，都是从主内存中把数据读到工作内存中，然后在工作内存中进行各种处理，如果进行了修改，会把数据回写到主内存，然后其他线程又进行同样的操作，就这样数据在工作内存和主内存，进进出出，不亦乐乎，在多次的情况下，就是因为进进出出的顺序乱了，不是按照线程预期的访问顺序，就出现了数据不一致的问题，导致了多线程的不安全性；整个操作过程还牵涉到CPU，高速缓存等概念，略过。。。。</p>
-<ul>
-<li>内存模型 还有哪些可以聊聊的（我们是抱着学习的心态）</li>
-</ul>
-<p>happen-befor 原则，Volatile 关键字（线程的可见性），内存屏障</p>
-<ul>
-<li>哦（怂了怂了）</li>
-</ul>
-<p>happen-befor原则定义了内存模型执行过程中的定律，就像1+1 = 2，不可能被打破的jvm的运行机制都依赖于这个原则，是jvm的宪法！！！
-Volatile关键字就有点叼了，Volatile修饰的数据，在被某个线程修改后，会被及时的回写到主内存，然后其他线程再获取时，就是新的数据，听起来很美好，但是Volatile没有办法控制线程的顺序，当一个数据（新数据）即将被修改到主内存时，刚好，另外一个线程从主内存读了数据（老数据），并又进行了一波操作，又将数据(更新的数据)回写到了主内存，整个过程（新数据）完全没有起到一毛钱作用，最终导致了数据的错误，呼呼打完收工！！！！</p>
+<p>举个例子，假入 Bob 要向 Smith 转账，思路大概是：
+我们有一个本地方法，里面依次调用</p>
+<ol>
+<li>首先在 Try 阶段，要先调用远程接口把 Smith 和 Bob 的钱给冻结起来。</li>
+<li>在 Confirm 阶段，执行远程调用的转账的操作，转账成功进行解冻。</li>
+<li>如果第2步执行成功，那么转账成功，如果第二步执行失败，则调用远程冻结接口对应的解冻方法 (Cancel)。</li>
+</ol>
+<p><strong>优点：</strong> 跟2PC比起来，实现以及流程相对简单了一些，但数据的一致性比2PC也要差一些</p>
+<p><strong>缺点：</strong> 缺点还是比较明显的，在2,3步中都有可能失败。TCC属于应用层的一种补偿方式，所以需要程序员在实现的时候多写很多补偿的代码，在一些场景中，一些业务流程可能用TCC不太好定义及处理。</p>
+<h2>三、本地消息表（异步确保）</h2>
+<p>本地消息表与业务数据表处于同一个数据库中，这样就能利用本地事务来保证在对这两个表的操作满足事务特性，并且使用了消息队列来保证最终一致性。</p>
+<ol>
+<li>在分布式事务操作的一方完成写业务数据的操作之后向本地消息表发送一个消息，本地事务能保证这个消息一定会被写入本地消息表中。</li>
+<li>之后将本地消息表中的消息转发到 Kafka 等消息队列中，如果转发成功则将消息从本地消息表中删除，否则继续重新转发。</li>
+<li>在分布式事务操作的另一方从消息队列中读取一个消息，并执行消息中的操作。</li>
+</ol>
+<p><img src="/2018/09/06/分布式事务的四种解决方案/3.jpg" title="图片"></p>
+<p><strong>优点：</strong> 一种非常经典的实现，避免了分布式事务，实现了最终一致性。</p>
+<p><strong>缺点：</strong> 消息表会耦合到业务系统中，如果没有封装好的解决方案，会有很多杂活需要处理。</p>
+<h2>四、MQ 事务消息</h2>
+<p>有一些第三方的MQ是支持事务消息的，比如RocketMQ，他们支持事务消息的方式也是类似于采用的二阶段提交，但是市面上一些主流的MQ都是不支持事务消息的，比如 RabbitMQ 和 Kafka 都不支持。</p>
+<p>以阿里的 RocketMQ 中间件为例，其思路大致为：</p>
+<p>第一阶段Prepared消息，会拿到消息的地址。
+第二阶段执行本地事务，第三阶段通过第一阶段拿到的地址去访问消息，并修改状态。</p>
+<p>也就是说在业务方法内要想消息队列提交两次请求，一次发送消息和一次确认消息。如果确认消息发送失败了RocketMQ会定期扫描消息集群中的事务消息，这时候发现了Prepared消息，它会向消息发送者确认，所以生产方需要实现一个check接口，RocketMQ会根据发送端设置的策略来决定是回滚还是继续发送确认消息。这样就保证了消息发送与本地事务同时成功或同时失败。</p>
+<p><img src="/2018/09/06/分布式事务的四种解决方案/4.png" title="图片"></p>
+<p><strong>优点：</strong> 实现了最终一致性，不需要依赖本地数据库事务。</p>
+<p><strong>缺点：</strong> 实现难度大，主流MQ不支持，RocketMQ事务消息部分代码也未开源。</p>
+<h1>总结</h1>
+<p>通过本文我们总结并对比了几种分布式分解方案的优缺点，分布式事务本身是一个技术难题，是没有一种完美的方案应对所有场景的，具体还是要根据业务场景去抉择吧。笔者上家公司是试用阿里RocketMQ去实现的分布式事务，现在也有除了很多分布式事务的协调器，比如LCN等，大家可以多去尝试。</p>
 
       
     </div>
@@ -527,9 +535,9 @@ Volatile关键字就有点叼了，Volatile修饰的数据，在被某个线程�
       
         <div class="post-tags">
           
-            <a href="/tags/Java/" rel="tag"># Java</a>
+            <a href="/tags/分布式/" rel="tag"># 分布式</a>
           
-            <a href="/tags/Mysql/" rel="tag"># Mysql</a>
+            <a href="/tags/MQ/" rel="tag"># MQ</a>
           
         </div>
       
@@ -542,8 +550,8 @@ Volatile关键字就有点叼了，Volatile修饰的数据，在被某个线程�
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/11/25/Mysql索引注意事项以及关键字优化/" rel="next" title="Mysql索引注意事项以及关键字优化">
-                <i class="fa fa-chevron-left"></i> Mysql索引注意事项以及关键字优化
+              <a href="/2018/08/20/Elasticsearch初体验/" rel="next" title="Elasticsearch初体验">
+                <i class="fa fa-chevron-left"></i> Elasticsearch初体验
               </a>
             
           </div>
@@ -551,10 +559,6 @@ Volatile关键字就有点叼了，Volatile修饰的数据，在被某个线程�
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/11/28/Mysql索引详解/" rel="prev" title="Mysql索引详解">
-                Mysql索引详解 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
