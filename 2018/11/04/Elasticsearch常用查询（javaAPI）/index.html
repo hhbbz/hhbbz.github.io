@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32*32.ico?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16*16.ico?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="简介 java Elastic 客户端基本使用 引入jar 123compile &apos;org.elasticsearch:elasticsearch:5.5.0&apos;compile &apos;org.elasticsearch.client:transport:5.5.0 client基本使用 得到client 123Settings settings = Settings.builder().put(&quot;clu">
+<meta name="keywords" content="Elasticsearch,Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Elasticsearch常用查询（javaAPI）">
+<meta property="og:url" content="https://hhbbz.github.io/2018/11/04/Elasticsearch常用查询（javaAPI）/index.html">
+<meta property="og:site_name" content="hhbbz-Blog">
+<meta property="og:description" content="简介 java Elastic 客户端基本使用 引入jar 123compile &apos;org.elasticsearch:elasticsearch:5.5.0&apos;compile &apos;org.elasticsearch.client:transport:5.5.0 client基本使用 得到client 123Settings settings = Settings.builder().put(&quot;clu">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-11-04T06:59:00.611Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Elasticsearch常用查询（javaAPI）">
+<meta name="twitter:description" content="简介 java Elastic 客户端基本使用 引入jar 123compile &apos;org.elasticsearch:elasticsearch:5.5.0&apos;compile &apos;org.elasticsearch.client:transport:5.5.0 client基本使用 得到client 123Settings settings = Settings.builder().put(&quot;clu">
+
+
+
+
+
+
+  <link rel="canonical" href="https://hhbbz.github.io/2018/11/04/Elasticsearch常用查询（javaAPI）/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Elasticsearch常用查询（javaAPI） | hhbbz-Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">hhbbz-Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">hhbbz</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2018/11/04/Elasticsearch常用查询（javaAPI）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="hhbbz">
+      <meta itemprop="description" content="摘抄和记录的地方">
+      <meta itemprop="image" content="/images/TOM.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hhbbz-Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Elasticsearch常用查询（javaAPI）
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-04 14:01:59" itemprop="dateCreated datePublished" datetime="2018-11-04T14:01:59+08:00">2018-11-04</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-11-04 14:59:00" itemprop="dateModified" datetime="2018-11-04T14:59:00+08:00">14:59:00</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1>简介</h1>
+<p>java Elastic 客户端基本使用</p>
+<h2>引入jar</h2>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">compile <span class="string">'org.elasticsearch:elasticsearch:5.5.0'</span></span><br><span class="line"></span><br><span class="line">compile <span class="string">'org.elasticsearch.client:transport:5.5.0</span></span><br></pre></td></tr></table></figure></p>
+<h2>client基本使用</h2>
+<h3>得到client</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Settings settings = Settings.builder().put(<span class="string">"cluster.name"</span>, <span class="string">"hbz-6-test"</span>).build();</span><br><span class="line">TransportClient client = <span class="keyword">new</span> PreBuiltTransportClient(settings);</span><br><span class="line">client.addTransportAddress(<span class="keyword">new</span> InetSocketTransportAddress(InetAddress.getByName(<span class="string">"127.0.0.1"</span>), <span class="number">9300</span>));</span><br></pre></td></tr></table></figure></p>
+<h3>关闭资源</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">client.close();</span><br></pre></td></tr></table></figure></p>
+<pre><code>搜索关键字全部要小写
+</code></pre>
+<h3>get得到指定index type id的数据</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">prepareGet</span><span class="params">(TransportClient client)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        GetResponse response = client.prepareGet(<span class="string">"mytest"</span>, <span class="string">"test"</span>, <span class="string">"p1"</span>).get();</span><br><span class="line">        System.out.println(response);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>output:</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"_index"</span>:<span class="string">"mytest"</span>,</span><br><span class="line">    <span class="attr">"_type"</span>:<span class="string">"test"</span>,</span><br><span class="line">    <span class="attr">"_id"</span>:<span class="string">"p1"</span>,</span><br><span class="line">    <span class="attr">"_version"</span>:<span class="number">1</span>,</span><br><span class="line">    <span class="attr">"found"</span>:<span class="literal">true</span>,</span><br><span class="line">    <span class="attr">"_source"</span>:&#123;</span><br><span class="line">        <span class="attr">"name"</span>:<span class="string">"mac Book 笔记本"</span>,</span><br><span class="line">        <span class="attr">"price"</span>:<span class="number">1233</span>,</span><br><span class="line">        <span class="attr">"description"</span>:<span class="string">"这是笔记本"</span>,</span><br><span class="line">        <span class="attr">"cats"</span>:[</span><br><span class="line">            <span class="string">"3c"</span>,</span><br><span class="line">            <span class="string">"computer"</span></span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3>insert添加数据</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(TransportClient client)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        Map&lt;String,Object&gt; resource = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        resource.put(<span class="string">"name"</span>,<span class="string">"mac Note"</span>);</span><br><span class="line">        resource.put(<span class="string">"price"</span>,<span class="number">8877</span>);</span><br><span class="line">        resource.put(<span class="string">"description"</span>,<span class="string">"mac Note 新款"</span>);</span><br><span class="line">        IndexRequestBuilder index = client.prepareIndex(<span class="string">"mytest"</span>, <span class="string">"test"</span>);</span><br><span class="line"></span><br><span class="line">        IndexResponse insertResponse = index.setSource(resource).execute().get();</span><br><span class="line"></span><br><span class="line">        System.out.println(insertResponse);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>output:</p>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">IndexResponse[index=mytest,type=test,id=AV8CZmTgGnilLCUrybiV,version=<span class="number">1</span>,result=created</span><br><span class="line">,shards=&#123;<span class="string">"total"</span>:<span class="number">2</span>,<span class="string">"successful"</span>:<span class="number">1</span>,<span class="string">"failed"</span>:<span class="number">0</span>&#125;]</span><br></pre></td></tr></table></figure></p>
+<h3>delete删除数据</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">(TransportClient client)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        BulkByScrollResponse response = DeleteByQueryAction.INSTANCE.newRequestBuilder(client)</span><br><span class="line">                .filter(QueryBuilders.matchQuery(<span class="string">"name"</span>, <span class="string">"mac"</span>)) <span class="comment">//搜索</span></span><br><span class="line">                .source(<span class="string">"mytest"</span>) <span class="comment">//index</span></span><br><span class="line">                .get();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">       <span class="keyword">long</span> deleted = response.getDeleted();</span><br><span class="line">       System.out.println(<span class="string">"删除个数: "</span>+deleted);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3>update 修改数据</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(TransportClient client)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line"></span><br><span class="line">        Map&lt;String,Object&gt; data = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        data.put(<span class="string">"name"</span>,<span class="string">"new mac node"</span>);</span><br><span class="line"></span><br><span class="line">        UpdateRequest updateRequest =  <span class="keyword">new</span> UpdateRequest();</span><br><span class="line">        updateRequest.index(<span class="string">"mytest"</span>);</span><br><span class="line">        updateRequest.type(<span class="string">"test"</span>);</span><br><span class="line">        updateRequest.id(<span class="string">"AV8CfcSLGnilLCUryoEl"</span>);</span><br><span class="line"></span><br><span class="line">        updateRequest.doc(data);</span><br><span class="line"></span><br><span class="line">        UpdateResponse response = client.update(updateRequest).get();</span><br><span class="line">        System.out.println(response);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>output:</p>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UpdateResponse[index=mytest,type=test,id=AV8CfcSLGnilLCUryoEl,version=<span class="number">2</span>,result=updated,shards=ShardInfo&#123;total=<span class="number">2</span>, successful=<span class="number">1</span>, failures=[]&#125;]</span><br></pre></td></tr></table></figure></p>
+<h3>MultiGet查询多个index</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">multiIndex</span><span class="params">(TransportClient client)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        MultiGetResponse multiGetItemResponses = client.prepareMultiGet()</span><br><span class="line">                .add(<span class="string">"mytest"</span>,<span class="string">"test"</span>,<span class="string">"AV8CfcSLGnilLCUryoEl"</span>) <span class="comment">//多个index</span></span><br><span class="line">                .add(<span class="string">"instestdb_business_log-2017.09"</span>,<span class="string">"instestdb_business_log"</span>,<span class="string">"AV7KHPtGDF9uyeK_lXln"</span>) <span class="comment">//多个index</span></span><br><span class="line">                .get();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(MultiGetItemResponse itemResponses : multiGetItemResponses) &#123;</span><br><span class="line">            GetResponse response = itemResponses.getResponse();</span><br><span class="line">            <span class="keyword">if</span>(response.isExists()) &#123; </span><br><span class="line">                String json = response.getSourceAsString(); <span class="comment">//获取到_source field</span></span><br><span class="line">                System.out.println(json);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h3>Bulk API 一次请求多个添加和删除</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">BulkRequest</span><span class="params">(TransportClient client)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        BulkRequestBuilder bulkRequest = client.prepareBulk();</span><br><span class="line"></span><br><span class="line">        IndexRequestBuilder index1 = client.prepareIndex(<span class="string">"mytest"</span>, <span class="string">"test"</span>);</span><br><span class="line">        IndexRequestBuilder index2 = client.prepareIndex(<span class="string">"mytest"</span>, <span class="string">"test"</span>);</span><br><span class="line"></span><br><span class="line">        Map&lt;String,Object&gt; resource = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        resource.put(<span class="string">"name"</span>,<span class="string">"华硕"</span>);</span><br><span class="line">        resource.put(<span class="string">"price"</span>,<span class="number">5577</span>);</span><br><span class="line">        resource.put(<span class="string">"description"</span>,<span class="string">"华硕z460"</span>);</span><br><span class="line"></span><br><span class="line">        index1.setSource(resource);</span><br><span class="line"></span><br><span class="line">        Map&lt;String,Object&gt; resource1 = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        resource1.put(<span class="string">"name"</span>,<span class="string">"小米2"</span>);</span><br><span class="line">        resource1.put(<span class="string">"price"</span>,<span class="number">4577</span>);</span><br><span class="line">        resource1.put(<span class="string">"description"</span>,<span class="string">"新机超薄"</span>);</span><br><span class="line"></span><br><span class="line">        index1.setSource(resource);</span><br><span class="line">        index2.setSource(resource1);</span><br><span class="line"></span><br><span class="line">        bulkRequest.add(index1);</span><br><span class="line">        bulkRequest.add(index2);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        BulkResponse bulkResponse = bulkRequest.get();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(bulkResponse.hasFailures()) &#123;</span><br><span class="line">            System.out.println(bulkResponse.buildFailureMessage());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        bulkResponse.forEach(response -&gt;&#123;</span><br><span class="line">            System.out.println(response.getId());</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h2>query dsl 使用</h2>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.elasticsearch.index.query.QueryBuilders.*;</span><br><span class="line"></span><br><span class="line"> Settings settings = Settings.builder()</span><br><span class="line">                .put(<span class="string">"cluster.name"</span>, <span class="string">"hbz-6-test"</span>).build();</span><br><span class="line">        TransportClient client = <span class="keyword">new</span> PreBuiltTransportClient(settings);</span><br><span class="line">        client.addTransportAddress(<span class="keyword">new</span> InetSocketTransportAddress(InetAddress.getByName(<span class="string">"127.0.0.1"</span>), <span class="number">9300</span>));</span><br><span class="line"></span><br><span class="line">        allquery(client); <span class="comment">//具体的query dsl查询</span></span><br><span class="line"></span><br><span class="line">        client.close();</span><br></pre></td></tr></table></figure></p>
+<h3>Match All Query 查询所有的数据</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">allquery</span><span class="params">(TransportClient client)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        QueryBuilder qb = matchAllQuery();</span><br><span class="line">        SearchResponse response = client.prepareSearch(<span class="string">"mytest"</span>).setTypes(<span class="string">"test"</span>).setSize(<span class="number">3</span>).setQuery(qb).get();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"length: "</span>+response.getHits().getHits().length );</span><br><span class="line">        <span class="keyword">if</span>(response.getHits().getTotalHits() != <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (SearchHit hit : response.getHits().getHits()) &#123;</span><br><span class="line"></span><br><span class="line">                System.out.println(hit.getSourceAsString());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h3>Match Query 查询单一条件的数据</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">myMatchQuery</span><span class="params">(TransportClient client)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        QueryBuilder qb = matchQuery(<span class="string">"name"</span>,<span class="string">"mac"</span>);</span><br><span class="line"></span><br><span class="line">        SearchResponse response = client.prepareSearch(<span class="string">"mytest"</span>).setTypes(<span class="string">"test"</span>).setQuery(qb).get();</span><br><span class="line">        System.out.println(<span class="string">"length: "</span>+response.getHits().getHits().length );</span><br><span class="line">        <span class="keyword">if</span>(response.getHits().getTotalHits() != <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (SearchHit hit : response.getHits().getHits()) &#123;</span><br><span class="line">                System.out.println(hit.getScore()+<span class="string">" --&gt; "</span>+hit.getSourceAsString());</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>MultiMatchQuery 在多个字段中查询一个关键字</strong></p>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">QueryBuilder qb = multiMatchQuery(<span class="string">"mac"</span>,<span class="string">"description"</span>,<span class="string">"name"</span>); <span class="comment">//mac是要搜索的词 description，name 都是字段</span></span><br></pre></td></tr></table></figure></p>
+<h3>Common Terms Query 搜索term</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">myCommonTermsQuery</span><span class="params">(TransportClient client )</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        QueryBuilder qb = commonTermsQuery(<span class="string">"description"</span>,<span class="string">"mac"</span>);</span><br><span class="line">        print(qb,client);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h3>Simple Query String Query 简单字符串查询可以使用正则</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mySimpleQueryString</span><span class="params">(TransportClient client )</span> </span>&#123;</span><br><span class="line">        QueryBuilder qb = queryStringQuery(<span class="string">"mac*^2"</span>).field(<span class="string">"name"</span>);</span><br><span class="line">        print(qb,client);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h3>term 搜索关键词一个</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">myTermQuery</span><span class="params">(TransportClient client)</span> </span>&#123;</span><br><span class="line">        QueryBuilder qb = termQuery(<span class="string">"name"</span>,<span class="string">"mac2"</span>);</span><br><span class="line">        print(qb,client);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h3>terms 搜索关键词多个</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">QueryBuilder qb = termsQuery(<span class="string">"name_str"</span>,<span class="string">"小米"</span>,<span class="string">"戴尔"</span>);</span><br><span class="line">print2(qb,client);</span><br></pre></td></tr></table></figure></p>
+<h3>range query 范围搜索</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">myRangeQuery</span><span class="params">(TransportClient client)</span></span>&#123;</span><br><span class="line">        QueryBuilder qb = rangeQuery(<span class="string">"price"</span>).from(<span class="number">3399</span>)</span><br><span class="line">                .to(<span class="number">6399</span>)</span><br><span class="line">                .includeLower(<span class="keyword">true</span>)</span><br><span class="line">                .includeUpper(<span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line">        print2(qb,client);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    QueryBuilder qb = rangeQuery(<span class="string">"price"</span>).gte(<span class="number">3399</span>).lt(<span class="number">6399</span>);</span><br></pre></td></tr></table></figure></p>
+<h3>Exists Query 查找字段是否存在 存在则返回所有的数据，不存在返回0</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">myExistsQuery</span><span class="params">(TransportClient client)</span> </span>&#123;</span><br><span class="line">        QueryBuilder qb = existsQuery(<span class="string">"name_str"</span>);</span><br><span class="line">        print2(qb,client);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h3>Wildcard Query 通配符查询</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">QueryBuilder qb = wildcardQuery(<span class="string">"user"</span>, <span class="string">"k?mc*"</span>);</span><br></pre></td></tr></table></figure></p>
+<h3>Regexp Query支持正则表达式的查询</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">QueryBuilder qb = regexpQuery(<span class="string">"name.first"</span>, <span class="string">"s.*y"</span>);</span><br></pre></td></tr></table></figure></p>
+<h3>Fuzzy Query 模糊查询</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">QueryBuilder qb = fuzzyQuery(</span><br><span class="line">    <span class="string">"name"</span>,</span><br><span class="line">    <span class="string">"kimzhy"</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<h3>ids Query 根据id 查询</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">QueryBuilder qb = idsQuery(<span class="string">"my_type"</span>, <span class="string">"type2"</span>)</span><br><span class="line">    .addIds(<span class="string">"1"</span>, <span class="string">"4"</span>, <span class="string">"100"</span>);</span><br><span class="line"></span><br><span class="line">QueryBuilder qb = idsQuery() </span><br><span class="line">    .addIds(<span class="string">"AV8HhVC8FiG-4m4G2rYp"</span>,<span class="string">"AV8HhVB6FiG-4m4G2rYm"</span>);</span><br></pre></td></tr></table></figure></p>
+<h2>复合查询</h2>
+<h3>Contant Score Query 指定score</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">QueryBuilder qb = constantScoreQuery(matchQuery(<span class="string">"name_str"</span>, <span class="string">"联想"</span>)).boost(<span class="number">3.0f</span>);</span><br></pre></td></tr></table></figure></p>
+<h3>Bool Query must mustNot should 查询</h3>
+<p>所有的 must 子句必须匹配, 并且所有的 must_not 子句必须不匹配, 但是多少 should 子句应
+该匹配呢? 默认的,不需要匹配任何 should 子句,一种情况例外:如果没有must子句,就必须至少匹 配一个should子句。</p>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">myBoolQuery</span><span class="params">(TransportClient client)</span> </span>&#123;</span><br><span class="line">        QueryBuilder qb = boolQuery().must(termQuery(<span class="string">"name_str"</span>,<span class="string">"小米"</span>))</span><br><span class="line">                .filter(matchQuery(<span class="string">"price"</span>,<span class="number">3599</span>))</span><br><span class="line">                .filter(matchQuery(<span class="string">"description"</span>,<span class="string">"lihao"</span>));</span><br><span class="line">        print2(qb, client);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    QueryBuilder qb = boolQuery()</span><br><span class="line">    .must(termQuery(<span class="string">"content"</span>, <span class="string">"test1"</span>))</span><br><span class="line">    .must(termQuery(<span class="string">"content"</span>, <span class="string">"test4"</span>))</span><br><span class="line">    .mustNot(termQuery(<span class="string">"content"</span>, <span class="string">"test2"</span>))</span><br><span class="line">    .should(termQuery(<span class="string">"content"</span>, <span class="string">"test3"</span>))  </span><br><span class="line">    .filter(termQuery(<span class="string">"content"</span>, <span class="string">"test5"</span>));</span><br></pre></td></tr></table></figure></p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">GET mttest-2017.10.41/web1/_search</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"query"</span>: &#123;</span><br><span class="line">    <span class="attr">"bool"</span>: &#123;</span><br><span class="line">      <span class="attr">"must"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"match"</span>: &#123;</span><br><span class="line">            <span class="attr">"request"</span>: <span class="string">"choosehospital/index"</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"match"</span>: &#123;</span><br><span class="line">            <span class="attr">"response"</span>: <span class="string">"500"</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3>indices query查询多个index</h3>
+<p>用来查询多个index,对于指定内的index,执行指定的内部query;对于指定外的index,执行
+no_match_query设定的条件</p>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">(QueryBuilder qb, TransportClient client)</span> </span>&#123;</span><br><span class="line">        SearchResponse response = client.prepareSearch(<span class="string">"mytest"</span>).setTypes(<span class="string">"test"</span>).setQuery(qb).get();</span><br><span class="line">        System.out.println(<span class="string">"length: "</span> + response.getHits().getHits().length);</span><br><span class="line">        <span class="keyword">if</span> (response.getHits().getTotalHits() != <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (SearchHit hit : response.getHits().getHits()) &#123;</span><br><span class="line">                System.out.println(hit.getScore() + <span class="string">" --&gt; "</span> + hit.getSourceAsString());</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">print2</span><span class="params">(QueryBuilder qb, TransportClient client)</span> </span>&#123;</span><br><span class="line">        SearchResponse response = client.prepareSearch(<span class="string">"mytest_1"</span>).setTypes(<span class="string">"test"</span>).setQuery(qb).get();</span><br><span class="line">        System.out.println(<span class="string">"length: "</span> + response.getHits().getHits().length);</span><br><span class="line">        <span class="keyword">if</span> (response.getHits().getTotalHits() != <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (SearchHit hit : response.getHits().getHits()) &#123;</span><br><span class="line">                System.out.println(hit.getScore() + <span class="string">" --&gt; "</span> + hit.getSourceAsString());</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h2>scroll分页</h2>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String ...arg)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//链接服务器</span></span><br><span class="line">        Settings  settings = Settings.builder()</span><br><span class="line">                .put(<span class="string">"cluster.name"</span>,<span class="string">"hbz-6-test"</span>).build();</span><br><span class="line"></span><br><span class="line">        TransportClient client = <span class="keyword">new</span> PreBuiltTransportClient(settings);</span><br><span class="line">        client.addTransportAddress(<span class="keyword">new</span> InetSocketTransportAddress(InetAddress.getByName(<span class="string">"127.0.0.1"</span>), <span class="number">9300</span>));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">//设置搜索条件</span></span><br><span class="line">        QueryBuilder qb = termQuery(<span class="string">"name_str"</span>,<span class="string">"笔记本"</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 按照price 降序  每次查询2条  第一次不需要设置sroll  scrollid</span></span><br><span class="line">        SearchResponse scrollResp = client.prepareSearch(<span class="string">"mytest_1"</span>).setTypes(<span class="string">"test"</span>)</span><br><span class="line">                .addSort(<span class="string">"price"</span>, SortOrder.DESC)</span><br><span class="line">                .setScroll(<span class="keyword">new</span> TimeValue(<span class="number">30000</span>))</span><br><span class="line">                .setQuery(qb)</span><br><span class="line">                .setSize(<span class="number">2</span>).get();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"length: "</span> + scrollResp.getHits().getHits().length);</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">do</span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"第 "</span> +count+ <span class="string">" 次"</span>);</span><br><span class="line">            System.out.println();</span><br><span class="line">            <span class="keyword">for</span> (SearchHit hit : scrollResp.getHits().getHits())&#123;</span><br><span class="line">                System.out.println(hit.getScore() + <span class="string">" --&gt; "</span> +hit.getSourceAsString());</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            System.out.println(<span class="string">"scrollid:  "</span>+scrollResp.getScrollId());</span><br><span class="line"></span><br><span class="line">            <span class="comment">//设置sroll id</span></span><br><span class="line">            scrollResp =client.prepareSearchScroll(scrollResp.getScrollId()).setScroll(<span class="keyword">new</span> TimeValue(<span class="number">60000</span>)).execute().actionGet();</span><br><span class="line">            System.out.println();</span><br><span class="line"></span><br><span class="line">            count++;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">while</span> (scrollResp.getHits().getHits().length !=<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        client.close();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h3>prepareMultiSearch多个条件查询</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MultiSearchDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String ...arg)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        Settings settings = Settings.builder().put(<span class="string">"cluster.name"</span>, <span class="string">"hbz-6-test"</span>).build();</span><br><span class="line"></span><br><span class="line">        TransportClient client = <span class="keyword">new</span> PreBuiltTransportClient(settings);</span><br><span class="line">        client.addTransportAddress(<span class="keyword">new</span> InetSocketTransportAddress(InetAddress.getByName(<span class="string">"127.0.0.1"</span>), <span class="number">9300</span>));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">       QueryBuilder query1 = termQuery(<span class="string">"name_str"</span>,<span class="string">"小米"</span>);</span><br><span class="line">       QueryBuilder query2 = termQuery(<span class="string">"name_str"</span>,<span class="string">"戴尔"</span>);</span><br><span class="line"></span><br><span class="line">        SearchRequestBuilder srb1 = client.prepareSearch(<span class="string">"mytest_1"</span>).setTypes(<span class="string">"test"</span>).setQuery(query1);</span><br><span class="line">        SearchRequestBuilder srb2 = client.prepareSearch(<span class="string">"mytest_1"</span>).setTypes(<span class="string">"test"</span>).setQuery(query2);</span><br><span class="line"></span><br><span class="line">        MultiSearchResponse sr = client.prepareMultiSearch().add(srb1).add(srb2).get();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">long</span> nbHits =<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(MultiSearchResponse.Item item : sr.getResponses()) &#123;</span><br><span class="line">            SearchResponse response = item.getResponse();</span><br><span class="line">            nbHits += response.getHits().getTotalHits();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(response.getHits().getHits().length &gt;<span class="number">0</span>) &#123;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">for</span>(SearchHit hit : response.getHits().getHits()) &#123;</span><br><span class="line">                    System.out.println(hit.getScore()+<span class="string">"  -----&gt;  "</span>+hit.getSourceAsString());</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(<span class="string">"-------------------------"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(nbHits);</span><br><span class="line"></span><br><span class="line">        client.close();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2>聚合</h2>
+<h3>概述</h3>
+<p>ES 的聚合框架提供对查询得到的数据进行分组和汇总统计，以提供复杂的统计分析功能。</p>
+<p>ES支持在一次聚合查询中，可以同时得到聚合的具体结果并再次进行聚合，也就是聚合是可以嵌套的。</p>
+<p>这非常有用,你可以通过一次操作得到多次聚合的结果,从而避免多次请求,减少网络和服务器的负担。</p>
+<h3>聚合的类型</h3>
+<ol>
+<li>
+<p>Bucketing（桶）聚合：划分不同的“桶”，将数据分配到不同的“桶” 里，然后再进行聚合，非常类似sql 中的group 语句的含义。</p>
+</li>
+<li>
+<p>Metric(指标)聚合：指标聚合主要针对number类型的数据，在一组文档中，保持对要聚合的指标的跟踪和计算，需要ES做比较多的计算工作。</p>
+</li>
+<li>
+<p>Pipeline(管道)聚合：用来聚合其它聚合输出的结果以及相关指标</p>
+</li>
+</ol>
+<h3>聚合的基本语法</h3>
+<p><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">"aggregations" : &#123;                      //定义聚合对象,也可用 "aggs"</span><br><span class="line">    "&lt;aggregation_name&gt;" : &#123;            //聚合的名称,用户自定义   </span><br><span class="line">        "&lt;aggregation_type&gt;" : &#123;         //聚合类型,比如 "histogram" "avg"</span><br><span class="line">            &lt;aggregation_body&gt;</span><br><span class="line">        &#125;</span><br><span class="line">        [,"meta" : &#123;  [&lt;meta_data_body&gt;] &#125; ]?</span><br><span class="line">        [,"aggregations" : &#123; [&lt;sub_aggregation&gt;]+ &#125; ]?</span><br><span class="line">    &#125;</span><br><span class="line">    [,"&lt;aggregation_name_2&gt;" : &#123; ... &#125; ]*  ////定义额外的多个平级聚合,只有Bucketing类型才有意义</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>GET mytest_1/test/_search</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"aggs"</span> : &#123;</span><br><span class="line">        <span class="attr">"avg_price"</span> : &#123; <span class="attr">"avg"</span> : &#123; <span class="attr">"field"</span> : <span class="string">"price"</span> &#125; &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>output:</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123; <span class="attr">"aggregations"</span>: &#123;</span><br><span class="line">    <span class="attr">"avg_price"</span>: &#123;</span><br><span class="line">      <span class="attr">"value"</span>: <span class="number">4954.555555555556</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<h2>Metric 使用</h2>
+<h3>求平均值</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String ...arg)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        Settings settings = Settings.builder().put(<span class="string">"cluster.name"</span>, <span class="string">"hbz-6-test"</span>).build();</span><br><span class="line"></span><br><span class="line">        TransportClient client = <span class="keyword">new</span> PreBuiltTransportClient(settings);</span><br><span class="line">        client.addTransportAddress(<span class="keyword">new</span> InetSocketTransportAddress(InetAddress.getByName(<span class="string">"127.0.0.1"</span>),<span class="number">9300</span>));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        avg(client);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        client.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">     <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">avg</span><span class="params">(TransportClient client)</span> </span>&#123;</span><br><span class="line">        SearchRequestBuilder search = client.prepareSearch(<span class="string">"mytest_1"</span>).setTypes(<span class="string">"test"</span>);</span><br><span class="line"></span><br><span class="line">        SearchResponse sr = search.addAggregation(AggregationBuilders.avg(<span class="string">"avg_price"</span>).field(<span class="string">"price"</span>)).execute().actionGet();</span><br><span class="line"></span><br><span class="line">        Avg result = sr.getAggregations().get(<span class="string">"avg_price"</span>);</span><br><span class="line">        System.out.println(result.getValue());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>POST mytest_1/test/_search?size=0</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"aggs"</span> : &#123;</span><br><span class="line">        <span class="attr">"avg_price"</span> : &#123;</span><br><span class="line">          <span class="attr">"avg"</span> : &#123; <span class="attr">"field"</span> : <span class="string">"price"</span> &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>POST mytest_1/test/_search?size=0</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"aggs"</span>:&#123;</span><br><span class="line">        <span class="attr">"all_cats"</span>:&#123;</span><br><span class="line">            <span class="attr">"terms"</span>:&#123;</span><br><span class="line">                <span class="attr">"field"</span>:<span class="string">"tag.keyword"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"aggs"</span>:&#123;</span><br><span class="line">                <span class="attr">"avg_price"</span>:&#123;</span><br><span class="line">                    <span class="attr">"avg"</span>:&#123;</span><br><span class="line">                        <span class="attr">"field"</span>:<span class="string">"price"</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>output:</p>
+<p><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">"aggregations": &#123;</span><br><span class="line">    "all_cats": &#123;</span><br><span class="line">      "doc_count_error_upper_bound": 0,</span><br><span class="line">      "sum_other_doc_count": 0,</span><br><span class="line">      "buckets": [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"key"</span>: <span class="string">"笔记本"</span>,</span><br><span class="line">          <span class="attr">"doc_count"</span>: <span class="number">8</span>,</span><br><span class="line">          <span class="attr">"avg_price"</span>: &#123;</span><br><span class="line">            <span class="attr">"value"</span>: <span class="number">5124</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"key"</span>: <span class="string">"联想"</span>,</span><br><span class="line">          <span class="attr">"doc_count"</span>: <span class="number">4</span>,</span><br><span class="line">          <span class="attr">"avg_price"</span>: &#123;</span><br><span class="line">            <span class="attr">"value"</span>: <span class="number">5649</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"key"</span>: <span class="string">"小米"</span>,</span><br><span class="line">          <span class="attr">"doc_count"</span>: <span class="number">2</span>,</span><br><span class="line">          <span class="attr">"avg_price"</span>: &#123;</span><br><span class="line">            <span class="attr">"value"</span>: <span class="number">4399</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"key"</span>: <span class="string">"惠普"</span>,</span><br><span class="line">          <span class="attr">"doc_count"</span>: <span class="number">1</span>,</span><br><span class="line">          <span class="attr">"avg_price"</span>: &#123;</span><br><span class="line">            <span class="attr">"value"</span>: <span class="number">2399</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"key"</span>: <span class="string">"戴尔"</span>,</span><br><span class="line">          <span class="attr">"doc_count"</span>: <span class="number">1</span>,</span><br><span class="line">          <span class="attr">"avg_price"</span>: &#123;</span><br><span class="line">            <span class="attr">"value"</span>: <span class="number">7199</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<h3>分类求取平均值</h3>
+<p>PUT mytest_1/_mapping/test</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"properties"</span>: &#123;</span><br><span class="line">    <span class="attr">"tag"</span>: &#123; </span><br><span class="line">      <span class="attr">"type"</span>:     <span class="string">"text"</span>,</span><br><span class="line">      <span class="attr">"fielddata"</span>: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">avg1</span><span class="params">(TransportClient client)</span> </span>&#123;</span><br><span class="line">        SearchRequestBuilder search = client.prepareSearch(<span class="string">"mytest_1"</span>).setSize(<span class="number">0</span>).setTypes(<span class="string">"test"</span>);</span><br><span class="line"></span><br><span class="line">        TermsAggregationBuilder tag = AggregationBuilders.terms(<span class="string">"tags"</span>).field(<span class="string">"tag.keyword"</span>);</span><br><span class="line">        AvgAggregationBuilder price = AggregationBuilders.avg(<span class="string">"avg_price"</span>).field(<span class="string">"price"</span>);</span><br><span class="line">        tag.subAggregation(price);</span><br><span class="line"></span><br><span class="line">        SearchResponse sr = search.addAggregation(tag).execute().actionGet();</span><br><span class="line"></span><br><span class="line">        System.out.println(sr);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h3>Cardinality 去除重复数据</h3>
+<p>用来对单个数据进行汇总,计算不重复的值的数量。</p>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String... arg)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        Settings settings = Settings.builder().put(<span class="string">"cluster.name"</span>, <span class="string">"hbz-6-test"</span>).build();</span><br><span class="line"></span><br><span class="line">        TransportClient client = <span class="keyword">new</span> PreBuiltTransportClient(settings);</span><br><span class="line">        client.addTransportAddress(<span class="keyword">new</span> InetSocketTransportAddress(InetAddress.getByName(<span class="string">"127.0.0.1"</span>), <span class="number">9300</span>));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        cardinality(client);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        client.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">cardinality</span><span class="params">(TransportClient client)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        SearchRequestBuilder search = client.prepareSearch(<span class="string">"mytest_1"</span>).setTypes(<span class="string">"test"</span>);</span><br><span class="line">        SearchResponse sr = search.addAggregation(AggregationBuilders.cardinality(<span class="string">"type_count"</span>).field(<span class="string">"price"</span>)).execute().actionGet();</span><br><span class="line"></span><br><span class="line">        Cardinality result = sr.getAggregations().get(<span class="string">"type_count"</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"type_count: "</span>+result.getValue());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>POST mytest_1/test/_search?size=0</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"aggs"</span> : &#123;</span><br><span class="line">        <span class="attr">"type_count"</span> : &#123;</span><br><span class="line">            <span class="attr">"cardinality"</span> : &#123;</span><br><span class="line">                <span class="attr">"field"</span> : <span class="string">"price"</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>output:</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"took"</span>: <span class="number">7</span>,</span><br><span class="line">  <span class="attr">"timed_out"</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">"_shards"</span>: &#123;</span><br><span class="line">    <span class="attr">"total"</span>: <span class="number">5</span>,</span><br><span class="line">    <span class="attr">"successful"</span>: <span class="number">5</span>,</span><br><span class="line">    <span class="attr">"failed"</span>: <span class="number">0</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"hits"</span>: &#123;</span><br><span class="line">    <span class="attr">"total"</span>: <span class="number">8</span>,</span><br><span class="line">    <span class="attr">"max_score"</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">"hits"</span>: []</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"aggregations"</span>: &#123;</span><br><span class="line">    <span class="attr">"type_count"</span>: &#123;</span><br><span class="line">      <span class="attr">"value"</span>: <span class="number">6</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3>Stats 聚合操作 count min max avg sum</h3>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">stats</span><span class="params">(TransportClient client)</span> </span>&#123;</span><br><span class="line">        SearchRequestBuilder search = client.prepareSearch(<span class="string">"mytest_1"</span>).setTypes(<span class="string">"test"</span>);</span><br><span class="line">        SearchResponse sr =  search.addAggregation(AggregationBuilders.stats(<span class="string">"price_stats"</span>).field(<span class="string">"price"</span>)).execute().actionGet();</span><br><span class="line"></span><br><span class="line">       Stats stats = sr.getAggregations().get(<span class="string">"price_stats"</span>);</span><br><span class="line">        System.out.println(stats.getAvgAsString());</span><br><span class="line">        System.out.println(stats.getMaxAsString());</span><br><span class="line">        System.out.println(stats.getMinAsString());</span><br><span class="line">        System.out.println(stats.getSumAsString());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>POST mytest_1/test/_search?size=0</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"aggs"</span> : &#123;</span><br><span class="line">        <span class="attr">"price_stats"</span> : &#123; <span class="attr">"extended_stats"</span> : &#123; <span class="attr">"field"</span> : <span class="string">"price"</span> &#125; &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>output:</p>
+<p><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">"aggregations": &#123;</span><br><span class="line">    "price_stats": &#123;</span><br><span class="line">      "count": 8,</span><br><span class="line">      "min": 2399,</span><br><span class="line">      "max": 7199,</span><br><span class="line">      "avg": 5124,</span><br><span class="line">      "sum": 40992,</span><br><span class="line">      "sum_of_squares": 231958008,</span><br><span class="line">      "variance": 2739375,</span><br><span class="line">      "std_deviation": 1655.1057368035433,</span><br><span class="line">      "std_deviation_bounds": &#123;</span><br><span class="line">        "upper": 8434.211473607087,</span><br><span class="line">        "lower": 1813.7885263929134</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<h3>Percentiles 百分比 查看一个百分比对应的值</h3>
+<p>这是一个多值的指标聚集,用来计算聚合文档中,在某个百分比或某个区间,所对应的观测值,</p>
+<ol>
+<li>
+<p>缺省的percentile的区间是[ 1, 5, 25, 50, 75, 95, 99 ]。</p>
+</li>
+<li>
+<p>观测值通常都是近似的,有很多不同的算法来计算。</p>
+</li>
+</ol>
+<p>​
+例如:第九十五个百分值是大于所观察到的值的95%的值。</p>
+<p>POST mytest_1/test/_search?size=0</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"aggs"</span> : &#123;</span><br><span class="line">        <span class="attr">"price_percent"</span> : &#123;</span><br><span class="line">            <span class="attr">"percentiles"</span> : &#123;</span><br><span class="line">                <span class="attr">"field"</span> : <span class="string">"price"</span> </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>POST mytest_1/test/_search?size=0</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"aggs"</span> : &#123;</span><br><span class="line">        <span class="attr">"price_percent"</span> : &#123;</span><br><span class="line">            <span class="attr">"percentiles"</span> : &#123;</span><br><span class="line">                <span class="attr">"field"</span> : <span class="string">"price"</span> ,</span><br><span class="line">                <span class="attr">"percents"</span> : [<span class="number">0.1</span>,<span class="number">50</span>,<span class="number">95</span>, <span class="number">99</span>, <span class="number">100</span>]  //自定义百分比区间</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>output:</p>
+<p><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">"aggregations": &#123;</span><br><span class="line">    "price_percent": &#123;</span><br><span class="line">      "values": &#123;</span><br><span class="line">        "1.0": 2468.9999999999995,</span><br><span class="line">        "5.0": 2749,</span><br><span class="line">        "25.0": 3549,</span><br><span class="line">        "50.0": 5799,</span><br><span class="line">        "75.0": 6399,</span><br><span class="line">        "95.0": 6918.999999999999,</span><br><span class="line">        "99.0": 7143</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure></p>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">percentile</span><span class="params">(TransportClient client)</span> </span>&#123;</span><br><span class="line">        SearchRequestBuilder search = client.prepareSearch(<span class="string">"mytest_1"</span>).setTypes(<span class="string">"test"</span>);</span><br><span class="line">        SearchResponse sr =  search.addAggregation(AggregationBuilders.percentiles(<span class="string">"price_percent"</span>).field(<span class="string">"price"</span>)).execute().actionGet();</span><br><span class="line"></span><br><span class="line">       Percentiles percentile = sr.getAggregations().get(<span class="string">"price_percent"</span>);</span><br><span class="line"></span><br><span class="line">       System.out.println(percentile.percentileAsString(<span class="number">80</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//自定义百分比区间</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">percentile2</span><span class="params">(TransportClient client)</span> </span>&#123;</span><br><span class="line">        SearchRequestBuilder search = client.prepareSearch(<span class="string">"mytest_1"</span>).setTypes(<span class="string">"test"</span>);</span><br><span class="line">        SearchResponse sr =  search.addAggregation(AggregationBuilders.percentiles(<span class="string">"price_percent"</span>).percentiles(<span class="number">0.1</span>,<span class="number">50</span>,<span class="number">95</span>, <span class="number">99</span>, <span class="number">100</span>).field(<span class="string">"price"</span>)).execute().actionGet();</span><br><span class="line"></span><br><span class="line">        System.out.println(sr);</span><br><span class="line">        Percentiles percentile = sr.getAggregations().get(<span class="string">"price_percent"</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(percentile.percentileAsString(<span class="number">80</span>));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h3>Value Count 计算聚合值的数量</h3>
+<p>POST mytest_1/test/_search?size=0</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="attr">"aggs"</span> : &#123;</span><br><span class="line">        <span class="attr">"types_count"</span> : &#123; <span class="attr">"value_count"</span> : &#123; <span class="attr">"field"</span> : <span class="string">"price"</span> &#125; &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>out:</p>
+<p><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">"aggregations": &#123;</span><br><span class="line">    "types_count": &#123;</span><br><span class="line">      "value": 8</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">valueCount</span><span class="params">(TransportClient client)</span> </span>&#123;</span><br><span class="line">        SearchRequestBuilder search = client.prepareSearch(<span class="string">"mytest_1"</span>).setTypes(<span class="string">"test"</span>);</span><br><span class="line">        SearchResponse sr =search.addAggregation(AggregationBuilders.count(<span class="string">"value_count"</span>).field(<span class="string">"price"</span>)).execute().actionGet();</span><br><span class="line">       ValueCount valueCount = sr.getAggregations().get(<span class="string">"value_count"</span>);</span><br><span class="line">       System.out.println(valueCount.getValue());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h3>TOP hits</h3>
+<p>用来取符合条件的前n条数据。 包含的选项有:from、size、sort。</p>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">topHits</span><span class="params">(TransportClient client)</span> </span>&#123;</span><br><span class="line">        SearchRequestBuilder search = client.prepareSearch(<span class="string">"mytest_1"</span>).setTypes(<span class="string">"test"</span>);</span><br><span class="line"></span><br><span class="line">        TopHitsAggregationBuilder addtion = AggregationBuilders.topHits(<span class="string">"top_price_hits"</span>).sort(<span class="string">"price"</span>, SortOrder.DESC).fieldDataField(<span class="string">"price"</span>)</span><br><span class="line">                .size(<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">        SearchResponse sr =search.addAggregation(addtion).execute().actionGet();</span><br><span class="line">       TopHits topHits = sr.getAggregations().get(<span class="string">"top_price_hits"</span>);</span><br><span class="line">       System.out.println();</span><br><span class="line">        SearchHit[] hits = topHits.getHits().internalHits();</span><br><span class="line">        <span class="keyword">for</span>(SearchHit searchHit : hits) &#123;</span><br><span class="line">            System.out.println(searchHit.getSourceAsString());</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h2>bucket 使用</h2>
+<h3>Histogram</h3>
+<p>条形图聚合，根据文档中的谋改革字段来分组。一个文档属于某个通，计算过程大致如下：</p>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rem = value % interval</span><br><span class="line"><span class="keyword">if</span> (rem &lt; <span class="number">0</span>) &#123;</span><br><span class="line">    rem += interval</span><br><span class="line">&#125;</span><br><span class="line">bucket_key = value - rem</span><br></pre></td></tr></table></figure></p>
+<p>可配置的参数:</p>
+<ol>
+<li>field:字段,必须为数值类型</li>
+<li>interval:分桶间距</li>
+<li>min_doc_count:最少文档数,桶过滤,只有不少于这么多文档的桶才会返回</li>
+<li>extended_bounds:范围扩展</li>
+<li>order:对桶排序,如果 histogram 聚合有一个权值聚合类型的“直接”子聚合,那么排序可以使用 子聚合中的结果</li>
+<li>offset:桶边界位移,默认从0开始</li>
+<li>keyed:hash结构返回,默认以数组形式返回每一个桶</li>
+<li>missing:配置缺省默认值</li>
+</ol>
+<p>POST mytest_1/test/_search?size=0</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"aggs"</span> : &#123;</span><br><span class="line">        <span class="attr">"prices"</span> : &#123;</span><br><span class="line">            <span class="attr">"histogram"</span> : &#123;</span><br><span class="line">                <span class="attr">"field"</span> : <span class="string">"price"</span>,</span><br><span class="line">                <span class="attr">"interval"</span> : <span class="number">2000</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>out:</p>
+<p><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">"aggregations": &#123;</span><br><span class="line">    "prices": &#123;</span><br><span class="line">      "buckets": [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"key"</span>: <span class="number">2000</span>,</span><br><span class="line">          <span class="attr">"doc_count"</span>: <span class="number">3</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"key"</span>: <span class="number">4000</span>,</span><br><span class="line">          <span class="attr">"doc_count"</span>: <span class="number">1</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"key"</span>: <span class="number">6000</span>,</span><br><span class="line">          <span class="attr">"doc_count"</span>: <span class="number">4</span></span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">histogram</span><span class="params">(TransportClient client)</span> </span>&#123;</span><br><span class="line">        SearchRequestBuilder search = client.prepareSearch(<span class="string">"mytest_1"</span>).setTypes(<span class="string">"test"</span>).setSize(<span class="number">0</span>);</span><br><span class="line">        HistogramAggregationBuilder addtion = AggregationBuilders.histogram(<span class="string">"prices"</span>).interval(<span class="number">2000</span>).field(<span class="string">"price"</span>);</span><br><span class="line"></span><br><span class="line">        SearchResponse sr = search.addAggregation(addtion).execute().actionGet();</span><br><span class="line"></span><br><span class="line">       Histogram histogram = sr.getAggregations().get(<span class="string">"prices"</span>);</span><br><span class="line">       histogram.getBuckets().forEach(bucket-&gt;&#123;</span><br><span class="line">           System.out.println(bucket.getKeyAsString()+<span class="string">" ----&gt;  "</span>+bucket.getDocCount());</span><br><span class="line">       &#125;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h2>Range</h2>
+<p>范围聚合，是对某个字段的值，按照设定的范围进行分组。</p>
+<p>POST mytest_1/test/_search?size=0</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"aggs"</span> : &#123;</span><br><span class="line">        <span class="attr">"price_ranges"</span> : &#123;</span><br><span class="line">            <span class="attr">"range"</span> : &#123;</span><br><span class="line">                <span class="attr">"field"</span> : <span class="string">"price"</span>,</span><br><span class="line">                <span class="attr">"ranges"</span> : [</span><br><span class="line">                    &#123; <span class="attr">"to"</span> : <span class="number">3000</span> &#125;,</span><br><span class="line">                    &#123; <span class="attr">"from"</span> : <span class="number">3000</span>, <span class="attr">"to"</span> : <span class="number">5000</span> &#125;,</span><br><span class="line">                    &#123; <span class="attr">"from"</span> : <span class="number">5000</span> &#125;</span><br><span class="line">                ]</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>out:</p>
+<p><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">"aggregations": &#123;</span><br><span class="line">    "price_ranges": &#123;</span><br><span class="line">      "buckets": [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"key"</span>: <span class="string">"*-3000.0"</span>,</span><br><span class="line">          <span class="attr">"to"</span>: <span class="number">3000</span>,</span><br><span class="line">          <span class="attr">"doc_count"</span>: <span class="number">1</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"key"</span>: <span class="string">"3000.0-5000.0"</span>,</span><br><span class="line">          <span class="attr">"from"</span>: <span class="number">3000</span>,</span><br><span class="line">          <span class="attr">"to"</span>: <span class="number">5000</span>,</span><br><span class="line">          <span class="attr">"doc_count"</span>: <span class="number">2</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"key"</span>: <span class="string">"5000.0-*"</span>,</span><br><span class="line">          <span class="attr">"from"</span>: <span class="number">5000</span>,</span><br><span class="line">          <span class="attr">"doc_count"</span>: <span class="number">5</span></span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">range</span><span class="params">(TransportClient client)</span> </span>&#123;</span><br><span class="line">        SearchRequestBuilder search = client.prepareSearch(<span class="string">"mytest_1"</span>).setTypes(<span class="string">"test"</span>).setSize(<span class="number">0</span>);</span><br><span class="line">        AggregationBuilder addtion = AggregationBuilders.range(<span class="string">"price_ranges"</span>).field(<span class="string">"price"</span>)</span><br><span class="line">                .addUnboundedTo(<span class="number">3000</span>)</span><br><span class="line">                .addRange(<span class="number">3000</span>,<span class="number">5000</span>)</span><br><span class="line">                .addUnboundedFrom(<span class="number">5000</span>);</span><br><span class="line"></span><br><span class="line">        SearchResponse sr = search.addAggregation(addtion).execute().actionGet();</span><br><span class="line"></span><br><span class="line">       Range histogram = sr.getAggregations().get(<span class="string">"price_ranges"</span>);</span><br><span class="line">       histogram.getBuckets().forEach(bucket-&gt;&#123;</span><br><span class="line">           String key = bucket.getKeyAsString();</span><br><span class="line">           String from = bucket.getFromAsString();</span><br><span class="line">           String to = bucket.getToAsString();</span><br><span class="line">           <span class="keyword">long</span> count = bucket.getDocCount();</span><br><span class="line">           System.out.println(<span class="string">"key : "</span>+key+<span class="string">"\t form: "</span>+from+<span class="string">"\t to:"</span>+to+<span class="string">"\t count:"</span>+count);</span><br><span class="line">       &#125;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h2>Terms</h2>
+<p>词元聚合，以指定的字段内的每一个不重复的term来分组，并计算每个组内文档的个数。</p>
+<p>POST mytest_1/test/_search?size=0</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">   <span class="attr">"aggs"</span> : &#123;</span><br><span class="line">        <span class="attr">"all_cats"</span> : &#123;</span><br><span class="line">          <span class="attr">"terms"</span> : &#123; <span class="attr">"field"</span> : <span class="string">"tag.keyword"</span> &#125;</span><br><span class="line">        &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2>Filters 过滤</h2>
+<p>多过滤聚合，用多个过滤条件，来对当前文档进行过滤的聚合，每个过滤都包含所有满足它的文档，</p>
+<p>多个bucket中可能重复。</p>
+<p>POST mytest_1/test/_search?size=0</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"size"</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="attr">"aggs"</span> : &#123;</span><br><span class="line">    <span class="attr">"messages"</span> : &#123;</span><br><span class="line">      <span class="attr">"filters"</span> : &#123;</span><br><span class="line">        <span class="attr">"filters"</span> : &#123;</span><br><span class="line">          <span class="attr">"filter1"</span> :   &#123; <span class="attr">"match"</span> : &#123; <span class="attr">"tag"</span> : <span class="string">"小米"</span>   &#125;&#125;,</span><br><span class="line">          <span class="attr">"filter2"</span> : &#123; <span class="attr">"match"</span> : &#123; <span class="attr">"tag"</span> : <span class="string">"戴尔"</span> &#125;&#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>out:</p>
+<p><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">"aggregations": &#123;</span><br><span class="line">    "messages": &#123;</span><br><span class="line">      "buckets": &#123;</span><br><span class="line">        "filter1": &#123;</span><br><span class="line">          "doc_count": 2</span><br><span class="line">        &#125;,</span><br><span class="line">        "filter2": &#123;</span><br><span class="line">          "doc_count": 1</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span>  <span class="keyword">void</span> <span class="title">filters</span><span class="params">(TransportClient client)</span> </span>&#123;</span><br><span class="line">        SearchRequestBuilder search = client.prepareSearch(<span class="string">"mytest_1"</span>).setTypes(<span class="string">"test"</span>).setSize(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        AggregationBuilder aggregation = AggregationBuilders.filters(<span class="string">"filters"</span>,</span><br><span class="line">                <span class="keyword">new</span> FiltersAggregator.KeyedFilter(<span class="string">"xiaomi"</span>,matchQuery(<span class="string">"tag"</span>,<span class="string">"小米"</span>)),</span><br><span class="line">                <span class="keyword">new</span> FiltersAggregator.KeyedFilter(<span class="string">"daier"</span>,matchQuery(<span class="string">"tag"</span>,<span class="string">"戴尔"</span>))</span><br><span class="line">        );</span><br><span class="line">        SearchResponse sr = search.addAggregation(aggregation).execute().actionGet();</span><br><span class="line">        System.out.println(sr);</span><br><span class="line">        Filters agg =sr.getAggregations().get(<span class="string">"filters"</span>);</span><br><span class="line">        agg.getBuckets().forEach(entry-&gt;&#123;</span><br><span class="line">            String key = entry.getKeyAsString();            <span class="comment">// bucket key</span></span><br><span class="line">            <span class="keyword">long</span> docCount = entry.getDocCount();</span><br><span class="line">            System.out.println(<span class="string">"key : "</span>+key+<span class="string">"\t docCount: "</span>+docCount);</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h2>分词</h2>
+<h3>分词安装</h3>
+<p><a href="https://github.com/medcl/elasticsearch-analysis-ik/tree/v5.5.0" target="_blank" rel="noopener">https://github.com/medcl/elasticsearch-analysis-ik/tree/v5.5.0</a></p>
+<h3>测试分词</h3>
+<p>GET _analyze</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"analyzer"</span>: <span class="string">"ik_smart"</span>,</span><br><span class="line">  <span class="attr">"text"</span>: [<span class="string">"中华人民共和国"</span>]</span><br><span class="line">  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2>bool</h2>
+<ul>
+<li>
+<p>bool 过滤 :可以用来合并多个过滤条件查询结果的布尔逻辑,它包含一下操作符:</p>
+</li>
+<li>
+<p>must:多个查询条件的完全匹配,相当于 and。</p>
+</li>
+<li>
+<p>must_not: 多个查询条件的相反匹配,相当于 not。</p>
+</li>
+<li>
+<p>should: 至少有一个查询条件匹配, 相当于 or。</p>
+</li>
+</ul>
+<h1>参考文档</h1>
+<p><a href="https://www.elastic.co/guide/en/elasticsearch/client/java-api/current/_structuring_aggregations.html" target="_blank" rel="noopener">https://www.elastic.co/guide/en/elasticsearch/client/java-api/current/_structuring_aggregations.html</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechat.png" alt="hhbbz 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Elasticsearch/" rel="tag"># Elasticsearch</a>
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/19/ES字符串类型Text和keyword/" rel="next" title="关于ES字符串类型Text和keyword">
+                <i class="fa fa-chevron-left"></i> 关于ES字符串类型Text和keyword
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/TOM.jpg"
+                alt="hhbbz" />
+            
+              <p class="site-author-name" itemprop="name">hhbbz</p>
+              <p class="site-description motion-element" itemprop="description">摘抄和记录的地方</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">31</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/hhbbz" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:hhbbz@outlook.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://coding.net/u/hhbbz" target="_blank" title="Coding" rel="external nofollow"><i class="fa fa-fw fa-github-alt"></i>Coding</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/hhbbz" target="_blank" title="知乎" rel="external nofollow"><i class="fa fa-fw fa-bookmark"></i>知乎</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hhbbz</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Power By HEXO</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
