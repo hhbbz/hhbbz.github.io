@@ -3,6 +3,29 @@
   
     
     <entry>
+      <title>Disruptor初步使用</title>
+      <link href="/2019/02/17/Disruptor%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8/"/>
+      <url>/2019/02/17/Disruptor%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8/</url>
+      <content type="html"><![CDATA[<h1>背景介绍</h1><p>最近在作一个用于调用第三方服务以及充当数据仓储的服务，对于数据的存储和获取都要有很好的响应。整体架构使用的是spring flux作接口层的异步调用，可以高效率的进行数据获取；使用Disruptor作为内存队列，将存储数据批量写入。</p><h1>为什么选择Disruptor</h1><p>Disruptor是用于一个JVM中多个线程之间的消息队列，作用与ArrayBlockingQueue有相似之处，但是Disruptor通过精巧的无锁设计实现了在高并发情形下的高性能。从功能、性能都远好于ArrayBlockingQueue，当多个线程之间传递大量数据或对性能要求较高时，可以考虑使用Disruptor作为ArrayBlockingQueue的替代者。</p><h2>为什么Disruptor会那么快</h2><p>Disruptor通过以下设计来解决队列速度慢的问题： - 环形数组结构</p><p>为了避免垃圾回收，采用数组而非链表。同时，数组对处理器的缓存机制更加友好。 - 元素位置定位</p><p>数组长度2^n，通过位运算，加快定位的速度。下标采取递增的形式。不用担心index溢出的问题。index是long类型，即使100万QPS的处理速度，也需要30万年才能用完。 - 无锁设计</p><p>每个生产者或者消费者线程，会先申请可以操作的元素在数组中的位置，申请到之后，直接在该位置写入或者读取数据。</p><h1>Disruptor的使用</h1><p>代码实现的功能：每10ms向disruptor中插入一个元素，消费者读取数据，并打印到终端。详细逻辑请细读代码。</p><p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description</span> disruptor代码样例。每10ms向disruptor中插入一个元素，消费者读取数据，并打印到终端</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">import</span> com.lmax.disruptor.*;</span><br><span class="line"><span class="keyword">import</span> com.lmax.disruptor.dsl.Disruptor;</span><br><span class="line"><span class="keyword">import</span> com.lmax.disruptor.dsl.ProducerType;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ThreadFactory;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DisruptorMain</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 队列中的元素</span></span><br><span class="line">        <span class="class"><span class="keyword">class</span> <span class="title">Element</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">private</span> <span class="keyword">int</span> value;</span><br><span class="line"></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">get</span><span class="params">()</span></span>&#123;</span><br><span class="line">                <span class="keyword">return</span> value;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> value)</span></span>&#123;</span><br><span class="line">                <span class="keyword">this</span>.value= value;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 生产者的线程工厂</span></span><br><span class="line">        ThreadFactory threadFactory = <span class="keyword">new</span> ThreadFactory()&#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Thread <span class="title">newThread</span><span class="params">(Runnable r)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> Thread(r, <span class="string">"simpleThread"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// RingBuffer生产工厂,初始化RingBuffer的时候使用</span></span><br><span class="line">        EventFactory&lt;Element&gt; factory = <span class="keyword">new</span> EventFactory&lt;Element&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Element <span class="title">newInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> Element();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 处理Event的handler</span></span><br><span class="line">        EventHandler&lt;Element&gt; handler = <span class="keyword">new</span> EventHandler&lt;Element&gt;()&#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onEvent</span><span class="params">(Element element, <span class="keyword">long</span> sequence, <span class="keyword">boolean</span> endOfBatch)</span></span></span><br><span class="line"><span class="function">            </span>&#123;</span><br><span class="line">                System.out.println(<span class="string">"Element: "</span> + element.get());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 阻塞策略</span></span><br><span class="line">        BlockingWaitStrategy strategy = <span class="keyword">new</span> BlockingWaitStrategy();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 指定RingBuffer的大小</span></span><br><span class="line">        <span class="keyword">int</span> bufferSize = <span class="number">16</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建disruptor，采用单生产者模式</span></span><br><span class="line">        Disruptor&lt;Element&gt; disruptor = <span class="keyword">new</span> Disruptor(factory, bufferSize, threadFactory, ProducerType.SINGLE, strategy);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 设置EventHandler</span></span><br><span class="line">        disruptor.handleEventsWith(handler);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 启动disruptor的线程</span></span><br><span class="line">        disruptor.start();</span><br><span class="line"></span><br><span class="line">        RingBuffer&lt;Element&gt; ringBuffer = disruptor.getRingBuffer();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> l = <span class="number">0</span>; <span class="keyword">true</span>; l++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 获取下一个可用位置的下标</span></span><br><span class="line">            <span class="keyword">long</span> sequence = ringBuffer.next();  </span><br><span class="line">            <span class="keyword">try</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// 返回可用位置的元素</span></span><br><span class="line">                Element event = ringBuffer.get(sequence); </span><br><span class="line">                <span class="comment">// 设置该位置元素的值</span></span><br><span class="line">                event.set(l); </span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">finally</span></span><br><span class="line">            &#123;</span><br><span class="line">                ringBuffer.publish(sequence);</span><br><span class="line">            &#125;</span><br><span class="line">            Thread.sleep(<span class="number">10</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><h1>总结</h1><p>Disruptor通过精巧的无锁设计实现了在高并发情形下的高性能。</p><p>在美团内部，很多高并发场景借鉴了Disruptor的设计，减少竞争的强度。其设计思想可以扩展到分布式场景，通过无锁设计，来提升服务性能。</p><p>使用Disruptor比使用ArrayBlockingQueue略微复杂，为方便读者上手，增加代码样例。</p><p><a href="https://tech.meituan.com/2016/11/18/disruptor.html" target="_blank" rel="noopener">参考</a></p>]]></content>
+      
+      <categories>
+          
+          <category> 后端 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+            <tag> MQ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>Elasticsearch常用查询（javaAPI）</title>
       <link href="/2018/11/04/Elasticsearch%E5%B8%B8%E7%94%A8%E6%9F%A5%E8%AF%A2%EF%BC%88javaAPI%EF%BC%89/"/>
       <url>/2018/11/04/Elasticsearch%E5%B8%B8%E7%94%A8%E6%9F%A5%E8%AF%A2%EF%BC%88javaAPI%EF%BC%89/</url>
@@ -17,9 +40,9 @@
       
         <tags>
             
-            <tag> Elasticsearch </tag>
-            
             <tag> Java </tag>
+            
+            <tag> Elasticsearch </tag>
             
         </tags>
       
@@ -40,9 +63,9 @@
       
         <tags>
             
-            <tag> Elasticsearch </tag>
-            
             <tag> Java </tag>
+            
+            <tag> Elasticsearch </tag>
             
         </tags>
       
@@ -63,9 +86,9 @@
       
         <tags>
             
-            <tag> 分布式 </tag>
-            
             <tag> MQ </tag>
+            
+            <tag> 分布式 </tag>
             
         </tags>
       
@@ -86,9 +109,9 @@
       
         <tags>
             
-            <tag> Elasticsearch </tag>
-            
             <tag> Linux </tag>
+            
+            <tag> Elasticsearch </tag>
             
         </tags>
       
@@ -270,9 +293,9 @@
       
         <tags>
             
-            <tag> Linux </tag>
-            
             <tag> Docker </tag>
+            
+            <tag> Linux </tag>
             
             <tag> Shell </tag>
             
@@ -343,9 +366,9 @@
       
         <tags>
             
-            <tag> Linux </tag>
-            
             <tag> Docker </tag>
+            
+            <tag> Linux </tag>
             
         </tags>
       
@@ -368,11 +391,11 @@
             
             <tag> Java </tag>
             
+            <tag> MQ </tag>
+            
             <tag> 分布式 </tag>
             
             <tag> Spring </tag>
-            
-            <tag> MQ </tag>
             
         </tags>
       
@@ -393,9 +416,9 @@
       
         <tags>
             
-            <tag> 分布式 </tag>
-            
             <tag> MQ </tag>
+            
+            <tag> 分布式 </tag>
             
         </tags>
       
@@ -508,9 +531,9 @@
       
         <tags>
             
-            <tag> Linux </tag>
-            
             <tag> Docker </tag>
+            
+            <tag> Linux </tag>
             
             <tag> 分布式 </tag>
             

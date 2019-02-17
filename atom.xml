@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://hhbbz.github.io/"/>
-  <updated>2018-11-04T06:59:00.611Z</updated>
+  <updated>2019-02-17T05:54:55.587Z</updated>
   <id>https://hhbbz.github.io/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Disruptor初步使用</title>
+    <link href="https://hhbbz.github.io/2019/02/17/Disruptor%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8/"/>
+    <id>https://hhbbz.github.io/2019/02/17/Disruptor初步使用/</id>
+    <published>2019-02-17T05:17:03.000Z</published>
+    <updated>2019-02-17T05:54:55.587Z</updated>
+    
+    <content type="html"><![CDATA[<h1>背景介绍</h1><p>最近在作一个用于调用第三方服务以及充当数据仓储的服务，对于数据的存储和获取都要有很好的响应。整体架构使用的是spring flux作接口层的异步调用，可以高效率的进行数据获取；使用Disruptor作为内存队列，将存储数据批量写入。</p><h1>为什么选择Disruptor</h1><p>Disruptor是用于一个JVM中多个线程之间的消息队列，作用与ArrayBlockingQueue有相似之处，但是Disruptor通过精巧的无锁设计实现了在高并发情形下的高性能。从功能、性能都远好于ArrayBlockingQueue，当多个线程之间传递大量数据或对性能要求较高时，可以考虑使用Disruptor作为ArrayBlockingQueue的替代者。</p><h2>为什么Disruptor会那么快</h2><p>Disruptor通过以下设计来解决队列速度慢的问题： - 环形数组结构</p><p>为了避免垃圾回收，采用数组而非链表。同时，数组对处理器的缓存机制更加友好。 - 元素位置定位</p><p>数组长度2^n，通过位运算，加快定位的速度。下标采取递增的形式。不用担心index溢出的问题。index是long类型，即使100万QPS的处理速度，也需要30万年才能用完。 - 无锁设计</p><p>每个生产者或者消费者线程，会先申请可以操作的元素在数组中的位置，申请到之后，直接在该位置写入或者读取数据。</p><h1>Disruptor的使用</h1><p>代码实现的功能：每10ms向disruptor中插入一个元素，消费者读取数据，并打印到终端。详细逻辑请细读代码。</p><p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description</span> disruptor代码样例。每10ms向disruptor中插入一个元素，消费者读取数据，并打印到终端</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">import</span> com.lmax.disruptor.*;</span><br><span class="line"><span class="keyword">import</span> com.lmax.disruptor.dsl.Disruptor;</span><br><span class="line"><span class="keyword">import</span> com.lmax.disruptor.dsl.ProducerType;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ThreadFactory;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DisruptorMain</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 队列中的元素</span></span><br><span class="line">        <span class="class"><span class="keyword">class</span> <span class="title">Element</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">private</span> <span class="keyword">int</span> value;</span><br><span class="line"></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">get</span><span class="params">()</span></span>&#123;</span><br><span class="line">                <span class="keyword">return</span> value;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> value)</span></span>&#123;</span><br><span class="line">                <span class="keyword">this</span>.value= value;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 生产者的线程工厂</span></span><br><span class="line">        ThreadFactory threadFactory = <span class="keyword">new</span> ThreadFactory()&#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Thread <span class="title">newThread</span><span class="params">(Runnable r)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> Thread(r, <span class="string">"simpleThread"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// RingBuffer生产工厂,初始化RingBuffer的时候使用</span></span><br><span class="line">        EventFactory&lt;Element&gt; factory = <span class="keyword">new</span> EventFactory&lt;Element&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Element <span class="title">newInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> Element();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 处理Event的handler</span></span><br><span class="line">        EventHandler&lt;Element&gt; handler = <span class="keyword">new</span> EventHandler&lt;Element&gt;()&#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onEvent</span><span class="params">(Element element, <span class="keyword">long</span> sequence, <span class="keyword">boolean</span> endOfBatch)</span></span></span><br><span class="line"><span class="function">            </span>&#123;</span><br><span class="line">                System.out.println(<span class="string">"Element: "</span> + element.get());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 阻塞策略</span></span><br><span class="line">        BlockingWaitStrategy strategy = <span class="keyword">new</span> BlockingWaitStrategy();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 指定RingBuffer的大小</span></span><br><span class="line">        <span class="keyword">int</span> bufferSize = <span class="number">16</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建disruptor，采用单生产者模式</span></span><br><span class="line">        Disruptor&lt;Element&gt; disruptor = <span class="keyword">new</span> Disruptor(factory, bufferSize, threadFactory, ProducerType.SINGLE, strategy);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 设置EventHandler</span></span><br><span class="line">        disruptor.handleEventsWith(handler);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 启动disruptor的线程</span></span><br><span class="line">        disruptor.start();</span><br><span class="line"></span><br><span class="line">        RingBuffer&lt;Element&gt; ringBuffer = disruptor.getRingBuffer();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> l = <span class="number">0</span>; <span class="keyword">true</span>; l++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 获取下一个可用位置的下标</span></span><br><span class="line">            <span class="keyword">long</span> sequence = ringBuffer.next();  </span><br><span class="line">            <span class="keyword">try</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// 返回可用位置的元素</span></span><br><span class="line">                Element event = ringBuffer.get(sequence); </span><br><span class="line">                <span class="comment">// 设置该位置元素的值</span></span><br><span class="line">                event.set(l); </span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">finally</span></span><br><span class="line">            &#123;</span><br><span class="line">                ringBuffer.publish(sequence);</span><br><span class="line">            &#125;</span><br><span class="line">            Thread.sleep(<span class="number">10</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><h1>总结</h1><p>Disruptor通过精巧的无锁设计实现了在高并发情形下的高性能。</p><p>在美团内部，很多高并发场景借鉴了Disruptor的设计，减少竞争的强度。其设计思想可以扩展到分布式场景，通过无锁设计，来提升服务性能。</p><p>使用Disruptor比使用ArrayBlockingQueue略微复杂，为方便读者上手，增加代码样例。</p><p><a href="https://tech.meituan.com/2016/11/18/disruptor.html" target="_blank" rel="noopener">参考</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1&gt;背景介绍&lt;/h1&gt;
+&lt;p&gt;最近在作一个用于调用第三方服务以及充当数据仓储的服务，对于数据的存储和获取都要有很好的响应。
+整体架构使用的是spring flux作接口层的异步调用，可以高效率的进行数据获取；使用Disruptor作为内存队列，将存储数据批量写入。&lt;/p&gt;
+&lt;
+      
+    
+    </summary>
+    
+      <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
+    
+    
+      <category term="Java" scheme="https://hhbbz.github.io/tags/Java/"/>
+    
+      <category term="MQ" scheme="https://hhbbz.github.io/tags/MQ/"/>
+    
+  </entry>
   
   <entry>
     <title>Elasticsearch常用查询（javaAPI）</title>
@@ -40,9 +70,9 @@
       <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
     
     
-      <category term="Elasticsearch" scheme="https://hhbbz.github.io/tags/Elasticsearch/"/>
-    
       <category term="Java" scheme="https://hhbbz.github.io/tags/Java/"/>
+    
+      <category term="Elasticsearch" scheme="https://hhbbz.github.io/tags/Elasticsearch/"/>
     
   </entry>
   
@@ -69,9 +99,9 @@
       <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
     
     
-      <category term="Elasticsearch" scheme="https://hhbbz.github.io/tags/Elasticsearch/"/>
-    
       <category term="Java" scheme="https://hhbbz.github.io/tags/Java/"/>
+    
+      <category term="Elasticsearch" scheme="https://hhbbz.github.io/tags/Elasticsearch/"/>
     
   </entry>
   
@@ -100,9 +130,9 @@
       <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
     
     
-      <category term="分布式" scheme="https://hhbbz.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
-    
       <category term="MQ" scheme="https://hhbbz.github.io/tags/MQ/"/>
+    
+      <category term="分布式" scheme="https://hhbbz.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
   </entry>
   
@@ -129,9 +159,9 @@
       <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
     
     
-      <category term="Elasticsearch" scheme="https://hhbbz.github.io/tags/Elasticsearch/"/>
-    
       <category term="Linux" scheme="https://hhbbz.github.io/tags/Linux/"/>
+    
+      <category term="Elasticsearch" scheme="https://hhbbz.github.io/tags/Elasticsearch/"/>
     
   </entry>
   
@@ -362,9 +392,9 @@ docker pull sebp/elk&lt;/p&gt;
       <category term="运维" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/%E8%BF%90%E7%BB%B4/"/>
     
     
-      <category term="Linux" scheme="https://hhbbz.github.io/tags/Linux/"/>
-    
       <category term="Docker" scheme="https://hhbbz.github.io/tags/Docker/"/>
+    
+      <category term="Linux" scheme="https://hhbbz.github.io/tags/Linux/"/>
     
       <category term="Shell" scheme="https://hhbbz.github.io/tags/Shell/"/>
     
@@ -453,9 +483,9 @@ docker pull sebp/elk&lt;/p&gt;
       <category term="运维" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/%E8%BF%90%E7%BB%B4/"/>
     
     
-      <category term="Linux" scheme="https://hhbbz.github.io/tags/Linux/"/>
-    
       <category term="Docker" scheme="https://hhbbz.github.io/tags/Docker/"/>
+    
+      <category term="Linux" scheme="https://hhbbz.github.io/tags/Linux/"/>
     
   </entry>
   
@@ -483,11 +513,11 @@ docker pull sebp/elk&lt;/p&gt;
     
       <category term="Java" scheme="https://hhbbz.github.io/tags/Java/"/>
     
+      <category term="MQ" scheme="https://hhbbz.github.io/tags/MQ/"/>
+    
       <category term="分布式" scheme="https://hhbbz.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
       <category term="Spring" scheme="https://hhbbz.github.io/tags/Spring/"/>
-    
-      <category term="MQ" scheme="https://hhbbz.github.io/tags/MQ/"/>
     
   </entry>
   
@@ -512,9 +542,9 @@ docker pull sebp/elk&lt;/p&gt;
       <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
     
     
-      <category term="分布式" scheme="https://hhbbz.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
-    
       <category term="MQ" scheme="https://hhbbz.github.io/tags/MQ/"/>
+    
+      <category term="分布式" scheme="https://hhbbz.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
   </entry>
   
@@ -570,36 +600,6 @@ docker pull sebp/elk&lt;/p&gt;
     
       <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
     
-    
-      <category term="Redis" scheme="https://hhbbz.github.io/tags/Redis/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Redis分布式锁及优化</title>
-    <link href="https://hhbbz.github.io/2018/01/17/Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8F%8A%E4%BC%98%E5%8C%96/"/>
-    <id>https://hhbbz.github.io/2018/01/17/Redis分布式锁及优化/</id>
-    <published>2018-01-17T14:59:05.000Z</published>
-    <updated>2018-01-17T15:14:22.000Z</updated>
-    
-    <content type="html"><![CDATA[<h1>自身业务场景</h1><p>场景一: 我有一个数据服务，每天调用量在3亿，每天按86400秒计算的qps在4000左右，由于服务的白天调用量要明显高于晚上，所以白天下午的峰值qps达到6000的，一共有4台服务器，单台qps要能达到3000以上。<strong>我最终使用了redis的setnx()和expire()的分布式锁解决的问题。</strong></p><p>场景二:场景一变异版。在这个场景中，不涉及支付。但是由于资源分配一次过程中，需要保持涉及一致性的地方增加，而且一期的设计目标要达到峰值qps500，所以需要我们对场景进一步的优化。<strong>我最终使用了redis的setnx()、expire()和基于数据库表的分布式锁来解决的问题。</strong></p><h1>分布式锁的解决方式</h1><ol><li><p>首先明确一点，有人可能会问是否可以考虑采用ReentrantLock来实现，但是实际上去实现的时候是有问题的，ReentrantLock的lock和unlock要求必须是在同一线程进行，而分布式应用中，lock和unlock是两次不相关的请求，因此肯定不是同一线程，因此导致无法使用ReentrantLock。</p></li><li><p>基于数据库表做乐观锁，用于分布式锁。</p></li><li><p>使用memcached的add()方法，用于分布式锁。</p></li><li><p>使用memcached的cas()方法，用于分布式锁。(不常用)</p></li><li><p>使用redis的setnx()、expire()方法，用于分布式锁。</p></li><li><p>使用redis的setnx()、get()、getset()方法，用于分布式锁。</p></li><li><p>使用redis的watch、multi、exec命令，用于分布式锁。(不常用)</p></li><li><p>使用zookeeper，用于分布式锁。(不常用)</p></li></ol><p>这里着重讲Redis的分布式锁。</p><h1>使用redis的setnx()、expire()方法，用于分布式锁</h1><p>对于使用redis的setnx()、expire()来实现分布式锁，这个方案相对于memcached()的add()方案，redis占优势的是，其支持的数据类型更多，而memcached只支持String一种数据类型。除此之外，无论是从性能上来说，还是操作方便性来说，其实都没有太多的差异，完全看你的选择，比如公司中用哪个比较多，你就可以用哪个。</p><p>首先说明一下setnx()命令，setnx的含义就是SET if Not Exists，其主要有两个参数 setnx(key, value)。该方法是原子的，如果key不存在，则设置当前key成功，返回1；如果当前key已经存在，则设置当前key失败，返回0。但是要注意的是setnx命令不能设置key的超时时间，只能通过expire()来对key设置。</p><p>具体的使用步骤如下:</p><ol><li><p>setnx(lockkey, 1)  如果返回0，则说明占位失败；如果返回1，则说明占位成功</p></li><li><p>expire()命令对lockkey设置超时时间，为的是避免死锁问题。</p></li><li><p>执行完业务代码后，可以通过delete命令删除key。</p></li></ol><p>这个方案其实是可以解决日常工作中的需求的，但从技术方案的探讨上来说，可能还有一些可以完善的地方。比如，如果在第一步setnx执行成功后，在expire()命令执行成功前，发生了宕机的现象，那么就依然会出现死锁的问题，所以如果要对其进行完善的话，可以使用redis的setnx()、get()和getset()方法来实现分布式锁。</p><h1>使用redis的setnx()、get()、getset()方法，用于分布式锁</h1><p>这个方案的背景主要是在setnx()和expire()的方案上针对可能存在的死锁问题，做了一版优化。</p><p>那么先说明一下这三个命令，对于setnx()和get()这两个命令，相信不用再多说什么。那么getset()命令？这个命令主要有两个参数 getset(key，newValue)。该方法是原子的，对key设置newValue这个值，并且返回key原来的旧值。假设key原来是不存在的，那么多次执行这个命令，会出现下边的效果：</p><ol><li><p>getset(key, &quot;value1&quot;)  返回nil   此时key的值会被设置为value1</p></li><li><p>getset(key, &quot;value2&quot;)  返回value1   此时key的值会被设置为value2</p></li><li><p>依次类推！</p></li></ol><p>介绍完要使用的命令后，具体的使用步骤如下：</p><ol><li><p>setnx(lockkey, 当前时间+过期超时时间) ，如果返回1，则获取锁成功；如果返回0则没有获取到锁，转向2。</p></li><li><p>get(lockkey)获取值oldExpireTime ，并将这个value值与当前的系统时间进行比较，如果小于当前系统时间，则认为这个锁已经超时，可以允许别的请求重新获取，转向3。</p></li><li><p>计算newExpireTime=当前时间+过期超时时间，然后getset(lockkey, newExpireTime) 会返回当前lockkey的值currentExpireTime。</p></li><li><p>判断currentExpireTime与oldExpireTime 是否相等，如果相等，说明当前getset设置成功，获取到了锁。如果不相等，说明这个锁又被别的请求获取走了，那么当前请求可以直接返回失败，或者继续重试。</p></li><li><p>在获取到锁之后，当前线程可以开始自己的业务处理，当处理完毕后，比较自己的处理时间和对于锁设置的超时时间，如果小于锁设置的超时时间，则直接执行delete释放锁；如果大于锁设置的超时时间，则不需要再锁进行处理。</p></li></ol><p>但这套方案也会存在一些质疑点：</p><ol><li>在“get(lockkey)获取值oldExpireTime ”这个操作与“getset(lockkey, newExpireTime) ”这个操作之间，如果有N个线程在get操作获取到相同的oldExpireTime后，然后都去getset，会不会返回的newExpireTime都是一样的，都会是成功，进而都获取到锁？</li></ol><blockquote><p>我认为这套方案是不存在这个问题的。依据有两条: 第一，redis是单进程单线程模式，串行执行命令。 第二，在串行执行的前提条件下，getset之后会比较返回的currentExpireTime与oldExpireTime 是否相等。</p></blockquote><ol start="2"><li>在“get(lockkey)获取值oldExpireTime ”这个操作与“getset(lockkey, newExpireTime) ”这个操作之间，如果有N个线程在get操作获取到相同的oldExpireTime后，然后都去getset，假设第1个线程获取锁成功，其他锁获取失败，但是获取锁失败的线程它发起的getset命令确实执行了，这样会不会造成第一个获取锁的线程设置的锁超时时间一直在延长？</li></ol><blockquote><p>我认为这套方案确实存在这个问题的可能。但我个人认为这个微小的误差是可以忽略的，不过技术方案上存在缺陷，大家可以自行抉择。</p></blockquote>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1&gt;自身业务场景&lt;/h1&gt;
-&lt;p&gt;场景一: 我有一个数据服务，每天调用量在3亿，每天按86400秒计算的qps在4000左右，由于服务的白天调用量要明显高于晚上，所以白天下午的峰值qps达到6000的，一共有4台服务器，单台qps要能达到3000以上。&lt;strong&gt;我最终使
-      
-    
-    </summary>
-    
-      <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
-    
-    
-      <category term="Java" scheme="https://hhbbz.github.io/tags/Java/"/>
-    
-      <category term="分布式" scheme="https://hhbbz.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
       <category term="Redis" scheme="https://hhbbz.github.io/tags/Redis/"/>
     
