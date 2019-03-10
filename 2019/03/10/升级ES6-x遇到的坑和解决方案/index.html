@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32*32.ico?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16*16.ico?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="问题描述 这星期公司要把es5.x升级到es6.x，因为是一个大版本的升级，所以坑肯定是不可避免的，详细的变更可以通过链接了解。ES各版本变更信息。 这里我主要讲对我有较大影响的两个地方：   ES官方建议通过Java Low Level REST Client来访问Elasticsearch，不建议通过TransportClient来访问。   ES6.x起，同个_index不再支持多个_typ">
+<meta name="keywords" content="Java,Elasticsearch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="升级ES6.x遇到的坑和解决方案">
+<meta property="og:url" content="https://hhbbz.github.io/2019/03/10/升级ES6-x遇到的坑和解决方案/index.html">
+<meta property="og:site_name" content="hhbbz-Blog">
+<meta property="og:description" content="问题描述 这星期公司要把es5.x升级到es6.x，因为是一个大版本的升级，所以坑肯定是不可避免的，详细的变更可以通过链接了解。ES各版本变更信息。 这里我主要讲对我有较大影响的两个地方：   ES官方建议通过Java Low Level REST Client来访问Elasticsearch，不建议通过TransportClient来访问。   ES6.x起，同个_index不再支持多个_typ">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-10T08:30:02.981Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="升级ES6.x遇到的坑和解决方案">
+<meta name="twitter:description" content="问题描述 这星期公司要把es5.x升级到es6.x，因为是一个大版本的升级，所以坑肯定是不可避免的，详细的变更可以通过链接了解。ES各版本变更信息。 这里我主要讲对我有较大影响的两个地方：   ES官方建议通过Java Low Level REST Client来访问Elasticsearch，不建议通过TransportClient来访问。   ES6.x起，同个_index不再支持多个_typ">
+
+
+
+
+
+
+  <link rel="canonical" href="https://hhbbz.github.io/2019/03/10/升级ES6-x遇到的坑和解决方案/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>升级ES6.x遇到的坑和解决方案 | hhbbz-Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">hhbbz-Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">hhbbz</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2019/03/10/升级ES6-x遇到的坑和解决方案/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="hhbbz">
+      <meta itemprop="description" content="摘抄和记录的地方">
+      <meta itemprop="image" content="/images/TOM.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hhbbz-Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">升级ES6.x遇到的坑和解决方案
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-10 15:36:10" itemprop="dateCreated datePublished" datetime="2019-03-10T15:36:10+08:00">2019-03-10</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-10 16:30:02" itemprop="dateModified" datetime="2019-03-10T16:30:02+08:00">16:30:02</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1>问题描述</h1>
+<p>这星期公司要把es5.x升级到es6.x，因为是一个大版本的升级，所以坑肯定是不可避免的，详细的变更可以通过链接了解。<a href="https://www.elastic.co/guide/en/elasticsearch/reference/6.6/es-release-notes.html" target="_blank" rel="noopener">ES各版本变更信息</a>。</p>
+<p>这里我主要讲对我有较大影响的两个地方：</p>
+<ol>
+<li>
+<p>ES官方建议通过Java Low Level REST Client来访问Elasticsearch，不建议通过TransportClient来访问。</p>
+</li>
+<li>
+<p>ES6.x起，同个_index不再支持多个_type.</p>
+</li>
+<li>
+<p>ES6.x起，可以支持使用sql进行查询。</p>
+</li>
+</ol>
+<h1>使用REST Client</h1>
+<p>ES官方已不建议通过TransportClient来访问Elasticsearch，使用TransportClient 5.5.3版在建立连接时会报 NoNodeAvailableException 问题，并且ES官方已经不再维护TransportClient。如果已经使用并且有提示报错，可用以下方法绕过：</p>
+<ul>
+<li>建议换成<a href="https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/java-rest-low.html" target="_blank" rel="noopener">Java Low Level REST Client</a>来访问Elasticsearch。</li>
+<li>在Java maven项目的POM配置文件中，使用 x-pack-transport-5.3.3 版client进行访问，并且POM配置文件中的elasticsearch版本也必须为5.3.3版，不建议通过该方案来绕着实现，不保证能完全兼</li>
+</ul>
+<p>Java Low Level REST Client示例代码</p>
+<ul>
+<li>{USER NAME}：替换为访问ES实例对应用户名。</li>
+<li>{PASSWORD}：替换为访问ES实例指定用户对应密码。</li>
+<li>{HOST}:替换为ES实例基本信息界面中的内网或外网地址。</li>
+</ul>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RestClientTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span>  <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">final</span> RequestOptions COMMON_OPTIONS;</span><br><span class="line">        <span class="keyword">final</span> CredentialsProvider credentialsProvider = <span class="keyword">new</span> BasicCredentialsProvider();</span><br><span class="line">        <span class="comment">//设置用户名密码</span></span><br><span class="line">        credentialsProvider.setCredentials(AuthScope.ANY,</span><br><span class="line">                <span class="keyword">new</span> UsernamePasswordCredentials(<span class="string">"&#123;USER NAME&#125;"</span>, <span class="string">"&#123;PASSWORD&#125;"</span>));</span><br><span class="line">        RestClient restClient = RestClient.builder(<span class="keyword">new</span> HttpHost(<span class="string">"&#123;HOST&#125;"</span>, <span class="number">9200</span>))</span><br><span class="line">                .setHttpClientConfigCallback(<span class="keyword">new</span> RestClientBuilder.HttpClientConfigCallback() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> HttpAsyncClientBuilder <span class="title">customizeHttpClient</span><span class="params">(HttpAsyncClientBuilder httpClientBuilder)</span> </span>&#123;</span><br><span class="line">                        <span class="keyword">return</span> httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;).build();</span><br><span class="line">        <span class="comment">//如果需要构造Authorization，在下面request.setOptions();</span></span><br><span class="line">        RequestOptions.Builder builder = RequestOptions.DEFAULT.toBuilder();</span><br><span class="line">        builder.setHttpAsyncResponseConsumerFactory(</span><br><span class="line">            <span class="keyword">new</span> HttpAsyncResponseConsumerFactory</span><br><span class="line">                .HeapBufferedResponseConsumerFactory(<span class="number">104857600</span>));</span><br><span class="line">        builder.addHeader(<span class="string">"Authorization"</span>, <span class="string">"Bearer "</span> + <span class="string">"123456"</span>);</span><br><span class="line">        COMMON_OPTIONS = builder.build();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//index a document</span></span><br><span class="line">            HttpEntity entity = <span class="keyword">new</span> NStringEntity(<span class="string">"&#123;\n\"user\" : \"hhbbz\"\n&#125;"</span>, ContentType.APPLICATION_JSON);</span><br><span class="line">            Response indexResponse = restClient.performRequest(</span><br><span class="line">                    <span class="string">"PUT"</span>,</span><br><span class="line">                    <span class="string">"/school/user/123"</span>,</span><br><span class="line">                    Collections.&lt;String, String&gt;emptyMap(),</span><br><span class="line">                    entity);</span><br><span class="line">            <span class="comment">//search a document</span></span><br><span class="line">            Response response = restClient.performRequest(<span class="string">"GET"</span>, <span class="string">"/school/user/123"</span>,</span><br><span class="line">                    Collections.singletonMap(<span class="string">"pretty"</span>, <span class="string">"true"</span>));</span><br><span class="line">            System.out.println(EntityUtils.toString(response.getEntity()));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>一般来说REST Client的相关api是不足以满足我们日常使用ES的操作的，所以我们需要使用RestHighLevelClient进行更多样化的操作。可以参考下面文档进行使用。</p>
+<p><a href="https://my.oschina.net/GinkGo/blog/1853345#h1_1" target="_blank" rel="noopener">RestHighLevelClient中文文档</a></p>
+<p><a href="https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/java-rest-high.html" target="_blank" rel="noopener">RestHighLevelClient英文官方文档</a></p>
+<h1>一个_index不能有多个_type</h1>
+<h2>原因分析</h2>
+<p>官方给出了一些说法，这里也总结下，无非就是以下几点：</p>
+<ol>
+<li>
+<p>将 index , doc_type 类比为 RDBMS 的 db , table 这个出发点本身就是不对的。</p>
+</li>
+<li>
+<p>除了造成初学者的困惑，另外一个原因就是，在传统db中，不同的表中可以有相同命名但是不同数据类型、不同含义的字段，但是到了es中，这就麻烦了。</p>
+</li>
+</ol>
+<p>假设你有一个索引名叫做blog，其中 type 为 <strong>user</strong> 的 <strong>deleted</strong> 字段类型为boolean，又想在type为 <strong>articles</strong> 的 <strong>deleted</strong> 创建字段类型为date，那么你就麻烦了，ES是不允许这样做的。
+究其原因是因为，在 Lucene 底层实现上，同一索引的不同type中的相同字段，存储结构都是相同的。</p>
+<p>最重要的是，在同一索引中存储具有少量或不共有字段的不同实体，会导致数据稀疏，并干扰Lucene高效压缩文档的能力。</p>
+<h2>兼容方案</h2>
+<p>官方有给出兼容的方案，就是通过reindex的方式来将现有数据中的_type字段数据转移到type字段中存储。</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">POST _reindex</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"source"</span>: &#123;</span><br><span class="line">    <span class="attr">"index"</span>: <span class="string">"old"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"dest"</span>: &#123;</span><br><span class="line">    <span class="attr">"index"</span>: <span class="string">"new"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"script"</span>: &#123;</span><br><span class="line">    <span class="attr">"inline"</span>: <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    ctx._id = ctx._type + "</span>-<span class="string">" + ctx._id;</span></span><br><span class="line"><span class="string">    ctx._source.type = ctx._type;</span></span><br><span class="line"><span class="string">    ctx._type = "</span>doc<span class="string">";</span></span><br><span class="line"><span class="string">"</span><span class="string">""</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这会将特殊的“_type”字段移动到“type”，然后您可以在后续过滤，聚合等中使用它。</p>
+<h2>后续开发解决方案</h2>
+<p>建议在文档中手动添加一个字段为 type，在查询的时候匹配即可，至于_type字段的内容，给个默认值就行。</p>
+<h1>SQL查询的支持</h1>
+<p>在ES6.x中，我们可以使用SQL来进行查询数据，ES引擎内部会把SQL转换成DSL的。</p>
+<p>DSL示例代码：</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">POST /_xpack/sql?format=json</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"query"</span>: <span class="string">"SELECT * FROM library ORDER BY page_count DESC LIMIT 5"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>返回值</p>
+<p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">     <span class="attr">"columns"</span>: [</span><br><span class="line">         &#123;<span class="attr">"name"</span>: <span class="string">"author"</span>,       <span class="attr">"type"</span>: <span class="string">"text"</span>&#125;,</span><br><span class="line">         &#123;<span class="attr">"name"</span>: <span class="string">"name"</span>,         <span class="attr">"type"</span>: <span class="string">"text"</span>&#125;,</span><br><span class="line">         &#123;<span class="attr">"name"</span>: <span class="string">"page_count"</span>,   <span class="attr">"type"</span>: <span class="string">"short"</span>&#125;,</span><br><span class="line">         &#123;<span class="attr">"name"</span>: <span class="string">"release_date"</span>, <span class="attr">"type"</span>: <span class="string">"date"</span>&#125;</span><br><span class="line">     ],</span><br><span class="line">     <span class="attr">"rows"</span>: [</span><br><span class="line">         [<span class="string">"Peter F. Hamilton"</span>,  <span class="string">"Pandora's Star"</span>,       <span class="number">768</span>, <span class="string">"2004-03-02T00:00:00.000Z"</span>],</span><br><span class="line">         [<span class="string">"Vernor Vinge"</span>,       <span class="string">"A Fire Upon the Deep"</span>, <span class="number">613</span>, <span class="string">"1992-06-01T00:00:00.000Z"</span>],</span><br><span class="line">         [<span class="string">"Frank Herbert"</span>,      <span class="string">"Dune"</span>,                 <span class="number">604</span>, <span class="string">"1965-06-01T00:00:00.000Z"</span>],</span><br><span class="line">         [<span class="string">"Alastair Reynolds"</span>,  <span class="string">"Revelation Space"</span>,     <span class="number">585</span>, <span class="string">"2000-03-15T00:00:00.000Z"</span>],</span><br><span class="line">         [<span class="string">"James S.A. Corey"</span>,   <span class="string">"Leviathan Wakes"</span>,      <span class="number">561</span>, <span class="string">"2011-06-02T00:00:00.000Z"</span>]</span><br><span class="line">     ],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>REST Client示例代码：</p>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">String sql = <span class="string">"SELECT * FROM school"</span>;</span><br><span class="line">Request request = <span class="keyword">new</span> Request(<span class="string">"POST"</span>, <span class="string">"/_xpack/sql?format=json"</span>);</span><br><span class="line">HttpEntity entity = <span class="keyword">new</span> NStringEntity(<span class="string">"&#123;\"query\": \""</span> + sql + <span class="string">"\"&#125;"</span>, ContentType.APPLICATION_JSON);</span><br><span class="line">request.setEntity(entity);</span><br><span class="line">Response response = restClient.performRequest(request);</span><br><span class="line">System.out.println(EntityUtils.toString(response.getEntity()));</span><br></pre></td></tr></table></figure></p>
+<p>支持的SQL函数只有链接里面这一些，<a href="https://www.elastic.co/guide/en/elasticsearch/reference/6.6/sql-syntax-show-functions.html" target="_blank" rel="noopener">ES支持的SQL函数</a></p>
+<p>具体的有关SQL的支持，可以通过查看官方文档来进行了解：
+<a href="https://www.elastic.co/guide/en/elasticsearch/reference/6.6/xpack-sql.html" target="_blank" rel="noopener">ES对SQL的支持</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechat.png" alt="hhbbz 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/Elasticsearch/" rel="tag"># Elasticsearch</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/17/Disruptor初步使用/" rel="next" title="Disruptor初步使用">
+                <i class="fa fa-chevron-left"></i> Disruptor初步使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/TOM.jpg"
+                alt="hhbbz" />
+            
+              <p class="site-author-name" itemprop="name">hhbbz</p>
+              <p class="site-description motion-element" itemprop="description">摘抄和记录的地方</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/hhbbz" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:hhbbz@outlook.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://coding.net/u/hhbbz" target="_blank" title="Coding" rel="external nofollow"><i class="fa fa-fw fa-github-alt"></i>Coding</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/hhbbz" target="_blank" title="知乎" rel="external nofollow"><i class="fa fa-fw fa-bookmark"></i>知乎</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hhbbz</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Power By HEXO</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
