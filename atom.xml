@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://hhbbz.github.io/"/>
-  <updated>2019-03-10T08:30:02.981Z</updated>
+  <updated>2019-03-31T07:36:41.295Z</updated>
   <id>https://hhbbz.github.io/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>jdbcTemplate高效率获取数据库元数据信息</title>
+    <link href="https://hhbbz.github.io/2019/03/31/jdbcTemplate%E9%AB%98%E6%95%88%E7%8E%87%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E5%BA%93%E5%85%83%E6%95%B0%E6%8D%AE%E4%BF%A1%E6%81%AF/"/>
+    <id>https://hhbbz.github.io/2019/03/31/jdbcTemplate高效率获取数据库元数据信息/</id>
+    <published>2019-03-31T03:44:12.000Z</published>
+    <updated>2019-03-31T07:36:41.295Z</updated>
+    
+    <content type="html"><![CDATA[<h1>场景</h1><p>在项目中需要通过表名来获取数据库中元数据相关信息，比如表名，字段名，长度等使用spring自带的jdbcTemplate 可以通过SqlRowSetMetaData 可以获取到部分元数据，但是不能获取备注信息（comment中的内容）</p><h1>最简单的解决方案</h1><p>使用jdbcTemplate的queryForRowSet方法。</p><p>该方法很简单</p><p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">SqlRowSet sqlRowSet ;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    sqlRowSet = <span class="keyword">this</span>.jdbcTemplate.queryForRowSet(sql.toString());</span><br><span class="line">    <span class="comment">//获取字段列</span></span><br><span class="line">    SqlRowSetMetaData rowSetMetaData = sqlRowSet.getMetaData();</span><br><span class="line">    <span class="comment">//获取列总数</span></span><br><span class="line">    <span class="keyword">int</span> columnCount = rowSetMetaData.getColumnCount();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= columnCount; i++) &#123;</span><br><span class="line">        rowSetMetaData.getColumnName(i);</span><br><span class="line">        rowSetMetaData.getColumnType(i);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>但是此方案存在严重的效率问题，10W的结果集数据，37个字段，24核cpu，基本没30s都返回不过来，占用内存也极高。进行debug跟进去看，看到jdbcTemplate调用jdbc返回ResultSet只用了10秒左右，之后就一直耗在extractData方法里。该方法是用默认的RowMapper，先取得MetaData然后根据这个去生成Map。</p><h1>对比方法</h1><ol><li><p>使用纯jdbc对比，手工码代码，直接调用Map的put方法逐个生成Map并填充数据。同样的sql，耗时8秒左右，其中根据ResultSet生成List&lt;Map&lt;String, Object&gt;&gt;的过程不超过10s。</p></li><li><p>改用jdbcTemplate的public &lt;T&gt; List&lt;T&gt; query(String sql, RowMapper&lt;T&gt; rowMapper)方法，T填入Map&lt;String, Object&gt;，这样就跟queryForList方法返回值一样了，然后自己实现RowMapper，直接用Map的put方法填充数据。实验结果跟直接用纯jdbc效率相同。</p></li><li><p>使用纯jdbc，自己写一个实体类，把resultSet里的数据循环填入对象放到List里。耗时也差不多8s，不过还是会省一点内存的。但是性能提升有限。</p></li></ol><h1>最优解决方案</h1><p>只需要通过jdbcTemplate获取jdbc Connection即可获取全部信息。</p><p>代码示例如下：</p><p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">StringBuilder sql = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">sql.append(<span class="string">"SELECT *"</span>);</span><br><span class="line">sql.append(<span class="string">" FROM "</span>).append(tableCode);</span><br><span class="line">ResultSet tabs;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    DatabaseMetaData dbMetaData = <span class="keyword">this</span>.jdbcTemplate.getDataSource().getConnection().getMetaData();</span><br><span class="line">    String[] types = &#123;<span class="string">"TABLE"</span>&#125;;</span><br><span class="line">    tabs = dbMetaData.getTables(<span class="keyword">null</span>, <span class="keyword">null</span>, tableCode, types);</span><br><span class="line">    <span class="keyword">while</span> (tabs.next()) &#123;</span><br><span class="line">        String tableName = tabs.getString(<span class="string">"TABLE_NAME"</span>);</span><br><span class="line">        <span class="comment">//表对应的schema</span></span><br><span class="line">        String tableSchema = tabs.getString(<span class="string">"TABLE_SCHEM"</span>);</span><br><span class="line">        ResultSet resultSet = dbMetaData.getColumns(<span class="keyword">null</span>, schema, tableName, <span class="keyword">null</span>);</span><br><span class="line">        <span class="keyword">while</span> (resultSet.next()) &#123;</span><br><span class="line">            String name = resultSet.getString(<span class="string">"COLUMN_NAME"</span>);</span><br><span class="line">            String type = resultSet.getString(<span class="string">"TYPE_NAME"</span>);</span><br><span class="line">            String colRemarks = resultSet.getString(<span class="string">"REMARKS"</span>);</span><br><span class="line">            <span class="keyword">int</span> size = resultSet.getInt(<span class="string">"COLUMN_SIZE"</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//业务逻辑</span></span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>经过测试，同样的10w+数据，37个字段，加上我写的业务逻辑也只需要700ms的响应时间，效率可谓是大大提升。</p><p>我觉得该方法效率得到提升的原因在于，它没有对全表进行扫描，不关乎结果集的多少，只在乎表结构，所以可以极大的提高响应效率。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1&gt;场景&lt;/h1&gt;
+&lt;p&gt;在项目中需要通过表名来获取数据库中元数据相关信息，比如表名，字段名，长度等
+使用spring自带的jdbcTemplate 可以通过SqlRowSetMetaData 可以获取到部分元数据，但是不能获取备注信息（comment中的内容）&lt;/p&gt;
+&lt;h
+      
+    
+    </summary>
+    
+      <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
+    
+    
+      <category term="Java" scheme="https://hhbbz.github.io/tags/Java/"/>
+    
+      <category term="Spring" scheme="https://hhbbz.github.io/tags/Spring/"/>
+    
+  </entry>
   
   <entry>
     <title>升级ES6.x遇到的坑和解决方案</title>
@@ -38,9 +68,9 @@
       <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
     
     
-      <category term="Java" scheme="https://hhbbz.github.io/tags/Java/"/>
-    
       <category term="Elasticsearch" scheme="https://hhbbz.github.io/tags/Elasticsearch/"/>
+    
+      <category term="Java" scheme="https://hhbbz.github.io/tags/Java/"/>
     
   </entry>
   
@@ -98,9 +128,9 @@
       <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
     
     
-      <category term="Java" scheme="https://hhbbz.github.io/tags/Java/"/>
-    
       <category term="Elasticsearch" scheme="https://hhbbz.github.io/tags/Elasticsearch/"/>
+    
+      <category term="Java" scheme="https://hhbbz.github.io/tags/Java/"/>
     
   </entry>
   
@@ -127,9 +157,9 @@
       <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
     
     
-      <category term="Java" scheme="https://hhbbz.github.io/tags/Java/"/>
-    
       <category term="Elasticsearch" scheme="https://hhbbz.github.io/tags/Elasticsearch/"/>
+    
+      <category term="Java" scheme="https://hhbbz.github.io/tags/Java/"/>
     
   </entry>
   
@@ -158,9 +188,9 @@
       <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
     
     
-      <category term="MQ" scheme="https://hhbbz.github.io/tags/MQ/"/>
-    
       <category term="分布式" scheme="https://hhbbz.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+      <category term="MQ" scheme="https://hhbbz.github.io/tags/MQ/"/>
     
   </entry>
   
@@ -187,9 +217,9 @@
       <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
     
     
-      <category term="Elasticsearch" scheme="https://hhbbz.github.io/tags/Elasticsearch/"/>
-    
       <category term="Linux" scheme="https://hhbbz.github.io/tags/Linux/"/>
+    
+      <category term="Elasticsearch" scheme="https://hhbbz.github.io/tags/Elasticsearch/"/>
     
   </entry>
   
@@ -541,11 +571,11 @@ docker pull sebp/elk&lt;/p&gt;
     
       <category term="Java" scheme="https://hhbbz.github.io/tags/Java/"/>
     
-      <category term="MQ" scheme="https://hhbbz.github.io/tags/MQ/"/>
-    
       <category term="分布式" scheme="https://hhbbz.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
       <category term="Spring" scheme="https://hhbbz.github.io/tags/Spring/"/>
+    
+      <category term="MQ" scheme="https://hhbbz.github.io/tags/MQ/"/>
     
   </entry>
   
@@ -570,36 +600,7 @@ docker pull sebp/elk&lt;/p&gt;
       <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
     
     
-      <category term="MQ" scheme="https://hhbbz.github.io/tags/MQ/"/>
-    
       <category term="分布式" scheme="https://hhbbz.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>消息队列简介及使用场景</title>
-    <link href="https://hhbbz.github.io/2018/03/14/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%AE%80%E4%BB%8B%E5%8F%8A%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/"/>
-    <id>https://hhbbz.github.io/2018/03/14/消息队列简介及使用场景/</id>
-    <published>2018-03-14T01:46:30.000Z</published>
-    <updated>2018-03-14T14:10:49.000Z</updated>
-    
-    <content type="html"><![CDATA[<h1>消息队列的使用场景</h1><p>校验用户名等信息，如果没问题会在数据库中添加一个用户记录如果是用邮箱注册会给你发送一封注册成功的邮件，手机注册则会发送一条短信分析用户的个人信息，以便将来向他推荐一些志同道合的人，或向那些人推荐他发送给用户一个包含操作指南的系统通知</p><h1>消息的重发补偿解决思路</h1><p>可靠消息服务定时查询状态为已发送并超时的消息可靠消息将消息重新投递到 MQ 组件中下游应用监听消息，在满足幂等性的条件下，重新执行业务。下游应用通知可靠消息服务该消息已经成功消费。通过消息状态确认和消息重发两个功能，可以确保上游应用、可靠消息服务和下游应用数据的最终一致性。</p><h1>消息的幂等性解决思路</h1><ol><li>查询操作查询一次和查询多次，在数据不变的情况下，查询结果是一样的。select是天然的幂等操作</li><li>删除操作删除操作也是幂等的，删除一次和多次删除都是把数据删除。(注意可能返回结果不一样，删除的数据不存在，返回0，删除的数据多条，返回结果多个)3.唯一索引，防止新增脏数据比如：支付宝的资金账户，支付宝也有用户账户，每个用户只能有一个资金账户，怎么防止给用户创建资金账户多个，那么给资金账户表中的用户ID加唯一索引，所以一个用户新增成功一个资金账户记录</li><li>token机制，防止页面重复提交</li><li>悲观锁获取数据的时候加锁获取select * from table_xxx where id='xxx' for update;注意：id字段一定是主键或者唯一索引，不然是锁表，会死人的悲观锁使用时一般伴随事务一起使用，数据锁定时间可能会很长，根据实际情况选用</li><li>乐观锁乐观锁只是在更新数据那一刻锁表，其他时间不锁表，所以相对于悲观锁，效率更高。</li><li>分布式锁还是拿插入数据的例子，如果是分布是系统，构建全局唯一索引比较困难，例如唯一性的字段没法确定，这时候可以引入分布式锁，通过第三方的系统(redis或zookeeper)，在业务系统插入数据或者更新数据，获取分布式锁，然后做操作，之后释放锁，这样其实是把多线程并发的锁的思路，引入多多个系统，也就是分布式系统中得解决思路。</li><li>select + insert并发不高的后台系统，或者一些任务JOB，为了支持幂等，支持重复执行，简单的处理方法是，先查询下一些关键数据，判断是否已经执行过，在进行业务处理，就可以了注意：核心高并发流程不要用这种方法</li><li>状态机幂等在设计单据相关的业务，或者是任务相关的业务，肯定会涉及到状态机(状态变更图)，就是业务单据上面有个状态，状态在不同的情况下会发生变更，一般情况下存在有限状态机，这时候，如果状态机已经处于下一个状态，这时候来了一个上一个状态的变更，理论上是不能够变更的，这样的话，保证了有限状态机的幂等。</li><li>对外提供接口的api如何保证幂等如银联提供的付款接口：需要接入商户提交付款请求时附带：source来源，seq序列号source+seq在数据库里面做唯一索引，防止多次付款，(并发时，只能处理一个请求)摘抄自： http://825635381.iteye.com/blog/2276077</li></ol><h1>消息的堆积解决思路</h1><p>如果还没开始投入使用kafka，那应该在设计分区数的时候，尽量设置的多点，从而提升生产和消费的并行度，避免消费太慢导致消费堆积。增大批次瓶颈在消费吞吐量的时候，增加批次也可以改善性能增加线程数如果一些消费者组中的消费者线程还是有1个消费者线程消费多个分区的情况，建议增加消费者线程。尽量1个消费者线程对应1个分区，从而发挥现有分区数下的最大并行度。摘抄自： https://kaimingwan.com/post/framworks/kafka/kafkaxiao-xi-dui-ji-chu-li</p><h1>自己如何实现消息队列</h1><p>大体上的设计是由一条线程1执行从等待列表中获取任务插入任务队列再由线程池中的线程从任务队列中取出任务去执行.添加一条线程1主要是防止在执行耗时的任务时阻塞主线程.当执行耗时任务时,添加的任务的操作快于取出任务的操作,当任务队列长度达到最大值时,线程1将被阻塞,等待线程2,3...从任务队列取出任务执行。</p><h1>如何保证消息的有序性</h1><p>通过轮询所有队列的方式来确定消息被发送到哪一个队列（负载均衡策略）。订单号相同的消息会被先后发送到同一个队列中，在获取到路由信息以后，会根据算法来选择一个队列，同一个OrderId获取到的肯定是同一个队列。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1&gt;消息队列的使用场景&lt;/h1&gt;
-&lt;p&gt;校验用户名等信息，如果没问题会在数据库中添加一个用户记录
-如果是用邮箱注册会给你发送一封注册成功的邮件，手机注册则会发送一条短信
-分析用户的个人信息，以便将来向他推荐一些志同道合的人，或向那些人推荐他
-发送给用户一个包含操作指南的系统通
-      
-    
-    </summary>
-    
-      <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
-    
     
       <category term="MQ" scheme="https://hhbbz.github.io/tags/MQ/"/>
     
