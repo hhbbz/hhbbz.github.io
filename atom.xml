@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://hhbbz.github.io/"/>
-  <updated>2019-03-31T07:36:41.295Z</updated>
+  <updated>2019-03-31T07:40:32.307Z</updated>
   <id>https://hhbbz.github.io/</id>
   
   <author>
@@ -17,13 +17,13 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>jdbcTemplate高效率获取数据库元数据信息</title>
-    <link href="https://hhbbz.github.io/2019/03/31/jdbcTemplate%E9%AB%98%E6%95%88%E7%8E%87%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E5%BA%93%E5%85%83%E6%95%B0%E6%8D%AE%E4%BF%A1%E6%81%AF/"/>
-    <id>https://hhbbz.github.io/2019/03/31/jdbcTemplate高效率获取数据库元数据信息/</id>
+    <title>jdbcTemplate高效率获取表结构，数据库元数据信息</title>
+    <link href="https://hhbbz.github.io/2019/03/31/jdbcTemplate%E9%AB%98%E6%95%88%E7%8E%87%E8%8E%B7%E5%8F%96%E8%A1%A8%E7%BB%93%E6%9E%84%EF%BC%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%85%83%E6%95%B0%E6%8D%AE%E4%BF%A1%E6%81%AF/"/>
+    <id>https://hhbbz.github.io/2019/03/31/jdbcTemplate高效率获取表结构，数据库元数据信息/</id>
     <published>2019-03-31T03:44:12.000Z</published>
-    <updated>2019-03-31T07:36:41.295Z</updated>
+    <updated>2019-03-31T07:40:32.307Z</updated>
     
-    <content type="html"><![CDATA[<h1>场景</h1><p>在项目中需要通过表名来获取数据库中元数据相关信息，比如表名，字段名，长度等使用spring自带的jdbcTemplate 可以通过SqlRowSetMetaData 可以获取到部分元数据，但是不能获取备注信息（comment中的内容）</p><h1>最简单的解决方案</h1><p>使用jdbcTemplate的queryForRowSet方法。</p><p>该方法很简单</p><p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">SqlRowSet sqlRowSet ;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    sqlRowSet = <span class="keyword">this</span>.jdbcTemplate.queryForRowSet(sql.toString());</span><br><span class="line">    <span class="comment">//获取字段列</span></span><br><span class="line">    SqlRowSetMetaData rowSetMetaData = sqlRowSet.getMetaData();</span><br><span class="line">    <span class="comment">//获取列总数</span></span><br><span class="line">    <span class="keyword">int</span> columnCount = rowSetMetaData.getColumnCount();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= columnCount; i++) &#123;</span><br><span class="line">        rowSetMetaData.getColumnName(i);</span><br><span class="line">        rowSetMetaData.getColumnType(i);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>但是此方案存在严重的效率问题，10W的结果集数据，37个字段，24核cpu，基本没30s都返回不过来，占用内存也极高。进行debug跟进去看，看到jdbcTemplate调用jdbc返回ResultSet只用了10秒左右，之后就一直耗在extractData方法里。该方法是用默认的RowMapper，先取得MetaData然后根据这个去生成Map。</p><h1>对比方法</h1><ol><li><p>使用纯jdbc对比，手工码代码，直接调用Map的put方法逐个生成Map并填充数据。同样的sql，耗时8秒左右，其中根据ResultSet生成List&lt;Map&lt;String, Object&gt;&gt;的过程不超过10s。</p></li><li><p>改用jdbcTemplate的public &lt;T&gt; List&lt;T&gt; query(String sql, RowMapper&lt;T&gt; rowMapper)方法，T填入Map&lt;String, Object&gt;，这样就跟queryForList方法返回值一样了，然后自己实现RowMapper，直接用Map的put方法填充数据。实验结果跟直接用纯jdbc效率相同。</p></li><li><p>使用纯jdbc，自己写一个实体类，把resultSet里的数据循环填入对象放到List里。耗时也差不多8s，不过还是会省一点内存的。但是性能提升有限。</p></li></ol><h1>最优解决方案</h1><p>只需要通过jdbcTemplate获取jdbc Connection即可获取全部信息。</p><p>代码示例如下：</p><p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">StringBuilder sql = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">sql.append(<span class="string">"SELECT *"</span>);</span><br><span class="line">sql.append(<span class="string">" FROM "</span>).append(tableCode);</span><br><span class="line">ResultSet tabs;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    DatabaseMetaData dbMetaData = <span class="keyword">this</span>.jdbcTemplate.getDataSource().getConnection().getMetaData();</span><br><span class="line">    String[] types = &#123;<span class="string">"TABLE"</span>&#125;;</span><br><span class="line">    tabs = dbMetaData.getTables(<span class="keyword">null</span>, <span class="keyword">null</span>, tableCode, types);</span><br><span class="line">    <span class="keyword">while</span> (tabs.next()) &#123;</span><br><span class="line">        String tableName = tabs.getString(<span class="string">"TABLE_NAME"</span>);</span><br><span class="line">        <span class="comment">//表对应的schema</span></span><br><span class="line">        String tableSchema = tabs.getString(<span class="string">"TABLE_SCHEM"</span>);</span><br><span class="line">        ResultSet resultSet = dbMetaData.getColumns(<span class="keyword">null</span>, schema, tableName, <span class="keyword">null</span>);</span><br><span class="line">        <span class="keyword">while</span> (resultSet.next()) &#123;</span><br><span class="line">            String name = resultSet.getString(<span class="string">"COLUMN_NAME"</span>);</span><br><span class="line">            String type = resultSet.getString(<span class="string">"TYPE_NAME"</span>);</span><br><span class="line">            String colRemarks = resultSet.getString(<span class="string">"REMARKS"</span>);</span><br><span class="line">            <span class="keyword">int</span> size = resultSet.getInt(<span class="string">"COLUMN_SIZE"</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//业务逻辑</span></span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>经过测试，同样的10w+数据，37个字段，加上我写的业务逻辑也只需要700ms的响应时间，效率可谓是大大提升。</p><p>我觉得该方法效率得到提升的原因在于，它没有对全表进行扫描，不关乎结果集的多少，只在乎表结构，所以可以极大的提高响应效率。</p>]]></content>
+    <content type="html"><![CDATA[<h1>场景</h1><p>在项目中需要通过表名来获取数据库中元数据相关信息，比如表名，字段名，长度等使用spring自带的jdbcTemplate 可以通过SqlRowSetMetaData 可以获取到部分元数据，但是不能获取备注信息（comment中的内容）</p><h1>最简单的解决方案</h1><p>使用jdbcTemplate的queryForRowSet方法。</p><p>该方法很简单</p><p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">SqlRowSet sqlRowSet ;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    sqlRowSet = <span class="keyword">this</span>.jdbcTemplate.queryForRowSet(sql.toString());</span><br><span class="line">    <span class="comment">//获取字段列</span></span><br><span class="line">    SqlRowSetMetaData rowSetMetaData = sqlRowSet.getMetaData();</span><br><span class="line">    <span class="comment">//获取列总数</span></span><br><span class="line">    <span class="keyword">int</span> columnCount = rowSetMetaData.getColumnCount();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= columnCount; i++) &#123;</span><br><span class="line">        rowSetMetaData.getColumnName(i);</span><br><span class="line">        rowSetMetaData.getColumnType(i);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><blockquote><p>但是此方案存在严重的效率问题，10W的结果集数据，37个字段，24核cpu，基本没30s都返回不过来，占用内存也极高。</p></blockquote><p>进行debug跟进去看，看到jdbcTemplate调用jdbc返回ResultSet只用了10秒左右，之后就一直耗在extractData方法里。该方法是用默认的RowMapper，先取得MetaData然后根据这个去生成Map。</p><h1>对比方法</h1><ol><li><p>使用纯jdbc对比，手工码代码，直接调用Map的put方法逐个生成Map并填充数据。同样的sql，耗时8秒左右，其中根据ResultSet生成List&lt;Map&lt;String, Object&gt;&gt;的过程不超过10s。</p></li><li><p>改用jdbcTemplate的public &lt;T&gt; List&lt;T&gt; query(String sql, RowMapper&lt;T&gt; rowMapper)方法，T填入Map&lt;String, Object&gt;，这样就跟queryForList方法返回值一样了，然后自己实现RowMapper，直接用Map的put方法填充数据。实验结果跟直接用纯jdbc效率相同。</p></li><li><p>使用纯jdbc，自己写一个实体类，把resultSet里的数据循环填入对象放到List里。耗时也差不多8s，不过还是会省一点内存的。但是性能提升有限。</p></li></ol><h1>最优解决方案</h1><p>只需要通过jdbcTemplate获取jdbc Connection即可获取全部信息。</p><p>代码示例如下：</p><p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">StringBuilder sql = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">sql.append(<span class="string">"SELECT *"</span>);</span><br><span class="line">sql.append(<span class="string">" FROM "</span>).append(tableCode);</span><br><span class="line">ResultSet tabs;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    DatabaseMetaData dbMetaData = <span class="keyword">this</span>.jdbcTemplate.getDataSource().getConnection().getMetaData();</span><br><span class="line">    String[] types = &#123;<span class="string">"TABLE"</span>&#125;;</span><br><span class="line">    tabs = dbMetaData.getTables(<span class="keyword">null</span>, <span class="keyword">null</span>, tableCode, types);</span><br><span class="line">    <span class="keyword">while</span> (tabs.next()) &#123;</span><br><span class="line">        String tableName = tabs.getString(<span class="string">"TABLE_NAME"</span>);</span><br><span class="line">        <span class="comment">//表对应的schema</span></span><br><span class="line">        String tableSchema = tabs.getString(<span class="string">"TABLE_SCHEM"</span>);</span><br><span class="line">        ResultSet resultSet = dbMetaData.getColumns(<span class="keyword">null</span>, schema, tableName, <span class="keyword">null</span>);</span><br><span class="line">        <span class="keyword">while</span> (resultSet.next()) &#123;</span><br><span class="line">            String name = resultSet.getString(<span class="string">"COLUMN_NAME"</span>);</span><br><span class="line">            String type = resultSet.getString(<span class="string">"TYPE_NAME"</span>);</span><br><span class="line">            String colRemarks = resultSet.getString(<span class="string">"REMARKS"</span>);</span><br><span class="line">            <span class="keyword">int</span> size = resultSet.getInt(<span class="string">"COLUMN_SIZE"</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//业务逻辑</span></span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><blockquote><p>经过测试，同样的10w+数据，37个字段，加上我写的业务逻辑也只需要700ms的响应时间，效率可谓是大大提升。</p></blockquote><p>我觉得该方法效率得到提升的原因在于，它没有对全表进行扫描，不关乎结果集的多少，只在乎表结构，所以可以极大的提高响应效率。</p>]]></content>
     
     <summary type="html">
     
@@ -68,9 +68,9 @@
       <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
     
     
-      <category term="Elasticsearch" scheme="https://hhbbz.github.io/tags/Elasticsearch/"/>
-    
       <category term="Java" scheme="https://hhbbz.github.io/tags/Java/"/>
+    
+      <category term="Elasticsearch" scheme="https://hhbbz.github.io/tags/Elasticsearch/"/>
     
   </entry>
   
@@ -128,9 +128,9 @@
       <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
     
     
-      <category term="Elasticsearch" scheme="https://hhbbz.github.io/tags/Elasticsearch/"/>
-    
       <category term="Java" scheme="https://hhbbz.github.io/tags/Java/"/>
+    
+      <category term="Elasticsearch" scheme="https://hhbbz.github.io/tags/Elasticsearch/"/>
     
   </entry>
   
@@ -157,9 +157,9 @@
       <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
     
     
-      <category term="Elasticsearch" scheme="https://hhbbz.github.io/tags/Elasticsearch/"/>
-    
       <category term="Java" scheme="https://hhbbz.github.io/tags/Java/"/>
+    
+      <category term="Elasticsearch" scheme="https://hhbbz.github.io/tags/Elasticsearch/"/>
     
   </entry>
   
@@ -188,9 +188,9 @@
       <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
     
     
-      <category term="分布式" scheme="https://hhbbz.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
-    
       <category term="MQ" scheme="https://hhbbz.github.io/tags/MQ/"/>
+    
+      <category term="分布式" scheme="https://hhbbz.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
   </entry>
   
@@ -571,11 +571,11 @@ docker pull sebp/elk&lt;/p&gt;
     
       <category term="Java" scheme="https://hhbbz.github.io/tags/Java/"/>
     
+      <category term="MQ" scheme="https://hhbbz.github.io/tags/MQ/"/>
+    
       <category term="分布式" scheme="https://hhbbz.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
       <category term="Spring" scheme="https://hhbbz.github.io/tags/Spring/"/>
-    
-      <category term="MQ" scheme="https://hhbbz.github.io/tags/MQ/"/>
     
   </entry>
   
@@ -600,9 +600,9 @@ docker pull sebp/elk&lt;/p&gt;
       <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
     
     
-      <category term="分布式" scheme="https://hhbbz.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
-    
       <category term="MQ" scheme="https://hhbbz.github.io/tags/MQ/"/>
+    
+      <category term="分布式" scheme="https://hhbbz.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
   </entry>
   

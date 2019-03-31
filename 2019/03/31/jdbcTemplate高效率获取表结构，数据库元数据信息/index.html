@@ -108,25 +108,25 @@
 
 
 
-  <meta name="description" content="项目地址 spring-boot-aliRocketMQ-starter application.yml 1234567mq-config:producerId: PID_*consumerId: CID_*accessKey: *secretKey: *onsAddr: *topic: * 添加启动类用于初始化消费者 123456789101112131415161718192021222324">
-<meta name="keywords" content="Java,MQ,分布式,Spring">
+  <meta name="description" content="场景 在项目中需要通过表名来获取数据库中元数据相关信息，比如表名，字段名，长度等 使用spring自带的jdbcTemplate 可以通过SqlRowSetMetaData 可以获取到部分元数据，但是不能获取备注信息（comment中的内容） 最简单的解决方案 使用jdbcTemplate的queryForRowSet方法。 该方法很简单 123456789101112131415SqlRowSe">
+<meta name="keywords" content="Java,Spring">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SpringBoot+RocketMQ做分布式消息队列">
-<meta property="og:url" content="https://hhbbz.github.io/2018/03/26/SpringBoot+RocketMQ做分布式消息队列/index.html">
+<meta property="og:title" content="jdbcTemplate高效率获取表结构，数据库元数据信息">
+<meta property="og:url" content="https://hhbbz.github.io/2019/03/31/jdbcTemplate高效率获取表结构，数据库元数据信息/index.html">
 <meta property="og:site_name" content="hhbbz-Blog">
-<meta property="og:description" content="项目地址 spring-boot-aliRocketMQ-starter application.yml 1234567mq-config:producerId: PID_*consumerId: CID_*accessKey: *secretKey: *onsAddr: *topic: * 添加启动类用于初始化消费者 123456789101112131415161718192021222324">
+<meta property="og:description" content="场景 在项目中需要通过表名来获取数据库中元数据相关信息，比如表名，字段名，长度等 使用spring自带的jdbcTemplate 可以通过SqlRowSetMetaData 可以获取到部分元数据，但是不能获取备注信息（comment中的内容） 最简单的解决方案 使用jdbcTemplate的queryForRowSet方法。 该方法很简单 123456789101112131415SqlRowSe">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-26T11:07:11.000Z">
+<meta property="og:updated_time" content="2019-03-31T07:40:32.307Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SpringBoot+RocketMQ做分布式消息队列">
-<meta name="twitter:description" content="项目地址 spring-boot-aliRocketMQ-starter application.yml 1234567mq-config:producerId: PID_*consumerId: CID_*accessKey: *secretKey: *onsAddr: *topic: * 添加启动类用于初始化消费者 123456789101112131415161718192021222324">
+<meta name="twitter:title" content="jdbcTemplate高效率获取表结构，数据库元数据信息">
+<meta name="twitter:description" content="场景 在项目中需要通过表名来获取数据库中元数据相关信息，比如表名，字段名，长度等 使用spring自带的jdbcTemplate 可以通过SqlRowSetMetaData 可以获取到部分元数据，但是不能获取备注信息（comment中的内容） 最简单的解决方案 使用jdbcTemplate的queryForRowSet方法。 该方法很简单 123456789101112131415SqlRowSe">
 
 
 
 
 
 
-  <link rel="canonical" href="https://hhbbz.github.io/2018/03/26/SpringBoot+RocketMQ做分布式消息队列/"/>
+  <link rel="canonical" href="https://hhbbz.github.io/2019/03/31/jdbcTemplate高效率获取表结构，数据库元数据信息/"/>
 
 
 
@@ -136,7 +136,7 @@
   };
 </script>
 
-  <title>SpringBoot+RocketMQ做分布式消息队列 | hhbbz-Blog</title>
+  <title>jdbcTemplate高效率获取表结构，数据库元数据信息 | hhbbz-Blog</title>
   
 
 
@@ -309,7 +309,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2018/03/26/SpringBoot+RocketMQ做分布式消息队列/">
+    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2019/03/31/jdbcTemplate高效率获取表结构，数据库元数据信息/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="hhbbz">
@@ -326,7 +326,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">SpringBoot+RocketMQ做分布式消息队列
+          <h2 class="post-title" itemprop="name headline">jdbcTemplate高效率获取表结构，数据库元数据信息
               
             
           </h2>
@@ -351,7 +351,7 @@
                 
               
 
-              <time title="创建时间：2018-03-26 11:01:46" itemprop="dateCreated datePublished" datetime="2018-03-26T11:01:46+08:00">2018-03-26</time>
+              <time title="创建时间：2019-03-31 11:44:12" itemprop="dateCreated datePublished" datetime="2019-03-31T11:44:12+08:00">2019-03-31</time>
             
 
             
@@ -368,7 +368,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-03-26 19:07:11" itemprop="dateModified" datetime="2018-03-26T19:07:11+08:00">19:07:11</time>
+                <time title="修改时间：2019-03-31 15:40:32" itemprop="dateModified" datetime="2019-03-31T15:40:32+08:00">15:40:32</time>
               
             
           </span>
@@ -427,16 +427,37 @@
       
 
       
-        <h1>项目地址</h1>
-<p><a href="https://github.com/hhbbz/spring-boot-aliRocketMQ-starter" target="_blank" rel="noopener">spring-boot-aliRocketMQ-starter</a></p>
-<h1>application.yml</h1>
-<p><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">mq-config:</span></span><br><span class="line"><span class="attr">producerId:</span> <span class="string">PID_*</span></span><br><span class="line"><span class="attr">consumerId:</span> <span class="string">CID_*</span></span><br><span class="line"><span class="attr">accessKey:</span> <span class="string">*</span></span><br><span class="line"><span class="attr">secretKey:</span> <span class="string">*</span></span><br><span class="line"><span class="attr">onsAddr:</span> <span class="string">*</span></span><br><span class="line"><span class="attr">topic:</span> <span class="string">*</span></span><br></pre></td></tr></table></figure></p>
-<h1>添加启动类用于初始化消费者</h1>
-<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RocketMQRunner</span> <span class="keyword">implements</span> <span class="title">CommandLineRunner</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger logger = LoggerFactory.getLogger(RocketMQRunner.class);</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> MQConfig mqConfig;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="meta">@Qualifier</span>(<span class="string">"orderConsumer"</span>)</span><br><span class="line">    <span class="keyword">private</span> OrderConsumer orderConsumer;</span><br><span class="line">    <span class="comment">/**消息监听器**/</span></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> ConsumerHandler consumerHandler;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 初始化订阅者，生产者信息，启动</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> args</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">(String... args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        orderConsumer.subscribe(mqConfig.getTopic(), mqConfig.getTag(), consumerHandler);</span><br><span class="line">        orderConsumer.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h1>生产消息</h1>
-<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SysMessageProducer</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger logger = LoggerFactory.getLogger(SysMessageProducer.class);</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> MQHelper&lt;SysMessage&gt; mqHelper;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> MQConfig mqConfig;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 此方法用于在消息中心创建消息后调用推送消息</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> sysMessage</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">PushMessageWhenCreate</span><span class="params">(SysMessage sysMessage)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (AssertValue.isNotNull(sysMessage)) &#123;</span><br><span class="line">            <span class="comment">//发送消息到队列中</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                ProducerMessage&lt;SysMessage&gt; producerMessage = <span class="keyword">new</span> ProducerMessage&lt;SysMessage&gt;()</span><br><span class="line">                        .setTopic(mqConfig.getTopic())</span><br><span class="line">                        .setTags(<span class="string">"middle"</span>)</span><br><span class="line">                        .setName(MQHandlerType.PUSH_APPMESSAGE_NEWS.getTypeName())</span><br><span class="line">                        .setKey(MQHandlerType.PUSH_APPMESSAGE_NEWS.toString())</span><br><span class="line">                        .setBody(sysMessage)</span><br><span class="line">                        .setShardingKey(String.valueOf(sysMessage.getId()))</span><br><span class="line">                        .setState(<span class="string">"none"</span>);</span><br><span class="line"></span><br><span class="line">                <span class="comment">//设置立刻发送消息</span></span><br><span class="line">                producerMessage.setType(RocketMQServiceConstant.SYNCHRONOUS_ORDER_MESSAGE);</span><br><span class="line">                producerMessage.setStartDeliveryTime(<span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>).format(<span class="keyword">new</span> Date()));</span><br><span class="line">                <span class="comment">//创建消息</span></span><br><span class="line">                Message message = mqHelper</span><br><span class="line">                        .generateMessage(producerMessage);</span><br><span class="line">                <span class="comment">//发送消息</span></span><br><span class="line">                SendResult sendResult = mqHelper.sendMessage(message, producerMessage);</span><br><span class="line">                logger.info(<span class="keyword">new</span> Date() + <span class="string">" 发送成功! Topic:"</span> + mqConfig.getTopic() + <span class="string">" msgId: "</span> + sendResult.getMessageId());</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">                logger.error(<span class="string">"消息生产失败,将进行两次重试"</span>, e.getMessage());</span><br><span class="line">                logger.info(<span class="string">"发送失败"</span>);</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> RestInternalServerErrorException(ExceptionEnumeration.SYS_NEWS_PUSH_FAIL, <span class="string">"平台消息推送失败"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RestInternalServerErrorException(ExceptionEnumeration.SYS_NEWS_SELECT_FAIL, <span class="string">"找不到该平台消息"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h1>监听器消费消息</h1>
-<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConsumerHandler</span> <span class="keyword">implements</span> <span class="title">MessageOrderListener</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger logger = LoggerFactory.getLogger(ConsumerHandler.class);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 消费消息 handler</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> message</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> context</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> OrderAction <span class="title">consume</span><span class="params">(Message message, ConsumeOrderContext context)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <h1>场景</h1>
+<p>在项目中需要通过表名来获取数据库中元数据相关信息，比如表名，字段名，长度等
+使用spring自带的jdbcTemplate 可以通过SqlRowSetMetaData 可以获取到部分元数据，但是不能获取备注信息（comment中的内容）</p>
+<h1>最简单的解决方案</h1>
+<p>使用jdbcTemplate的queryForRowSet方法。</p>
+<p>该方法很简单</p>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">SqlRowSet sqlRowSet ;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    sqlRowSet = <span class="keyword">this</span>.jdbcTemplate.queryForRowSet(sql.toString());</span><br><span class="line">    <span class="comment">//获取字段列</span></span><br><span class="line">    SqlRowSetMetaData rowSetMetaData = sqlRowSet.getMetaData();</span><br><span class="line">    <span class="comment">//获取列总数</span></span><br><span class="line">    <span class="keyword">int</span> columnCount = rowSetMetaData.getColumnCount();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= columnCount; i++) &#123;</span><br><span class="line">        rowSetMetaData.getColumnName(i);</span><br><span class="line">        rowSetMetaData.getColumnType(i);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>但是此方案存在严重的效率问题，10W的结果集数据，37个字段，24核cpu，基本没30s都返回不过来，占用内存也极高。</p>
+</blockquote>
+<p>进行debug跟进去看，看到jdbcTemplate调用jdbc返回ResultSet只用了10秒左右，之后就一直耗在extractData方法里。该方法是用默认的RowMapper，先取得MetaData然后根据这个去生成Map。</p>
+<h1>对比方法</h1>
+<ol>
+<li>
+<p>使用纯jdbc对比，手工码代码，直接调用Map的put方法逐个生成Map并填充数据。同样的sql，耗时8秒左右，其中根据ResultSet生成List&lt;Map&lt;String, Object&gt;&gt;的过程不超过10s。</p>
+</li>
+<li>
+<p>改用jdbcTemplate的public &lt;T&gt; List&lt;T&gt; query(String sql, RowMapper&lt;T&gt; rowMapper)方法，T填入Map&lt;String, Object&gt;，这样就跟queryForList方法返回值一样了，然后自己实现RowMapper，直接用Map的put方法填充数据。实验结果跟直接用纯jdbc效率相同。</p>
+</li>
+<li>
+<p>使用纯jdbc，自己写一个实体类，把resultSet里的数据循环填入对象放到List里。耗时也差不多8s，不过还是会省一点内存的。但是性能提升有限。</p>
+</li>
+</ol>
+<h1>最优解决方案</h1>
+<p>只需要通过jdbcTemplate获取jdbc Connection即可获取全部信息。</p>
+<p>代码示例如下：</p>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">StringBuilder sql = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">sql.append(<span class="string">"SELECT *"</span>);</span><br><span class="line">sql.append(<span class="string">" FROM "</span>).append(tableCode);</span><br><span class="line">ResultSet tabs;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    DatabaseMetaData dbMetaData = <span class="keyword">this</span>.jdbcTemplate.getDataSource().getConnection().getMetaData();</span><br><span class="line">    String[] types = &#123;<span class="string">"TABLE"</span>&#125;;</span><br><span class="line">    tabs = dbMetaData.getTables(<span class="keyword">null</span>, <span class="keyword">null</span>, tableCode, types);</span><br><span class="line">    <span class="keyword">while</span> (tabs.next()) &#123;</span><br><span class="line">        String tableName = tabs.getString(<span class="string">"TABLE_NAME"</span>);</span><br><span class="line">        <span class="comment">//表对应的schema</span></span><br><span class="line">        String tableSchema = tabs.getString(<span class="string">"TABLE_SCHEM"</span>);</span><br><span class="line">        ResultSet resultSet = dbMetaData.getColumns(<span class="keyword">null</span>, schema, tableName, <span class="keyword">null</span>);</span><br><span class="line">        <span class="keyword">while</span> (resultSet.next()) &#123;</span><br><span class="line">            String name = resultSet.getString(<span class="string">"COLUMN_NAME"</span>);</span><br><span class="line">            String type = resultSet.getString(<span class="string">"TYPE_NAME"</span>);</span><br><span class="line">            String colRemarks = resultSet.getString(<span class="string">"REMARKS"</span>);</span><br><span class="line">            <span class="keyword">int</span> size = resultSet.getInt(<span class="string">"COLUMN_SIZE"</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//业务逻辑</span></span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>经过测试，同样的10w+数据，37个字段，加上我写的业务逻辑也只需要700ms的响应时间，效率可谓是大大提升。</p>
+</blockquote>
+<p>我觉得该方法效率得到提升的原因在于，它没有对全表进行扫描，不关乎结果集的多少，只在乎表结构，所以可以极大的提高响应效率。</p>
 
       
     </div>
@@ -483,10 +504,6 @@
           
             <a href="/tags/Java/" rel="tag"># Java</a>
           
-            <a href="/tags/MQ/" rel="tag"># MQ</a>
-          
-            <a href="/tags/分布式/" rel="tag"># 分布式</a>
-          
             <a href="/tags/Spring/" rel="tag"># Spring</a>
           
         </div>
@@ -500,8 +517,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/20/十分钟入门RocketMQ/" rel="next" title="十分钟入门RocketMQ">
-                <i class="fa fa-chevron-left"></i> 十分钟入门RocketMQ
+              <a href="/2019/03/10/升级ES6-x遇到的坑和解决方案/" rel="next" title="升级ES6.x遇到的坑和解决方案">
+                <i class="fa fa-chevron-left"></i> 升级ES6.x遇到的坑和解决方案
               </a>
             
           </div>
@@ -509,10 +526,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/03/28/DockerOverlay2/" rel="prev" title="Docker文件系统与存储驱动简介">
-                Docker文件系统与存储驱动简介 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
