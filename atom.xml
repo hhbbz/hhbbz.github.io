@@ -248,9 +248,9 @@
       <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
     
     
-      <category term="Linux" scheme="https://hhbbz.github.io/tags/Linux/"/>
-    
       <category term="Elasticsearch" scheme="https://hhbbz.github.io/tags/Elasticsearch/"/>
+    
+      <category term="Linux" scheme="https://hhbbz.github.io/tags/Linux/"/>
     
   </entry>
   
@@ -481,9 +481,9 @@ docker pull sebp/elk&lt;/p&gt;
       <category term="运维" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/%E8%BF%90%E7%BB%B4/"/>
     
     
-      <category term="Docker" scheme="https://hhbbz.github.io/tags/Docker/"/>
-    
       <category term="Linux" scheme="https://hhbbz.github.io/tags/Linux/"/>
+    
+      <category term="Docker" scheme="https://hhbbz.github.io/tags/Docker/"/>
     
       <category term="Shell" scheme="https://hhbbz.github.io/tags/Shell/"/>
     
@@ -572,9 +572,9 @@ docker pull sebp/elk&lt;/p&gt;
       <category term="运维" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/%E8%BF%90%E7%BB%B4/"/>
     
     
-      <category term="Docker" scheme="https://hhbbz.github.io/tags/Docker/"/>
-    
       <category term="Linux" scheme="https://hhbbz.github.io/tags/Linux/"/>
+    
+      <category term="Docker" scheme="https://hhbbz.github.io/tags/Docker/"/>
     
   </entry>
   
