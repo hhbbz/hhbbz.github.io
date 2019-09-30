@@ -106,9 +106,9 @@
         <title>升级ES6.x遇到的坑和解决方案</title>
         <pubTime>2019-03-10T07:36:10.000Z</pubTime>
         
-        <tag>Java</tag>
-         
         <tag>Elasticsearch</tag>
+         
+        <tag>Java</tag>
          
          
            
@@ -128,9 +128,9 @@
         <title>ES5.x常用查询（javaAPI）</title>
         <pubTime>2018-11-04T06:01:59.000Z</pubTime>
         
-        <tag>Java</tag>
-         
         <tag>Elasticsearch</tag>
+         
+        <tag>Java</tag>
          
          
            
@@ -172,9 +172,9 @@
         <title>关于ES字符串类型Text和keyword</title>
         <pubTime>2018-10-19T08:30:15.000Z</pubTime>
         
-        <tag>Java</tag>
-         
         <tag>Elasticsearch</tag>
+         
+        <tag>Java</tag>
          
          
            
@@ -194,9 +194,9 @@
         <title>分布式事务的四种解决方案</title>
         <pubTime>2018-09-06T10:50:40.000Z</pubTime>
         
-        <tag>MQ</tag>
-         
         <tag>分布式</tag>
+         
+        <tag>MQ</tag>
          
          
            
@@ -491,9 +491,9 @@
         
         <tag>Java</tag>
          
-        <tag>MQ</tag>
-         
         <tag>分布式</tag>
+         
+        <tag>MQ</tag>
          
         <tag>Spring</tag>
          
@@ -515,9 +515,9 @@
         <title>十分钟入门RocketMQ</title>
         <pubTime>2018-03-20T02:23:54.000Z</pubTime>
         
-        <tag>MQ</tag>
-         
         <tag>分布式</tag>
+         
+        <tag>MQ</tag>
          
          
            
@@ -778,9 +778,9 @@
         <title>gradle-distDocker插件构建SpringBoot的Docker镜像</title>
         <pubTime>2017-11-07T10:11:24.000Z</pubTime>
         
-        <tag>Java</tag>
-         
         <tag>Docker</tag>
+         
+        <tag>Java</tag>
          
         <tag>Gradle</tag>
          
