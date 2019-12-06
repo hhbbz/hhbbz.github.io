@@ -112,23 +112,23 @@
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ThreadLocal线程安全机制与坑">
-<meta property="og:url" content="https://hhbbz.coding.me/blog/2018/08/12/ThreadLocal线程安全机制与坑/index.html">
+<meta property="og:url" content="https://hhbbz.github.io/2018/08/12/ThreadLocal线程安全机制与坑/index.html">
 <meta property="og:site_name" content="hhbbz-Blog">
 <meta property="og:description" content="Java 多线程类库对于共享数据的读写控制主要采用锁机制保证线程安全，本文所要探究的 ThreadLocal 则采用了一种完全不同的策略。ThreadLocal 不是用来解决共享数据的并发访问问题的，它让每个线程都将目标数据复制一份作为线程私有，后续对于该数据的操作都是在各自私有的副本上进行，线程之间彼此相互隔离，也就不存在竞争问题。 下面的例子演示了 ThreadLocal 的典型应用场景，在">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://hhbbz.coding.me/blog/2018/08/12/ThreadLocal线程安全机制与坑/1.png">
+<meta property="og:image" content="https://hhbbz.github.io/blog/2018/08/12/ThreadLocal线程安全机制与坑/1.png">
 <meta property="og:updated_time" content="2019-12-06T08:13:14.142Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ThreadLocal线程安全机制与坑">
 <meta name="twitter:description" content="Java 多线程类库对于共享数据的读写控制主要采用锁机制保证线程安全，本文所要探究的 ThreadLocal 则采用了一种完全不同的策略。ThreadLocal 不是用来解决共享数据的并发访问问题的，它让每个线程都将目标数据复制一份作为线程私有，后续对于该数据的操作都是在各自私有的副本上进行，线程之间彼此相互隔离，也就不存在竞争问题。 下面的例子演示了 ThreadLocal 的典型应用场景，在">
-<meta name="twitter:image" content="https://hhbbz.coding.me/blog/2018/08/12/ThreadLocal线程安全机制与坑/1.png">
+<meta name="twitter:image" content="https://hhbbz.github.io/blog/2018/08/12/ThreadLocal线程安全机制与坑/1.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://hhbbz.coding.me/blog/2018/08/12/ThreadLocal线程安全机制与坑/"/>
+  <link rel="canonical" href="https://hhbbz.github.io/2018/08/12/ThreadLocal线程安全机制与坑/"/>
 
 
 
@@ -342,7 +342,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hhbbz.coding.me/blog/blog/2018/08/12/ThreadLocal线程安全机制与坑/">
+    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/blog/2018/08/12/ThreadLocal线程安全机制与坑/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="hhbbz">
