@@ -56,21 +56,21 @@
 
 
 
-<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/blog/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.3.0">
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32*32.ico?v=6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16*16.ico?v=6.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32*32.ico?v=6.3.0">
 
 
-  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.3.0" color="#222">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16*16.ico?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
 
 
 
@@ -83,7 +83,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '/blog/',
+    root: '/',
     scheme: 'Pisces',
     version: '6.3.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
@@ -112,24 +112,24 @@
 <meta name="keywords" content="Java,分布式,Netty">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Netty入门浅析(1)">
-<meta property="og:url" content="https://hhbbz.coding.me/blog/2018/07/22/Netty入门浅析(1)/index.html">
+<meta property="og:url" content="https://hhbbz.github.io/2018/07/22/Netty入门浅析(1)/index.html">
 <meta property="og:site_name" content="hhbbz-Blog">
 <meta property="og:description" content="Netty的简单介绍 Netty 是一个 NIO client-server(客户端服务器)框架，使用 Netty 可以快速开发网络应用，例如服务器和客户 端协议。 Netty 提供了一种新的方式来使开发网络应用程序，这种新的方式使得它很容易使用和有很强的扩展性。 Netty 的内部实现时很复杂的，但是 Netty 提供了简单易用的 api 从网络处理代码中解耦业务逻辑。 Netty 是完全基 于">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://hhbbz.coding.me/blog/2018/07/22/Netty入门浅析(1)/1.png">
-<meta property="og:image" content="https://hhbbz.coding.me/blog/2018/07/22/Netty入门浅析(1)/2.png">
+<meta property="og:image" content="https://hhbbz.github.io/2018/07/22/Netty入门浅析(1)/1.png">
+<meta property="og:image" content="https://hhbbz.github.io/2018/07/22/Netty入门浅析(1)/2.png">
 <meta property="og:updated_time" content="2019-12-06T08:14:49.908Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Netty入门浅析(1)">
 <meta name="twitter:description" content="Netty的简单介绍 Netty 是一个 NIO client-server(客户端服务器)框架，使用 Netty 可以快速开发网络应用，例如服务器和客户 端协议。 Netty 提供了一种新的方式来使开发网络应用程序，这种新的方式使得它很容易使用和有很强的扩展性。 Netty 的内部实现时很复杂的，但是 Netty 提供了简单易用的 api 从网络处理代码中解耦业务逻辑。 Netty 是完全基 于">
-<meta name="twitter:image" content="https://hhbbz.coding.me/blog/2018/07/22/Netty入门浅析(1)/1.png">
+<meta name="twitter:image" content="https://hhbbz.github.io/2018/07/22/Netty入门浅析(1)/1.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://hhbbz.coding.me/blog/2018/07/22/Netty入门浅析(1)/"/>
+  <link rel="canonical" href="https://hhbbz.github.io/2018/07/22/Netty入门浅析(1)/"/>
 
 
 
@@ -195,7 +195,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/blog/" class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">hhbbz-Blog</span>
         <span class="logo-line-after"><i></i></span>
@@ -228,7 +228,7 @@
         
           
           <li class="menu-item menu-item-home">
-    <a href="/blog/" rel="section">
+    <a href="/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
   </li>
         
@@ -236,7 +236,7 @@
         
           
           <li class="menu-item menu-item-about">
-    <a href="/blog/about/" rel="section">
+    <a href="/about/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
   </li>
         
@@ -244,7 +244,7 @@
         
           
           <li class="menu-item menu-item-tags">
-    <a href="/blog/tags/" rel="section">
+    <a href="/tags/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
         
@@ -252,7 +252,7 @@
         
           
           <li class="menu-item menu-item-categories">
-    <a href="/blog/categories/" rel="section">
+    <a href="/categories/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
   </li>
         
@@ -260,7 +260,7 @@
         
           
           <li class="menu-item menu-item-archives">
-    <a href="/blog/archives/" rel="section">
+    <a href="/archives/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
   </li>
 
@@ -343,12 +343,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hhbbz.coding.me/blog/blog/2018/07/22/Netty入门浅析(1)/">
+    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2018/07/22/Netty入门浅析(1)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="hhbbz">
       <meta itemprop="description" content="摘抄和记录的地方">
-      <meta itemprop="image" content="/blog/images/TOM.jpg">
+      <meta itemprop="image" content="/images/TOM.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -419,7 +419,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/blog/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
 
                 
                 
@@ -484,7 +484,7 @@
 <h1>Netty Reactor模式</h1>
 <p>Netty是典型的Reactor模型结构。Netty通过Reactor模型基于多路复用器接收并处理用户请求，内部实现了两个线程池，Boss线程池和Work线程池，其中Boss线程池的线程负责处理请求的accept事件，当接收到accept事件的请求时，把对应的socket封装到一个NioSocketChannel中，并交给Work线程池，其中Work线程池负责请求的read和write事件。
 <strong>流程图：</strong></p>
-<p><img src="/blog/2018/07/22/Netty入门浅析(1)/1.png" title="图片"></p>
+<p><img src="/2018/07/22/Netty入门浅析(1)/1.png" title="图片"></p>
 <h1>Netty核心组件</h1>
 <h2>Channel</h2>
 <p>这里的Channel与Java的Channel不是同一个，是netty自己定义的通道；Netty的Channel是对网络连接处理的抽象，负责与网络进行通讯，支持NIO和OIO两种方式；内部与网络socket连接，通过channel能够进行I/O操作，如读、写、连接和绑定。
@@ -504,7 +504,7 @@ ChannelHandler是个接口，通常我们在Netty中需要使用下面的子类�
 </ul>
 <p>Netty的ChannelPipeline和ChannelHandler机制类似于Servlet和Filter过滤器/拦截器，每次收到请求会依次调用配置好的拦截器链。Netty服务器收到消息后，将消息在ChannelPipeline中流动和传递，途经的ChannelHandler会对消息进行处理，ChannelHandler分为两种inbound和outbound，服务器read过程中只会调用inbound的方法，write时只寻找链中的outbound的Handler。
 ChannelPipeline内部维护了一个双向链表，Head和Tail分别代表表头和表尾，Head作为总入口和总出口，负责底层的网络读写操作；用户自己定义的ChannelHandler会被添加到链表中，这样就可以对I/O事件进行拦截和处理；这样的好处在于用户可以方便的通过新增和删除链表中的ChannelHandler来实现不同的业务逻辑，不需要对已有的ChannelHandler进行修改</p>
-<p><img src="/blog/2018/07/22/Netty入门浅析(1)/2.png" title="图片"></p>
+<p><img src="/2018/07/22/Netty入门浅析(1)/2.png" title="图片"></p>
 <p>如图所示，在服务器初始化后，ServerSocketChannel的会创建一个Pipeline，内部维护了ChannelHanlder的双向链表，读取数据时，会依次调用ChannelInboundHandler子类的channelRead()方法，例如：读取到客户端数据后，依次调用解码-业务逻辑-直到Tail。而写入数据时，会从用户自定义的ChannelHandler出发查找ChannelOutboundHandler的子类，调用channelWrite()，最终由Head的write()向socket写入数据。例如：写入数据会通过业务逻辑的组装–编码–写入socket（Head的write）</p>
 <h2>EventLoop与EventLoopGroup</h2>
 <p>EventLoop是事件循环，EventLoopGroup是运行在线程池中的事件循环组，Netty使用了Reactor模型，服务器的连接和读写放在线程池之上的事件循环中执行，这是Netty获得高性能的原因之一。事件循环内部会打开selector，并将Channel注册到事件循环中，事件循环不断的进行select()查找准备就绪的描述符；此外，某些系统任务也会被提交到事件循环组中运行。</p>
@@ -544,7 +544,7 @@ ChannelPipeline内部维护了一个双向链表，Head和Tail分别代表表头
 
     
       <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/blog/images/wechat.png" alt="hhbbz 微信支付"/>
+        <img id="wechat_qr" src="/images/wechat.png" alt="hhbbz 微信支付"/>
         <p>微信支付</p>
       </div>
     
@@ -565,11 +565,11 @@ ChannelPipeline内部维护了一个双向链表，Head和Tail分别代表表头
       
         <div class="post-tags">
           
-            <a href="/blog/tags/Java/" rel="tag"># Java</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
           
-            <a href="/blog/tags/分布式/" rel="tag"># 分布式</a>
+            <a href="/tags/分布式/" rel="tag"># 分布式</a>
           
-            <a href="/blog/tags/Netty/" rel="tag"># Netty</a>
+            <a href="/tags/Netty/" rel="tag"># Netty</a>
           
         </div>
       
@@ -582,7 +582,7 @@ ChannelPipeline内部维护了一个双向链表，Head和Tail分别代表表头
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2018/07/14/Java实现乐观互斥Key锁/" rel="next" title="Java实现乐观互斥Key锁">
+              <a href="/2018/07/14/Java实现乐观互斥Key锁/" rel="next" title="Java实现乐观互斥Key锁">
                 <i class="fa fa-chevron-left"></i> Java实现乐观互斥Key锁
               </a>
             
@@ -592,7 +592,7 @@ ChannelPipeline内部维护了一个双向链表，Head和Tail分别代表表头
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blog/2018/07/22/Netty入门浅析(2)/" rel="prev" title="Netty入门浅析(2)">
+              <a href="/2018/07/22/Netty入门浅析(2)/" rel="prev" title="Netty入门浅析(2)">
                 Netty入门浅析(2) <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -649,7 +649,7 @@ ChannelPipeline内部维护了一个双向链表，Head和Tail分别代表表头
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
-                src="/blog/images/TOM.jpg"
+                src="/images/TOM.jpg"
                 alt="hhbbz" />
             
               <p class="site-author-name" itemprop="name">hhbbz</p>
@@ -661,7 +661,7 @@ ChannelPipeline内部维护了一个双向链表，Head和Tail分别代表表头
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/blog/archives/">
+                  <a href="/archives/">
                 
                     <span class="site-state-item-count">38</span>
                     <span class="site-state-item-name">日志</span>
@@ -673,7 +673,7 @@ ChannelPipeline内部维护了一个双向链表，Head和Tail分别代表表头
                 
                 
                 <div class="site-state-item site-state-categories">
-                  <a href="/blog/categories/index.html">
+                  <a href="/categories/index.html">
                     
                     
                       
@@ -690,7 +690,7 @@ ChannelPipeline内部维护了一个双向链表，Head和Tail分别代表表头
                 
                 
                 <div class="site-state-item site-state-tags">
-                  <a href="/blog/tags/index.html">
+                  <a href="/tags/index.html">
                     
                     
                       
@@ -884,49 +884,49 @@ ChannelPipeline内部维护了一个双向链表，Head和Tail分别代表表头
 
   
   
-    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
   
 
   
   
-    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
   
   
-    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
-
-
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.3.0"></script>
-
-  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.3.0"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/affix.js?v=6.3.0"></script>
-
-  <script type="text/javascript" src="/blog/js/src/schemes/pisces.js?v=6.3.0"></script>
-
-
-
-  
-  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=6.3.0"></script>
-<script type="text/javascript" src="/blog/js/src/post-details.js?v=6.3.0"></script>
-
 
 
   
 
 
-  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.3.0"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
 
 
 
@@ -970,7 +970,7 @@ ChannelPipeline内部维护了一个双向链表，Head和Tail分别代表表头
     } else if (/json$/i.test(search_path)) {
       isXml = false;
     }
-    var path = "/blog/" + search_path;
+    var path = "/" + search_path;
     // monitor main search box;
 
     var onPopupClose = function (e) {

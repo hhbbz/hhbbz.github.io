@@ -56,21 +56,21 @@
 
 
 
-<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/blog/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.3.0">
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32*32.ico?v=6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16*16.ico?v=6.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32*32.ico?v=6.3.0">
 
 
-  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.3.0" color="#222">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16*16.ico?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
 
 
 
@@ -83,7 +83,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '/blog/',
+    root: '/',
     scheme: 'Pisces',
     version: '6.3.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
@@ -112,25 +112,25 @@
 <meta name="keywords" content="Java,Ignite,分布式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ignite踩坑录(3) 数据平衡分布">
-<meta property="og:url" content="https://hhbbz.coding.me/blog/2019/09/23/ignite踩坑录-3-数据平衡分布/index.html">
+<meta property="og:url" content="https://hhbbz.github.io/2019/09/23/ignite踩坑录-3-数据平衡分布/index.html">
 <meta property="og:site_name" content="hhbbz-Blog">
 <meta property="og:description" content="为什么需要数据平衡分布 在一个集群的环境中，我们往往希望能更好的利用分布式的优势，把数据平衡分布在各个节点中，这样有几个好处：   这样才能缓存/持久化更多的数据。   即使其中一个节点down掉，也不影响其他节点的数据和状态。   数据在各个节点中平衡分布，使得资源利用率，单节点的拔插效率更高。   igntie实现分布式存储的配置 Ignite提供了三种不同的缓存操作模式，分区、复制和本地。缓">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://hhbbz.coding.me/blog/2019/09/23/ignite踩坑录-3-数据平衡分布/001.png">
-<meta property="og:image" content="https://hhbbz.coding.me/blog/2019/09/23/ignite踩坑录-3-数据平衡分布/002.png">
-<meta property="og:image" content="https://hhbbz.coding.me/blog/2019/09/23/ignite踩坑录-3-数据平衡分布/003.png">
+<meta property="og:image" content="https://hhbbz.github.io/2019/09/23/ignite踩坑录-3-数据平衡分布/001.png">
+<meta property="og:image" content="https://hhbbz.github.io/2019/09/23/ignite踩坑录-3-数据平衡分布/002.png">
+<meta property="og:image" content="https://hhbbz.github.io/2019/09/23/ignite踩坑录-3-数据平衡分布/003.png">
 <meta property="og:updated_time" content="2019-09-25T02:50:43.120Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ignite踩坑录(3) 数据平衡分布">
 <meta name="twitter:description" content="为什么需要数据平衡分布 在一个集群的环境中，我们往往希望能更好的利用分布式的优势，把数据平衡分布在各个节点中，这样有几个好处：   这样才能缓存/持久化更多的数据。   即使其中一个节点down掉，也不影响其他节点的数据和状态。   数据在各个节点中平衡分布，使得资源利用率，单节点的拔插效率更高。   igntie实现分布式存储的配置 Ignite提供了三种不同的缓存操作模式，分区、复制和本地。缓">
-<meta name="twitter:image" content="https://hhbbz.coding.me/blog/2019/09/23/ignite踩坑录-3-数据平衡分布/001.png">
+<meta name="twitter:image" content="https://hhbbz.github.io/2019/09/23/ignite踩坑录-3-数据平衡分布/001.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://hhbbz.coding.me/blog/2019/09/23/ignite踩坑录-3-数据平衡分布/"/>
+  <link rel="canonical" href="https://hhbbz.github.io/2019/09/23/ignite踩坑录-3-数据平衡分布/"/>
 
 
 
@@ -196,7 +196,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/blog/" class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">hhbbz-Blog</span>
         <span class="logo-line-after"><i></i></span>
@@ -229,7 +229,7 @@
         
           
           <li class="menu-item menu-item-home">
-    <a href="/blog/" rel="section">
+    <a href="/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
   </li>
         
@@ -237,7 +237,7 @@
         
           
           <li class="menu-item menu-item-about">
-    <a href="/blog/about/" rel="section">
+    <a href="/about/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
   </li>
         
@@ -245,7 +245,7 @@
         
           
           <li class="menu-item menu-item-tags">
-    <a href="/blog/tags/" rel="section">
+    <a href="/tags/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
         
@@ -253,7 +253,7 @@
         
           
           <li class="menu-item menu-item-categories">
-    <a href="/blog/categories/" rel="section">
+    <a href="/categories/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
   </li>
         
@@ -261,7 +261,7 @@
         
           
           <li class="menu-item menu-item-archives">
-    <a href="/blog/archives/" rel="section">
+    <a href="/archives/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
   </li>
 
@@ -344,12 +344,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hhbbz.coding.me/blog/blog/2019/09/23/ignite踩坑录-3-数据平衡分布/">
+    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2019/09/23/ignite踩坑录-3-数据平衡分布/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="hhbbz">
       <meta itemprop="description" content="摘抄和记录的地方">
-      <meta itemprop="image" content="/blog/images/TOM.jpg">
+      <meta itemprop="image" content="/images/TOM.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -420,7 +420,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/blog/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
 
                 
                 
@@ -524,11 +524,11 @@ ignite.cluster().setBaselineTopology(nodes);
 </ul>
 <h1>日志示例</h1>
 <h2>加入新节点前</h2>
-<p><img src="/blog/2019/09/23/ignite踩坑录-3-数据平衡分布/001.png" title="图片"></p>
+<p><img src="/2019/09/23/ignite踩坑录-3-数据平衡分布/001.png" title="图片"></p>
 <h2>加入新节点</h2>
-<p><img src="/blog/2019/09/23/ignite踩坑录-3-数据平衡分布/002.png" title="图片"></p>
+<p><img src="/2019/09/23/ignite踩坑录-3-数据平衡分布/002.png" title="图片"></p>
 <h2>加入新节点后，尚未激活的集群</h2>
-<p><img src="/blog/2019/09/23/ignite踩坑录-3-数据平衡分布/003.png" title="图片"></p>
+<p><img src="/2019/09/23/ignite踩坑录-3-数据平衡分布/003.png" title="图片"></p>
 
       
     </div>
@@ -552,7 +552,7 @@ ignite.cluster().setBaselineTopology(nodes);
 
     
       <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/blog/images/wechat.png" alt="hhbbz 微信支付"/>
+        <img id="wechat_qr" src="/images/wechat.png" alt="hhbbz 微信支付"/>
         <p>微信支付</p>
       </div>
     
@@ -573,11 +573,11 @@ ignite.cluster().setBaselineTopology(nodes);
       
         <div class="post-tags">
           
-            <a href="/blog/tags/Java/" rel="tag"># Java</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
           
-            <a href="/blog/tags/Ignite/" rel="tag"># Ignite</a>
+            <a href="/tags/Ignite/" rel="tag"># Ignite</a>
           
-            <a href="/blog/tags/分布式/" rel="tag"># 分布式</a>
+            <a href="/tags/分布式/" rel="tag"># 分布式</a>
           
         </div>
       
@@ -590,7 +590,7 @@ ignite.cluster().setBaselineTopology(nodes);
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2019/07/13/ignite踩坑录-2-节点集群/" rel="next" title="ignite踩坑录(2) 节点集群">
+              <a href="/2019/07/13/ignite踩坑录-2-节点集群/" rel="next" title="ignite踩坑录(2) 节点集群">
                 <i class="fa fa-chevron-left"></i> ignite踩坑录(2) 节点集群
               </a>
             
@@ -600,7 +600,7 @@ ignite.cluster().setBaselineTopology(nodes);
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blog/2019/12/06/Java多线程的使用之三板斧/" rel="prev" title="Java多线程的使用之三板斧">
+              <a href="/2019/12/06/Java多线程的使用之三板斧/" rel="prev" title="Java多线程的使用之三板斧">
                 Java多线程的使用之三板斧 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -657,7 +657,7 @@ ignite.cluster().setBaselineTopology(nodes);
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
-                src="/blog/images/TOM.jpg"
+                src="/images/TOM.jpg"
                 alt="hhbbz" />
             
               <p class="site-author-name" itemprop="name">hhbbz</p>
@@ -669,7 +669,7 @@ ignite.cluster().setBaselineTopology(nodes);
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/blog/archives/">
+                  <a href="/archives/">
                 
                     <span class="site-state-item-count">38</span>
                     <span class="site-state-item-name">日志</span>
@@ -681,7 +681,7 @@ ignite.cluster().setBaselineTopology(nodes);
                 
                 
                 <div class="site-state-item site-state-categories">
-                  <a href="/blog/categories/index.html">
+                  <a href="/categories/index.html">
                     
                     
                       
@@ -698,7 +698,7 @@ ignite.cluster().setBaselineTopology(nodes);
                 
                 
                 <div class="site-state-item site-state-tags">
-                  <a href="/blog/tags/index.html">
+                  <a href="/tags/index.html">
                     
                     
                       
@@ -892,49 +892,49 @@ ignite.cluster().setBaselineTopology(nodes);
 
   
   
-    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
   
 
   
   
-    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
   
   
-    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
-
-
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.3.0"></script>
-
-  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.3.0"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/affix.js?v=6.3.0"></script>
-
-  <script type="text/javascript" src="/blog/js/src/schemes/pisces.js?v=6.3.0"></script>
-
-
-
-  
-  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=6.3.0"></script>
-<script type="text/javascript" src="/blog/js/src/post-details.js?v=6.3.0"></script>
-
 
 
   
 
 
-  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.3.0"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
 
 
 
@@ -978,7 +978,7 @@ ignite.cluster().setBaselineTopology(nodes);
     } else if (/json$/i.test(search_path)) {
       isXml = false;
     }
-    var path = "/blog/" + search_path;
+    var path = "/" + search_path;
     // monitor main search box;
 
     var onPopupClose = function (e) {
