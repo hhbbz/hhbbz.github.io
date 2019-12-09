@@ -402,7 +402,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-12-09 17:26:57" itemprop="dateModified" datetime="2019-12-09T17:26:57+08:00">17:26:57</time>
+                <time title="修改时间：2019-12-09 17:37:25" itemprop="dateModified" datetime="2019-12-09T17:37:25+08:00">17:37:25</time>
               
             
           </span>
@@ -455,10 +455,11 @@
       
         
           
-          问题描述
-前段时间做的一个数据平台在最近总是莫名其妙出现
-12Caused by:java.sql.SQLException: HikariDataSource HikariDataSource (HikariPool-2) has been closed.
-这种错误。按字面意思来说就是使用连接池里
+          Hikari简单介绍
+官网地址
+快速，简单，可靠的数据源，spring boot2.0 已经将 HikariCP 做为了默认的数据源链接池，在官网测试中秒杀一切其他数据源，比如 commons-dbcp,tomcat,c3po,druid。
+基本设计
+Hikari 链接池采用了很多优化来提高并发数，
           ...
           <!--noindex-->
           <div class="post-button text-center">
