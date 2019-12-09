@@ -108,25 +108,25 @@
 
 
 
-  <meta name="description" content="选择镜像 选择docker images(在hub.docker.com 搜索 elk 选择 start或pulls比较多的镜像) 本次安装选择的是 sebp/elk,默认本地已安装docker环境 docker pull sebp/elk   选择docker镜像登录 hub.docker.com 搜索 &apos;elk&apos;, 选择stars 和 pulls 比较多的镜像   下载镜像docker pul">
-<meta name="keywords" content="Linux,Docker,Shell">
+  <meta name="description" content="问题描述 前段时间做的一个数据平台在最近总是莫名其妙出现 12Caused by:java.sql.SQLException: HikariDataSource HikariDataSource (HikariPool-2) has been closed. 这种错误。按字面意思来说就是使用连接池里的连接执行sql之前，这个连接池就已经被关闭了无法使用。 因为是会有很多数据源配置通过数据平台来连接">
+<meta name="keywords" content="Java,Spring">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用Docker容器部署ELK">
-<meta property="og:url" content="https://hhbbz.github.io/2018/07/03/使用Docker容器部署ELK/index.html">
+<meta property="og:title" content="排查HikariDataSource异常关闭问题">
+<meta property="og:url" content="https://hhbbz.github.io/2019/12/09/排查HikariDataSource异常关闭问题/index.html">
 <meta property="og:site_name" content="hhbbz-Blog">
-<meta property="og:description" content="选择镜像 选择docker images(在hub.docker.com 搜索 elk 选择 start或pulls比较多的镜像) 本次安装选择的是 sebp/elk,默认本地已安装docker环境 docker pull sebp/elk   选择docker镜像登录 hub.docker.com 搜索 &apos;elk&apos;, 选择stars 和 pulls 比较多的镜像   下载镜像docker pul">
+<meta property="og:description" content="问题描述 前段时间做的一个数据平台在最近总是莫名其妙出现 12Caused by:java.sql.SQLException: HikariDataSource HikariDataSource (HikariPool-2) has been closed. 这种错误。按字面意思来说就是使用连接池里的连接执行sql之前，这个连接池就已经被关闭了无法使用。 因为是会有很多数据源配置通过数据平台来连接">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-03T15:51:01.000Z">
+<meta property="og:updated_time" content="2019-12-09T09:26:57.625Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用Docker容器部署ELK">
-<meta name="twitter:description" content="选择镜像 选择docker images(在hub.docker.com 搜索 elk 选择 start或pulls比较多的镜像) 本次安装选择的是 sebp/elk,默认本地已安装docker环境 docker pull sebp/elk   选择docker镜像登录 hub.docker.com 搜索 &apos;elk&apos;, 选择stars 和 pulls 比较多的镜像   下载镜像docker pul">
+<meta name="twitter:title" content="排查HikariDataSource异常关闭问题">
+<meta name="twitter:description" content="问题描述 前段时间做的一个数据平台在最近总是莫名其妙出现 12Caused by:java.sql.SQLException: HikariDataSource HikariDataSource (HikariPool-2) has been closed. 这种错误。按字面意思来说就是使用连接池里的连接执行sql之前，这个连接池就已经被关闭了无法使用。 因为是会有很多数据源配置通过数据平台来连接">
 
 
 
 
 
 
-  <link rel="canonical" href="https://hhbbz.github.io/2018/07/03/使用Docker容器部署ELK/"/>
+  <link rel="canonical" href="https://hhbbz.github.io/2019/12/09/排查HikariDataSource异常关闭问题/"/>
 
 
 
@@ -136,7 +136,7 @@
   };
 </script>
 
-  <title>使用Docker容器部署ELK | hhbbz-Blog</title>
+  <title>排查HikariDataSource异常关闭问题 | hhbbz-Blog</title>
   
 
 
@@ -340,7 +340,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2018/07/03/使用Docker容器部署ELK/">
+    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2019/12/09/排查HikariDataSource异常关闭问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="hhbbz">
@@ -357,7 +357,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">使用Docker容器部署ELK
+          <h2 class="post-title" itemprop="name headline">排查HikariDataSource异常关闭问题
               
             
           </h2>
@@ -382,7 +382,7 @@
                 
               
 
-              <time title="创建时间：2018-07-03 23:11:29" itemprop="dateCreated datePublished" datetime="2018-07-03T23:11:29+08:00">2018-07-03</time>
+              <time title="创建时间：2019-12-09 16:48:02" itemprop="dateCreated datePublished" datetime="2019-12-09T16:48:02+08:00">2019-12-09</time>
             
 
             
@@ -399,7 +399,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-07-03 23:51:01" itemprop="dateModified" datetime="2018-07-03T23:51:01+08:00">23:51:01</time>
+                <time title="修改时间：2019-12-09 17:26:57" itemprop="dateModified" datetime="2019-12-09T17:26:57+08:00">17:26:57</time>
               
             
           </span>
@@ -417,13 +417,6 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/运维/" itemprop="url" rel="index"><span itemprop="name">运维</span></a></span>
 
                 
                 
@@ -465,62 +458,53 @@
       
 
       
-        <h1>选择镜像</h1>
-<p>选择docker images(在hub.docker.com 搜索 elk 选择 start或pulls比较多的镜像) 本次安装选择的是 sebp/elk,默认本地已安装docker环境
-docker pull sebp/elk</p>
+        <h1>问题描述</h1>
+<p>前段时间做的一个数据平台在最近总是莫名其妙出现
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Caused by:</span><br><span class="line">java.sql.SQLException: <span class="function">HikariDataSource <span class="title">HikariDataSource</span> <span class="params">(HikariPool<span class="number">-2</span>)</span> has been closed.</span></span><br></pre></td></tr></table></figure></p>
+<p>这种错误。按字面意思来说就是使用连接池里的连接执行sql之前，这个连接池就已经被关闭了无法使用。</p>
+<p>因为是会有很多数据源配置通过数据平台来连接数据库的，连接数非常庞大，很难管理，也会容易出现这种因为遗漏逻辑代码而导致的问题。所以在处理大量的数据库连接时候，务必要仔细仔细再仔细。**“连接风暴”**这种事情一旦发生，会压倒整个数据库服务器，直接影响当前业务，甚至所有业务。</p>
+<h1>问题跟踪</h1>
+<p>在找问题的时候，我们要看清楚控制台输出的堆栈信息和调用链，除了关注自己本身的业务代码之外，也要去关注调用链经过的框架/工具。</p>
+<p>因为这个问题会涉及到数据库方面，所以数据库那一边的参数以及资源情况我们也要去关注，看到底是程序连接泄漏还是数据库给的连接数实在是太少。</p>
+<h1>模拟场景确认问题</h1>
+<p>在通过报错信息，异常产生的调用链以及所涉及资源的使用情况、参数配置之后，就要开始根据自己的猜想去编写代码，模拟bug触发的场景去确认我们的问题了。</p>
+<ul>
+<li>封装一个简单的HikariDataSource</li>
+</ul>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> HikariDataSource <span class="title">initDataSource</span><span class="params">()</span></span>&#123;</span><br><span class="line">    HikariDataSource dataSource = <span class="keyword">new</span> HikariDataSource();</span><br><span class="line">    dataSource.setConnectionTestQuery(<span class="string">"SELECT 1"</span>);</span><br><span class="line">    dataSource.setConnectionTimeout(<span class="number">60000</span>);</span><br><span class="line">    dataSource.setMinimumIdle(<span class="number">2</span>);</span><br><span class="line">    dataSource.setMaximumPoolSize(<span class="number">100</span>);</span><br><span class="line">    dataSource.setMaxLifetime(<span class="number">600000</span>);</span><br><span class="line">    dataSource.setValidationTimeout(<span class="number">5000</span>);</span><br><span class="line">    dataSource.setIdleTimeout(<span class="number">300000</span>);</span><br><span class="line">    dataSource.setLeakDetectionThreshold(<span class="number">500000</span>);</span><br><span class="line"></span><br><span class="line">    dataSource.setDriverClassName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line">    dataSource.setJdbcUrl(<span class="string">"jdbc:mysql://127.0.0.1:3306/anymarket_dev?useSSL=false&amp;characterEncoding=utf8&amp;allowPublicKeyRetrieval=true"</span>);</span><br><span class="line">    dataSource.setUsername(<span class="string">"root"</span>);</span><br><span class="line">    dataSource.setPassword(<span class="string">"hbz961005"</span>);</span><br><span class="line">    <span class="keyword">return</span> dataSource;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>使用构造的数据源进行查询</li>
+</ul>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testHikari</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    HikariDataSource dataSource = initDataSource();</span><br><span class="line"></span><br><span class="line">    JdbcTemplate jdbcTemplate = <span class="keyword">new</span> JdbcTemplate(dataSource);</span><br><span class="line"></span><br><span class="line">    jdbcTemplate.execute(<span class="string">"select * from clocd_type"</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样的操作是正常使用的，没有问题，但是我们的报错有异常关闭数据源连接，所以我们下一步就要开始加一句close数据源，再执行看看。</p>
+<ul>
+<li>基于上面的测试代码进行改造，增加关闭数据源代码。</li>
+</ul>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testHikari</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    HikariDataSource dataSource = initDataSource();</span><br><span class="line"></span><br><span class="line">    JdbcTemplate jdbcTemplate = <span class="keyword">new</span> JdbcTemplate(dataSource);</span><br><span class="line"></span><br><span class="line">    jdbcTemplate.execute(<span class="string">"select * from clocd_type"</span>);</span><br><span class="line"></span><br><span class="line">    dataSource.close();</span><br><span class="line"></span><br><span class="line">    jdbcTemplate.execute(<span class="string">"select * from clocd_type"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>执行，这个时候控制台就报出了
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Caused by:</span><br><span class="line">java.sql.SQLException: <span class="function">HikariDataSource <span class="title">HikariDataSource</span> <span class="params">(HikariPool<span class="number">-2</span>)</span> has been closed.</span></span><br></pre></td></tr></table></figure></p>
+<p>这跟我们数据平台遇到的错误是一样的。</p>
+<p>自此，我们已经验证出来了导致问题的所在：
+jdbcTemplate是基于初始化出来的dataSource构造出来的，那么当我们的dataSoource关闭之后，
+我们再使用原先的jdbcTemplate去进行查询，那就会有问题，因为里面的连接已经被我们关闭了。</p>
+<p>问题已经验证出来了，那么接下来就是解决问题。</p>
+<ul>
+<li>解决代码</li>
+</ul>
+<p>基于上面的测试代码，补上重新构造新的datasource代码，重新设置当前jdbcTemplate。</p>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testHikari</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    HikariDataSource dataSource = initDataSource();</span><br><span class="line"></span><br><span class="line">    JdbcTemplate jdbcTemplate = <span class="keyword">new</span> JdbcTemplate(dataSource);</span><br><span class="line"></span><br><span class="line">    jdbcTemplate.execute(<span class="string">"select * from clocd_type"</span>);</span><br><span class="line"></span><br><span class="line">    dataSource.close();</span><br><span class="line"></span><br><span class="line">    dataSource = initDataSource();</span><br><span class="line"></span><br><span class="line">    jdbcTemplate = <span class="keyword">new</span> JdbcTemplate(dataSource);</span><br><span class="line"></span><br><span class="line">    jdbcTemplate.execute(<span class="string">"select * from clocd_type"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样就不会再报错了。</p>
+<h1>把问题回溯到业务代码中</h1>
+<p>我们已经知道了这个报错产生的原因以及解决方式了，那么我们就要去检查我们的业务代码。很明显业务代码报这个错的原因就是关闭连接后，没有重新构造连接，并设置给jdbcTemplate，所以只需要在业务代码中补上这个解决的逻辑即可。</p>
+<h1>结尾</h1>
+<p>这篇文章主要说明从一个复杂的业务平台中，把异常抽离出来，并使用简单的测试类/单元测试去进行模拟场景去验证问题，验证问题的产生原因以及找到解决方法，并最后把解决思路回归到业务代码中进行检查。</p>
+<p>这种报错还是比较简单的，很好验证。如果是遇到因为线程安全、批量并发和中间件等所导致的bug，那么我们大概率要借助工具去进行问题跟踪了。这里笔者推几个工具:</p>
 <ol>
-<li>
-<p>选择docker镜像登录 hub.docker.com 搜索 'elk', 选择stars 和 pulls 比较多的镜像</p>
-</li>
-<li>
-<p>下载镜像docker pull sebp/elk</p>
-</li>
+<li>alibaba arthas</li>
+<li>jmeter</li>
+<li>qunar bistoury</li>
 </ol>
-<h1>启动docker容器</h1>
-<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --ulimit nofile=65536:65536 -p 5601:5601 -p 9200:9200 -p 5044:5044 -p 5045:5045 -p 5046:5046 -d --restart=always -v /etc/logstash:/etc/logstash -v /etc/localtime:/etc/localtime --name elk sebp/elk</span><br></pre></td></tr></table></figure></p>
-<h2>参数介绍</h2>
-<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">--ulimit  来修改容器的ulimit参数(该镜像默认的ulimit值为4096。 不带该参数，启动容器会出现类似 “max file descriptors [4096] for elasticsearch process is too low, increase to at least [65536]” 错误)</span><br><span class="line">    -p  指定容器和宿主机映射端口</span><br><span class="line">        5601：  kibana服务端口 HTTP  (web访问)</span><br><span class="line">        9200： Elasticsearch 开发端口 HTTP,保存数据到Elasticsearch中使用</span><br><span class="line">        5044： logstash  收集日志端口 TCP</span><br><span class="line">    -v  挂载目录 可以将logstash 的配置文件挂载在宿主机的目录上，方便随时修改，修改后的配置文件会同步到容器中。</span><br><span class="line">        挂载 /etc/localtime 该目录是为了保证容器和宿主机的时区相同。</span><br><span class="line">        通过-v参数，冒号前为宿主机目录，必须为绝对路径，冒号后为镜像内挂载的路径。</span><br><span class="line">        现在镜像内就可以共享宿主机里的文件了。</span><br></pre></td></tr></table></figure></p>
-<h1>配置logstash</h1>
-<p>创建以下路径，并在其中创建logstash配置文件 /etc/logstash/conf.d/logstash.conf</p>
-<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">    beats &#123;</span><br><span class="line">        port =&gt; 5044</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">output &#123;</span><br><span class="line">    elasticsearch &#123;</span><br><span class="line">        hosts =&gt; [&quot;127.0.0.1:9200&quot;]</span><br><span class="line">        index =&gt; &quot;test&quot; ##对应es索引名</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>修改完配置文件后，执行如下命令来重启logstash<br>
-docker exec elk /etc/init.d/logstash restart</p>
-<h1>客户端服务器</h1>
-<ol>
-<li>安装filebeat</li>
-</ol>
-<p>Debian/Ubuntu:</p>
-<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-5.3.2-amd64.deb</span><br><span class="line">sudo dpkg -i filebeat-5.3.2-amd64.deb</span><br></pre></td></tr></table></figure></p>
-<p>Redhat/Centos/Fedora:</p>
-<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-5.3.2-x86_64.rpm</span><br><span class="line">sudo rpm -vi filebeat-5.3.2-x86_64.rpm</span><br></pre></td></tr></table></figure></p>
-<ol start="2">
-<li>配置filebeat （默认文件路径 /etc/filebeat/filebeat.yml）</li>
-</ol>
-<p><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">filebeat.prospectors:</span></span><br><span class="line"><span class="attr">    - input_type:</span> <span class="string">log</span></span><br><span class="line"><span class="attr">document_type:</span> <span class="string">info</span></span><br><span class="line"><span class="attr">paths:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">/data/logs/info.log</span></span><br><span class="line"><span class="string">output.logstash:</span></span><br><span class="line"><span class="attr">    hosts:</span> <span class="string">["18.18.18.18:5044"]</span></span><br></pre></td></tr></table></figure></p>
-<p>paths 需要收集的日志文件路径<br>
-hosts: logstash 服务IP和端口</p>
-<ol start="3">
-<li>测试配置文件语法是否正确</li>
-</ol>
-<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/filebeat.sh -configtest /etc/filebeat/filebeat.yml</span><br></pre></td></tr></table></figure></p>
-<p>修改完成后，重启filebeat</p>
-<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/filebeat restart</span><br></pre></td></tr></table></figure></p>
-<h1>访问kibana页面</h1>
-<ol>
-<li>在已经安装filebeat的客户端服务器上，测试日志收集</li>
-</ol>
-<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo 'nihao' &gt;&gt; /data/logs/info.log</span><br></pre></td></tr></table></figure></p>
-<ol start="2">
-<li>
-<p>在浏览器输入 18.18.18.18:5601（IP修改为ELK所在服务器的IP地址）创建 index pattern，选择刚才创建的“test“索引即可，可以在web上看到输入的测试日志。</p>
-</li>
-<li>
-<p>在 http://localhost:9200/_search?pretty 可看到es中的全部索引数据。</p>
-</li>
-<li>
-<p>在 http://localhost:9200/_cat/indices?v 可看到es中的全部索引。</p>
-</li>
-</ol>
+<p>这些都是挺不错的bug跟踪验证工具，大家可以去了解一下。</p>
 
       
     </div>
@@ -565,11 +549,9 @@ hosts: logstash 服务IP和端口</p>
       
         <div class="post-tags">
           
-            <a href="/tags/Linux/" rel="tag"># Linux</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
           
-            <a href="/tags/Docker/" rel="tag"># Docker</a>
-          
-            <a href="/tags/Shell/" rel="tag"># Shell</a>
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
           
         </div>
       
@@ -582,8 +564,8 @@ hosts: logstash 服务IP和端口</p>
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/02/分布式系统CAP定理及详解/" rel="next" title="分布式系统CAP定理及详解">
-                <i class="fa fa-chevron-left"></i> 分布式系统CAP定理及详解
+              <a href="/2019/12/06/Java多线程的使用之三板斧/" rel="next" title="Java多线程的使用之三板斧">
+                <i class="fa fa-chevron-left"></i> Java多线程的使用之三板斧
               </a>
             
           </div>
@@ -591,10 +573,6 @@ hosts: logstash 服务IP和端口</p>
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/07/06/Spring-Security（1）配置说明/" rel="prev" title="Spring Security（1）配置说明">
-                Spring Security（1）配置说明 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>

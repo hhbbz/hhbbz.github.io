@@ -3,6 +3,29 @@
   
     
     <entry>
+      <title>排查HikariDataSource异常关闭问题</title>
+      <link href="/2019/12/09/%E6%8E%92%E6%9F%A5HikariDataSource%E5%BC%82%E5%B8%B8%E5%85%B3%E9%97%AD%E9%97%AE%E9%A2%98/"/>
+      <url>/2019/12/09/%E6%8E%92%E6%9F%A5HikariDataSource%E5%BC%82%E5%B8%B8%E5%85%B3%E9%97%AD%E9%97%AE%E9%A2%98/</url>
+      <content type="html"><![CDATA[<h1>问题描述</h1><p>前段时间做的一个数据平台在最近总是莫名其妙出现<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Caused by:</span><br><span class="line">java.sql.SQLException: <span class="function">HikariDataSource <span class="title">HikariDataSource</span> <span class="params">(HikariPool<span class="number">-2</span>)</span> has been closed.</span></span><br></pre></td></tr></table></figure></p><p>这种错误。按字面意思来说就是使用连接池里的连接执行sql之前，这个连接池就已经被关闭了无法使用。</p><p>因为是会有很多数据源配置通过数据平台来连接数据库的，连接数非常庞大，很难管理，也会容易出现这种因为遗漏逻辑代码而导致的问题。所以在处理大量的数据库连接时候，务必要仔细仔细再仔细。**“连接风暴”**这种事情一旦发生，会压倒整个数据库服务器，直接影响当前业务，甚至所有业务。</p><h1>问题跟踪</h1><p>在找问题的时候，我们要看清楚控制台输出的堆栈信息和调用链，除了关注自己本身的业务代码之外，也要去关注调用链经过的框架/工具。</p><p>因为这个问题会涉及到数据库方面，所以数据库那一边的参数以及资源情况我们也要去关注，看到底是程序连接泄漏还是数据库给的连接数实在是太少。</p><h1>模拟场景确认问题</h1><p>在通过报错信息，异常产生的调用链以及所涉及资源的使用情况、参数配置之后，就要开始根据自己的猜想去编写代码，模拟bug触发的场景去确认我们的问题了。</p><ul><li>封装一个简单的HikariDataSource</li></ul><p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> HikariDataSource <span class="title">initDataSource</span><span class="params">()</span></span>&#123;</span><br><span class="line">    HikariDataSource dataSource = <span class="keyword">new</span> HikariDataSource();</span><br><span class="line">    dataSource.setConnectionTestQuery(<span class="string">"SELECT 1"</span>);</span><br><span class="line">    dataSource.setConnectionTimeout(<span class="number">60000</span>);</span><br><span class="line">    dataSource.setMinimumIdle(<span class="number">2</span>);</span><br><span class="line">    dataSource.setMaximumPoolSize(<span class="number">100</span>);</span><br><span class="line">    dataSource.setMaxLifetime(<span class="number">600000</span>);</span><br><span class="line">    dataSource.setValidationTimeout(<span class="number">5000</span>);</span><br><span class="line">    dataSource.setIdleTimeout(<span class="number">300000</span>);</span><br><span class="line">    dataSource.setLeakDetectionThreshold(<span class="number">500000</span>);</span><br><span class="line"></span><br><span class="line">    dataSource.setDriverClassName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line">    dataSource.setJdbcUrl(<span class="string">"jdbc:mysql://127.0.0.1:3306/anymarket_dev?useSSL=false&amp;characterEncoding=utf8&amp;allowPublicKeyRetrieval=true"</span>);</span><br><span class="line">    dataSource.setUsername(<span class="string">"root"</span>);</span><br><span class="line">    dataSource.setPassword(<span class="string">"hbz961005"</span>);</span><br><span class="line">    <span class="keyword">return</span> dataSource;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><ul><li>使用构造的数据源进行查询</li></ul><p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testHikari</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    HikariDataSource dataSource = initDataSource();</span><br><span class="line"></span><br><span class="line">    JdbcTemplate jdbcTemplate = <span class="keyword">new</span> JdbcTemplate(dataSource);</span><br><span class="line"></span><br><span class="line">    jdbcTemplate.execute(<span class="string">"select * from clocd_type"</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>这样的操作是正常使用的，没有问题，但是我们的报错有异常关闭数据源连接，所以我们下一步就要开始加一句close数据源，再执行看看。</p><ul><li>基于上面的测试代码进行改造，增加关闭数据源代码。</li></ul><p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testHikari</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    HikariDataSource dataSource = initDataSource();</span><br><span class="line"></span><br><span class="line">    JdbcTemplate jdbcTemplate = <span class="keyword">new</span> JdbcTemplate(dataSource);</span><br><span class="line"></span><br><span class="line">    jdbcTemplate.execute(<span class="string">"select * from clocd_type"</span>);</span><br><span class="line"></span><br><span class="line">    dataSource.close();</span><br><span class="line"></span><br><span class="line">    jdbcTemplate.execute(<span class="string">"select * from clocd_type"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>执行，这个时候控制台就报出了<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Caused by:</span><br><span class="line">java.sql.SQLException: <span class="function">HikariDataSource <span class="title">HikariDataSource</span> <span class="params">(HikariPool<span class="number">-2</span>)</span> has been closed.</span></span><br></pre></td></tr></table></figure></p><p>这跟我们数据平台遇到的错误是一样的。</p><p>自此，我们已经验证出来了导致问题的所在：jdbcTemplate是基于初始化出来的dataSource构造出来的，那么当我们的dataSoource关闭之后，我们再使用原先的jdbcTemplate去进行查询，那就会有问题，因为里面的连接已经被我们关闭了。</p><p>问题已经验证出来了，那么接下来就是解决问题。</p><ul><li>解决代码</li></ul><p>基于上面的测试代码，补上重新构造新的datasource代码，重新设置当前jdbcTemplate。</p><p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testHikari</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    HikariDataSource dataSource = initDataSource();</span><br><span class="line"></span><br><span class="line">    JdbcTemplate jdbcTemplate = <span class="keyword">new</span> JdbcTemplate(dataSource);</span><br><span class="line"></span><br><span class="line">    jdbcTemplate.execute(<span class="string">"select * from clocd_type"</span>);</span><br><span class="line"></span><br><span class="line">    dataSource.close();</span><br><span class="line"></span><br><span class="line">    dataSource = initDataSource();</span><br><span class="line"></span><br><span class="line">    jdbcTemplate = <span class="keyword">new</span> JdbcTemplate(dataSource);</span><br><span class="line"></span><br><span class="line">    jdbcTemplate.execute(<span class="string">"select * from clocd_type"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>这样就不会再报错了。</p><h1>把问题回溯到业务代码中</h1><p>我们已经知道了这个报错产生的原因以及解决方式了，那么我们就要去检查我们的业务代码。很明显业务代码报这个错的原因就是关闭连接后，没有重新构造连接，并设置给jdbcTemplate，所以只需要在业务代码中补上这个解决的逻辑即可。</p><h1>结尾</h1><p>这篇文章主要说明从一个复杂的业务平台中，把异常抽离出来，并使用简单的测试类/单元测试去进行模拟场景去验证问题，验证问题的产生原因以及找到解决方法，并最后把解决思路回归到业务代码中进行检查。</p><p>这种报错还是比较简单的，很好验证。如果是遇到因为线程安全、批量并发和中间件等所导致的bug，那么我们大概率要借助工具去进行问题跟踪了。这里笔者推几个工具:</p><ol><li>alibaba arthas</li><li>jmeter</li><li>qunar bistoury</li></ol><p>这些都是挺不错的bug跟踪验证工具，大家可以去了解一下。</p>]]></content>
+      
+      <categories>
+          
+          <category> 后端 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+            <tag> Spring </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>Java多线程的使用之三板斧</title>
       <link href="/2019/12/06/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B9%8B%E4%B8%89%E6%9D%BF%E6%96%A7/"/>
       <url>/2019/12/06/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B9%8B%E4%B8%89%E6%9D%BF%E6%96%A7/</url>
@@ -251,9 +274,9 @@
       
         <tags>
             
-            <tag> Linux </tag>
-            
             <tag> Elasticsearch </tag>
+            
+            <tag> Linux </tag>
             
         </tags>
       
@@ -435,9 +458,9 @@
       
         <tags>
             
-            <tag> Docker </tag>
-            
             <tag> Linux </tag>
+            
+            <tag> Docker </tag>
             
             <tag> Shell </tag>
             
@@ -508,9 +531,9 @@
       
         <tags>
             
-            <tag> Docker </tag>
-            
             <tag> Linux </tag>
+            
+            <tag> Docker </tag>
             
         </tags>
       
@@ -673,9 +696,9 @@
       
         <tags>
             
-            <tag> Docker </tag>
-            
             <tag> Linux </tag>
+            
+            <tag> Docker </tag>
             
             <tag> 分布式 </tag>
             

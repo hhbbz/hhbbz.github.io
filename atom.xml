@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://hhbbz.github.io/"/>
-  <updated>2019-12-06T09:50:50.642Z</updated>
+  <updated>2019-12-09T09:26:57.625Z</updated>
   <id>https://hhbbz.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>排查HikariDataSource异常关闭问题</title>
+    <link href="https://hhbbz.github.io/2019/12/09/%E6%8E%92%E6%9F%A5HikariDataSource%E5%BC%82%E5%B8%B8%E5%85%B3%E9%97%AD%E9%97%AE%E9%A2%98/"/>
+    <id>https://hhbbz.github.io/2019/12/09/排查HikariDataSource异常关闭问题/</id>
+    <published>2019-12-09T08:48:02.000Z</published>
+    <updated>2019-12-09T09:26:57.625Z</updated>
+    
+    <content type="html"><![CDATA[<h1>问题描述</h1><p>前段时间做的一个数据平台在最近总是莫名其妙出现<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Caused by:</span><br><span class="line">java.sql.SQLException: <span class="function">HikariDataSource <span class="title">HikariDataSource</span> <span class="params">(HikariPool<span class="number">-2</span>)</span> has been closed.</span></span><br></pre></td></tr></table></figure></p><p>这种错误。按字面意思来说就是使用连接池里的连接执行sql之前，这个连接池就已经被关闭了无法使用。</p><p>因为是会有很多数据源配置通过数据平台来连接数据库的，连接数非常庞大，很难管理，也会容易出现这种因为遗漏逻辑代码而导致的问题。所以在处理大量的数据库连接时候，务必要仔细仔细再仔细。**“连接风暴”**这种事情一旦发生，会压倒整个数据库服务器，直接影响当前业务，甚至所有业务。</p><h1>问题跟踪</h1><p>在找问题的时候，我们要看清楚控制台输出的堆栈信息和调用链，除了关注自己本身的业务代码之外，也要去关注调用链经过的框架/工具。</p><p>因为这个问题会涉及到数据库方面，所以数据库那一边的参数以及资源情况我们也要去关注，看到底是程序连接泄漏还是数据库给的连接数实在是太少。</p><h1>模拟场景确认问题</h1><p>在通过报错信息，异常产生的调用链以及所涉及资源的使用情况、参数配置之后，就要开始根据自己的猜想去编写代码，模拟bug触发的场景去确认我们的问题了。</p><ul><li>封装一个简单的HikariDataSource</li></ul><p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> HikariDataSource <span class="title">initDataSource</span><span class="params">()</span></span>&#123;</span><br><span class="line">    HikariDataSource dataSource = <span class="keyword">new</span> HikariDataSource();</span><br><span class="line">    dataSource.setConnectionTestQuery(<span class="string">"SELECT 1"</span>);</span><br><span class="line">    dataSource.setConnectionTimeout(<span class="number">60000</span>);</span><br><span class="line">    dataSource.setMinimumIdle(<span class="number">2</span>);</span><br><span class="line">    dataSource.setMaximumPoolSize(<span class="number">100</span>);</span><br><span class="line">    dataSource.setMaxLifetime(<span class="number">600000</span>);</span><br><span class="line">    dataSource.setValidationTimeout(<span class="number">5000</span>);</span><br><span class="line">    dataSource.setIdleTimeout(<span class="number">300000</span>);</span><br><span class="line">    dataSource.setLeakDetectionThreshold(<span class="number">500000</span>);</span><br><span class="line"></span><br><span class="line">    dataSource.setDriverClassName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line">    dataSource.setJdbcUrl(<span class="string">"jdbc:mysql://127.0.0.1:3306/anymarket_dev?useSSL=false&amp;characterEncoding=utf8&amp;allowPublicKeyRetrieval=true"</span>);</span><br><span class="line">    dataSource.setUsername(<span class="string">"root"</span>);</span><br><span class="line">    dataSource.setPassword(<span class="string">"hbz961005"</span>);</span><br><span class="line">    <span class="keyword">return</span> dataSource;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><ul><li>使用构造的数据源进行查询</li></ul><p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testHikari</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    HikariDataSource dataSource = initDataSource();</span><br><span class="line"></span><br><span class="line">    JdbcTemplate jdbcTemplate = <span class="keyword">new</span> JdbcTemplate(dataSource);</span><br><span class="line"></span><br><span class="line">    jdbcTemplate.execute(<span class="string">"select * from clocd_type"</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>这样的操作是正常使用的，没有问题，但是我们的报错有异常关闭数据源连接，所以我们下一步就要开始加一句close数据源，再执行看看。</p><ul><li>基于上面的测试代码进行改造，增加关闭数据源代码。</li></ul><p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testHikari</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    HikariDataSource dataSource = initDataSource();</span><br><span class="line"></span><br><span class="line">    JdbcTemplate jdbcTemplate = <span class="keyword">new</span> JdbcTemplate(dataSource);</span><br><span class="line"></span><br><span class="line">    jdbcTemplate.execute(<span class="string">"select * from clocd_type"</span>);</span><br><span class="line"></span><br><span class="line">    dataSource.close();</span><br><span class="line"></span><br><span class="line">    jdbcTemplate.execute(<span class="string">"select * from clocd_type"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>执行，这个时候控制台就报出了<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Caused by:</span><br><span class="line">java.sql.SQLException: <span class="function">HikariDataSource <span class="title">HikariDataSource</span> <span class="params">(HikariPool<span class="number">-2</span>)</span> has been closed.</span></span><br></pre></td></tr></table></figure></p><p>这跟我们数据平台遇到的错误是一样的。</p><p>自此，我们已经验证出来了导致问题的所在：jdbcTemplate是基于初始化出来的dataSource构造出来的，那么当我们的dataSoource关闭之后，我们再使用原先的jdbcTemplate去进行查询，那就会有问题，因为里面的连接已经被我们关闭了。</p><p>问题已经验证出来了，那么接下来就是解决问题。</p><ul><li>解决代码</li></ul><p>基于上面的测试代码，补上重新构造新的datasource代码，重新设置当前jdbcTemplate。</p><p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testHikari</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    HikariDataSource dataSource = initDataSource();</span><br><span class="line"></span><br><span class="line">    JdbcTemplate jdbcTemplate = <span class="keyword">new</span> JdbcTemplate(dataSource);</span><br><span class="line"></span><br><span class="line">    jdbcTemplate.execute(<span class="string">"select * from clocd_type"</span>);</span><br><span class="line"></span><br><span class="line">    dataSource.close();</span><br><span class="line"></span><br><span class="line">    dataSource = initDataSource();</span><br><span class="line"></span><br><span class="line">    jdbcTemplate = <span class="keyword">new</span> JdbcTemplate(dataSource);</span><br><span class="line"></span><br><span class="line">    jdbcTemplate.execute(<span class="string">"select * from clocd_type"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>这样就不会再报错了。</p><h1>把问题回溯到业务代码中</h1><p>我们已经知道了这个报错产生的原因以及解决方式了，那么我们就要去检查我们的业务代码。很明显业务代码报这个错的原因就是关闭连接后，没有重新构造连接，并设置给jdbcTemplate，所以只需要在业务代码中补上这个解决的逻辑即可。</p><h1>结尾</h1><p>这篇文章主要说明从一个复杂的业务平台中，把异常抽离出来，并使用简单的测试类/单元测试去进行模拟场景去验证问题，验证问题的产生原因以及找到解决方法，并最后把解决思路回归到业务代码中进行检查。</p><p>这种报错还是比较简单的，很好验证。如果是遇到因为线程安全、批量并发和中间件等所导致的bug，那么我们大概率要借助工具去进行问题跟踪了。这里笔者推几个工具:</p><ol><li>alibaba arthas</li><li>jmeter</li><li>qunar bistoury</li></ol><p>这些都是挺不错的bug跟踪验证工具，大家可以去了解一下。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1&gt;问题描述&lt;/h1&gt;
+&lt;p&gt;前段时间做的一个数据平台在最近总是莫名其妙出现
+&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;s
+      
+    
+    </summary>
+    
+      <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
+    
+    
+      <category term="Java" scheme="https://hhbbz.github.io/tags/Java/"/>
+    
+      <category term="Spring" scheme="https://hhbbz.github.io/tags/Spring/"/>
+    
+  </entry>
   
   <entry>
     <title>Java多线程的使用之三板斧</title>
@@ -345,9 +374,9 @@ Ignite是一个以内存为中心的分布式数据库，通过DiscoverySpi节�
       <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
     
     
-      <category term="Linux" scheme="https://hhbbz.github.io/tags/Linux/"/>
-    
       <category term="Elasticsearch" scheme="https://hhbbz.github.io/tags/Elasticsearch/"/>
+    
+      <category term="Linux" scheme="https://hhbbz.github.io/tags/Linux/"/>
     
   </entry>
   
@@ -578,39 +607,11 @@ docker pull sebp/elk&lt;/p&gt;
       <category term="运维" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/%E8%BF%90%E7%BB%B4/"/>
     
     
-      <category term="Docker" scheme="https://hhbbz.github.io/tags/Docker/"/>
-    
       <category term="Linux" scheme="https://hhbbz.github.io/tags/Linux/"/>
     
+      <category term="Docker" scheme="https://hhbbz.github.io/tags/Docker/"/>
+    
       <category term="Shell" scheme="https://hhbbz.github.io/tags/Shell/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>分布式系统CAP定理及详解</title>
-    <link href="https://hhbbz.github.io/2018/06/02/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9FCAP%E5%AE%9A%E7%90%86%E5%8F%8A%E8%AF%A6%E8%A7%A3/"/>
-    <id>https://hhbbz.github.io/2018/06/02/分布式系统CAP定理及详解/</id>
-    <published>2018-06-02T14:45:55.000Z</published>
-    <updated>2019-12-06T08:16:09.171Z</updated>
-    
-    <content type="html"><![CDATA[<h1>CAP定理简介</h1><p>C：Consistency，多台机器的数据一致性。</p><p>A：Availability，服务可用性，比如你用一个分布式事务从主同步数据到从，这时候服务不可用。</p><p>P：Partition-tolerance，分区容忍性，如果多台机器间，产生了分区，比如网络不通，服务是否可容忍。 等同于，【如果多台服务器有相同的数据，对于分区是可以容忍的】。</p><p>CA：单服务器。</p><p>CP：多服务器，数据强行同步，比如2PC，导致服务短时间不可用。</p><p>AP：多服务器，数据最终一致，比如异步消息，导致主挂了后，从可能没有完整数据。</p><p>Consistency其实就是数据库系统中提到的ACID的另一种表述：</p><ul><li><p>一个用户请求要么成功、要么失败，不能处于中间状态（Atomic）；</p></li><li><p>一旦一个事务完成，将来的所有事务都必须基于这个完成后的状态（Consistent）；</p></li><li><p>未完成的事务不会互相影响（Isolated）；</p></li><li><p>一旦一个事务完成，就是持久的（Durable）。</p></li></ul><p>对于Availability，其概念没有变化，指的是对于一个系统而言，所有的请求都应该‘成功’并且收到‘返回’。</p><p>对于Partition-tolerance，所指就是分布式系统的容错性。节点crash或者网络分片都不应该导致一个分布式系统停止服务。</p><h1>业界方案</h1><p>由于每台机器都可能挂，所以排除CA，即数据需要备多份，P必须满足。从上面可以看出，CP或者AP都有明显缺点，所以选择一个折衷的方案：2f+1台服务器，如果1是主，同步到f台备后就告诉请求方，已经成功。在可用性与一致性方面折衷。</p><p>如果备挂了，不用管，直到它自己恢复。</p><p>如果主挂了，用Raft等选举算法，选举出新的主。选举过程中，服务不可用，大概几百ms。</p><p><strong>即采取AP，保证分布式高可用，并通过弱一致性或最终一致性来同步数据。系统可以不同时达到CAP，而是分时达到。</strong></p><h1>CAP的证明</h1><p>CAP的证明很简单，假设两个节点集{G1, G2}，由于网络分片导致G1和G2之间所有的通讯都断开了，如果在G1中写，在G2中读刚写的数据， G2中返回的值不可能G1中的写值。由于A的要求，G2一定要返回这次读请求，由于P的存在，导致C一定是不可满足的。</p><h1>流行解释</h1><p>目前流行的、对CAP理论解释的情形是从同一数据在网络环境中存在多个副本出发为前提的。为了保证数据不会丢失，同时也是为了增加并发访问量（读写分离），在企业级的数据管理方案中，一般必须考虑数据的冗余存储问题，而这应该是通过在网络上的其他独立物理存储节点上保留另一份、或多份数据副本来实现的。因为在同一个存储节点上的数据冗余明显不能解决单点故障问题，这与通过多节点集群来提供更好的计算可用性的道理是相同的。</p><p>数据在节点A、B、C上保留了三份，如果对节点A上的数据进行了修改，然后再让客户端通过网络对该数据进行读取。那么，客户端的读取操作什么时候返回呢？</p><p>一种情况是要求节点A、B、C的三份数据完全一致后返回。也就是说，这时从任何一个网络节点读取的数据都是一样的，这就是所谓的强一致性读。很明显，这时数据读取的Latency要高一些（因为要等数据在网络中的复制），同时A、B、C三个节点中任何一个宕机，都会导致数据不可用。也就是说，要保证强一致性，网络中的副本越多，数据的可用性就越差。</p><p>另一种情况是，允许读操作立即返回，容忍B节点的读取与A节点的读取不一致的情况发生。这样一来，可用性显然得到了提高，网络中的副本也可以多一些，唯一得不到保证的是数据一致性。当然，对写操作同样也有多个节点一致性的情况，在此不再赘述。</p><p>可以看出，上述对CAP理论的解释主要是从网络上多个节点之间的读写一致性出发考虑问题的。而这一点，对于关系型数据库意味着什么呢？当然主要是指通常所说的Standby（关于分布式事务，涉及到更多考虑，随后讨论）情况。对此，在实践中我们大多已经采取了弱一致性的异步延时同步方案，以提高可用性。这种情况并不存在关系型数据库为保证C、A而放弃P的情况；而对海量数据管理的需求，关系型数据库扩展过程中所遇到的性能瓶颈，似乎也并不是CAP理论中所描述的那种原因造成的。那么，上述流行的说法中所描述的关系型数据库为保证C、A而牺牲P到底是在指什么呢？ 如果只将CAP当作分布式系统中多个数据副本之间的读写一致性问题的通用理论对待，那么就可以得出结论：CAP既适用于NoSQL数据库，也适用于关系型数据库。它是NoSQL数据库、关系型数据库，乃至一切分布式系统在设计数据多个副本之间读写一致性问题时需要遵循的共同原则。</p><h1>解决CAP</h1><p>根据一些专家的分析，CAP并不是一个严谨的定律，并不是牺牲了Consistency，就一定能同时获得Availability和Partition Tolerance。还有一个很重要的因素是Latency，在CAP中并没有体现。在现在NoSQL以及其他一些大规模设计时，A和P并不是牺牲C或部分牺牲C的借口，因为即使牺牲了C，也不一定A和P，并且C不一定必须要牺牲。</p><p>淘宝一天就处理了1亿零580万，而12306一天处理的交易仅仅166万条 ，如果从并发性上来说，淘宝的并发量远比12306大，但天猫的商品信息，促销数据都可以做缓存，做CDN，而12306的“商品”是一个个座位，这些座位必须通过后端数据库即时查询出来，状态的一致性要求很高。</p><p>从这点上看，12306的商品信息很难利用到缓存，因此12306查看“商品”的代价是比较大的，涉及到一系列的后端数据库操作，从这个角度讲，12306的复杂度是高于天猫的。 淘宝的商品相对独立，而12306商品之间的关联性很大，由于CAP定律限制，如果其商品的一致性要求过高，必然对可用性和分区容错性造成影响。</p><p>因此，业务设计上，如果找到一条降低一致性要求时，还能保证业务的正确性的业务分拆之路。举个例子，火车票查询时，不要显示多少张，而是显示“有”或“无”，或者显示&gt;100张，50~100,小于50等，这样就可以减小状态的更新频率，充分使用缓存数据。</p><p>CAP 理论说在一个系统中对某个数据不存在一个算法同时满足 Consistency, Availability, Partition-tolerance。注意，这里边最重要和最容易被人忽视的是限定词“对某个数据不存在一个算法”。这就是说在一个系统中，可以对某些数据做到 CP, 对另一些数据做到 AP，就算是对同一个数据，调用者可以指定不同的算法，某些算法可以做到 CP，某些算法可以做到 AP。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1&gt;CAP定理简介&lt;/h1&gt;
-&lt;p&gt;C：Consistency，多台机器的数据一致性。&lt;/p&gt;
-&lt;p&gt;A：Availability，服务可用性，比如你用一个分布式事务从主同步数据到从，这时候服务不可用。&lt;/p&gt;
-&lt;p&gt;P：Partition-tolerance，分区容忍性，如
-      
-    
-    </summary>
-    
-      <category term="后端" scheme="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
-    
-    
-      <category term="分布式" scheme="https://hhbbz.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
   </entry>
   
