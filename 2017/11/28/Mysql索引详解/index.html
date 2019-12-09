@@ -56,21 +56,21 @@
 
 
 
-<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/blog/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.3.0">
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32*32.ico?v=6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16*16.ico?v=6.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32*32.ico?v=6.3.0">
 
 
-  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.3.0" color="#222">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16*16.ico?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
 
 
 
@@ -83,7 +83,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '/blog/',
+    root: '/',
     scheme: 'Pisces',
     version: '6.3.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
@@ -112,26 +112,26 @@
 <meta name="keywords" content="Mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mysql索引详解">
-<meta property="og:url" content="https://hhbbz.coding.me/blog/2017/11/28/Mysql索引详解/index.html">
+<meta property="og:url" content="https://hhbbz.github.io/2017/11/28/Mysql索引详解/index.html">
 <meta property="og:site_name" content="hhbbz-Blog">
 <meta property="og:description" content="数据库索引 是数据库管理系统中一个排序的数据结构，以协助快速查询，更新数据库表中数据，索引的实现通常使用B树（所有节点的平衡因子均为0的多叉查找树）及其变种B+树 。B+树特点是,只有在最低节点保存数据本身。节点保存主键。 存储引擎比较   InnoDB: 写多读少，支持事务，不加锁读取，支持外键，支持行锁（where对主键的支持，select count(*)和order by 还是会锁表），不">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://hhbbz.coding.me/blog/2017/11/28/Mysql索引详解/002.png">
-<meta property="og:image" content="https://hhbbz.coding.me/blog/2017/11/28/Mysql索引详解/003.png">
-<meta property="og:image" content="https://hhbbz.coding.me/blog/2017/11/28/Mysql索引详解/001.png">
-<meta property="og:image" content="https://hhbbz.coding.me/blog/2017/11/28/Mysql索引详解/004.jpg">
+<meta property="og:image" content="https://hhbbz.github.io/2017/11/28/Mysql索引详解/002.png">
+<meta property="og:image" content="https://hhbbz.github.io/2017/11/28/Mysql索引详解/003.png">
+<meta property="og:image" content="https://hhbbz.github.io/2017/11/28/Mysql索引详解/001.png">
+<meta property="og:image" content="https://hhbbz.github.io/2017/11/28/Mysql索引详解/004.jpg">
 <meta property="og:updated_time" content="2017-11-29T02:50:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mysql索引详解">
 <meta name="twitter:description" content="数据库索引 是数据库管理系统中一个排序的数据结构，以协助快速查询，更新数据库表中数据，索引的实现通常使用B树（所有节点的平衡因子均为0的多叉查找树）及其变种B+树 。B+树特点是,只有在最低节点保存数据本身。节点保存主键。 存储引擎比较   InnoDB: 写多读少，支持事务，不加锁读取，支持外键，支持行锁（where对主键的支持，select count(*)和order by 还是会锁表），不">
-<meta name="twitter:image" content="https://hhbbz.coding.me/blog/2017/11/28/Mysql索引详解/002.png">
+<meta name="twitter:image" content="https://hhbbz.github.io/2017/11/28/Mysql索引详解/002.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://hhbbz.coding.me/blog/2017/11/28/Mysql索引详解/"/>
+  <link rel="canonical" href="https://hhbbz.github.io/2017/11/28/Mysql索引详解/"/>
 
 
 
@@ -197,7 +197,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/blog/" class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">hhbbz-Blog</span>
         <span class="logo-line-after"><i></i></span>
@@ -230,7 +230,7 @@
         
           
           <li class="menu-item menu-item-home">
-    <a href="/blog/" rel="section">
+    <a href="/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
   </li>
         
@@ -238,7 +238,7 @@
         
           
           <li class="menu-item menu-item-about">
-    <a href="/blog/about/" rel="section">
+    <a href="/about/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
   </li>
         
@@ -246,7 +246,7 @@
         
           
           <li class="menu-item menu-item-tags">
-    <a href="/blog/tags/" rel="section">
+    <a href="/tags/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
         
@@ -254,7 +254,7 @@
         
           
           <li class="menu-item menu-item-categories">
-    <a href="/blog/categories/" rel="section">
+    <a href="/categories/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
   </li>
         
@@ -262,7 +262,7 @@
         
           
           <li class="menu-item menu-item-archives">
-    <a href="/blog/archives/" rel="section">
+    <a href="/archives/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
   </li>
 
@@ -345,12 +345,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hhbbz.coding.me/blog/blog/2017/11/28/Mysql索引详解/">
+    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2017/11/28/Mysql索引详解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="hhbbz">
       <meta itemprop="description" content="摘抄和记录的地方">
-      <meta itemprop="image" content="/blog/images/TOM.jpg">
+      <meta itemprop="image" content="/images/TOM.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -421,7 +421,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/blog/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
 
                 
                 
@@ -491,10 +491,10 @@
 </ol>
 <h1>索引在不同存储引擎中的比较</h1>
 <h2>InnoDB</h2>
-<p><img src="/blog/2017/11/28/Mysql索引详解/002.png" title="图片"></p>
-<p><img src="/blog/2017/11/28/Mysql索引详解/003.png" title="图片"></p>
+<p><img src="/2017/11/28/Mysql索引详解/002.png" title="图片"></p>
+<p><img src="/2017/11/28/Mysql索引详解/003.png" title="图片"></p>
 <h2>MyISAM</h2>
-<p><img src="/blog/2017/11/28/Mysql索引详解/001.png" title="图片"></p>
+<p><img src="/2017/11/28/Mysql索引详解/001.png" title="图片"></p>
 <h1>数据库索引的原理</h1>
 <p>数据库索引，是数据库管理系统中一个排序的数据结构，以协助快速查询、更新数据库表中数据。索引的实现通常使用B树及其变种B+树。</p>
 <ul>
@@ -521,7 +521,7 @@
 </ol>
 <h1>索引的数据结构</h1>
 <p>在数据之外，数据库系统还维护着满足特定查找算法的数据结构，这些数据结构以某种方式引用（指向）数据，这样就可以在这些数据结构上实现高级查找算法。这种数据结构，就是索引。<strong>一是增加了数据库的存储空间，二是在插入和修改数据时要花费较多的时间(因为索引也要随之变动)。</strong></p>
-<p><img src="/blog/2017/11/28/Mysql索引详解/004.jpg" title="图片"></p>
+<p><img src="/2017/11/28/Mysql索引详解/004.jpg" title="图片"></p>
 <p>上图展示了一种可能的索引方式。左边是数据表，一共有两列七条记录，最左边的是数据记录的物理地址（注意逻辑上相邻的记录在磁盘上也并不是一定物理相邻的）。为了加快Col2的查找，可以维护一个右边所示的二叉查找树，每个节点分别包含索引键值和一个指向对应数据记录物理地址的指针，这样就可以运用二叉查找在O(log2n)的复杂度内获取到相应数据。
 创建索引可以大大提高系统的性能。</p>
 <ol>
@@ -569,7 +569,7 @@
 
     
       <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/blog/images/wechat.png" alt="hhbbz 微信支付"/>
+        <img id="wechat_qr" src="/images/wechat.png" alt="hhbbz 微信支付"/>
         <p>微信支付</p>
       </div>
     
@@ -590,7 +590,7 @@
       
         <div class="post-tags">
           
-            <a href="/blog/tags/Mysql/" rel="tag"># Mysql</a>
+            <a href="/tags/Mysql/" rel="tag"># Mysql</a>
           
         </div>
       
@@ -603,7 +603,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2017/11/27/锁与事务的问答对话/" rel="next" title="锁与事务的问答对话">
+              <a href="/2017/11/27/锁与事务的问答对话/" rel="next" title="锁与事务的问答对话">
                 <i class="fa fa-chevron-left"></i> 锁与事务的问答对话
               </a>
             
@@ -613,7 +613,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blog/2017/11/29/Mysql死锁的产生和解决/" rel="prev" title="Mysql死锁的产生和解决">
+              <a href="/2017/11/29/Mysql死锁的产生和解决/" rel="prev" title="Mysql死锁的产生和解决">
                 Mysql死锁的产生和解决 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -670,7 +670,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
-                src="/blog/images/TOM.jpg"
+                src="/images/TOM.jpg"
                 alt="hhbbz" />
             
               <p class="site-author-name" itemprop="name">hhbbz</p>
@@ -682,7 +682,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/blog/archives/">
+                  <a href="/archives/">
                 
                     <span class="site-state-item-count">39</span>
                     <span class="site-state-item-name">日志</span>
@@ -694,7 +694,7 @@
                 
                 
                 <div class="site-state-item site-state-categories">
-                  <a href="/blog/categories/index.html">
+                  <a href="/categories/index.html">
                     
                     
                       
@@ -711,7 +711,7 @@
                 
                 
                 <div class="site-state-item site-state-tags">
-                  <a href="/blog/tags/index.html">
+                  <a href="/tags/index.html">
                     
                     
                       
@@ -905,49 +905,49 @@
 
   
   
-    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
   
 
   
   
-    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
   
   
-    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
-
-
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.3.0"></script>
-
-  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.3.0"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/affix.js?v=6.3.0"></script>
-
-  <script type="text/javascript" src="/blog/js/src/schemes/pisces.js?v=6.3.0"></script>
-
-
-
-  
-  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=6.3.0"></script>
-<script type="text/javascript" src="/blog/js/src/post-details.js?v=6.3.0"></script>
-
 
 
   
 
 
-  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.3.0"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
 
 
 
@@ -991,7 +991,7 @@
     } else if (/json$/i.test(search_path)) {
       isXml = false;
     }
-    var path = "/blog/" + search_path;
+    var path = "/" + search_path;
     // monitor main search box;
 
     var onPopupClose = function (e) {

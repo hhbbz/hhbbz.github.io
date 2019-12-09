@@ -56,21 +56,21 @@
 
 
 
-<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/blog/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.3.0">
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32*32.ico?v=6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16*16.ico?v=6.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32*32.ico?v=6.3.0">
 
 
-  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.3.0" color="#222">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16*16.ico?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
 
 
 
@@ -83,7 +83,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '/blog/',
+    root: '/',
     scheme: 'Pisces',
     version: '6.3.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
@@ -112,26 +112,26 @@
 <meta name="keywords" content="Java,Ignite,分布式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ignite踩坑录(2) 节点集群">
-<meta property="og:url" content="https://hhbbz.coding.me/blog/2019/07/13/ignite踩坑录-2-节点集群/index.html">
+<meta property="og:url" content="https://hhbbz.github.io/2019/07/13/ignite踩坑录-2-节点集群/index.html">
 <meta property="og:site_name" content="hhbbz-Blog">
 <meta property="og:description" content="Ignite的天然支持分布式 Ignite具有非常先进的集群能力，包括逻辑集群组和自动发现。 Ignite是一个以内存为中心的分布式数据库，通过DiscoverySpi节点可以彼此发现对方，而且提供了TcpDiscoverySpi作为DiscoverySpi的默认实现，它使用TCP/IP来作为节点发现的实现，可以配置成基于组播的或者基于静态IP的。 所以在同一个网络内的ignite节点都会天然的自">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://hhbbz.coding.me/blog/2019/07/13/ignite踩坑录-2-节点集群/001.png">
-<meta property="og:image" content="https://hhbbz.coding.me/blog/2019/07/13/ignite踩坑录-2-节点集群/002.png">
-<meta property="og:image" content="https://hhbbz.coding.me/blog/2019/07/13/ignite踩坑录-2-节点集群/003.png">
-<meta property="og:image" content="https://hhbbz.coding.me/blog/2019/07/13/ignite踩坑录-2-节点集群/004.png">
+<meta property="og:image" content="https://hhbbz.github.io/2019/07/13/ignite踩坑录-2-节点集群/001.png">
+<meta property="og:image" content="https://hhbbz.github.io/2019/07/13/ignite踩坑录-2-节点集群/002.png">
+<meta property="og:image" content="https://hhbbz.github.io/2019/07/13/ignite踩坑录-2-节点集群/003.png">
+<meta property="og:image" content="https://hhbbz.github.io/2019/07/13/ignite踩坑录-2-节点集群/004.png">
 <meta property="og:updated_time" content="2019-09-25T02:50:44.318Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ignite踩坑录(2) 节点集群">
 <meta name="twitter:description" content="Ignite的天然支持分布式 Ignite具有非常先进的集群能力，包括逻辑集群组和自动发现。 Ignite是一个以内存为中心的分布式数据库，通过DiscoverySpi节点可以彼此发现对方，而且提供了TcpDiscoverySpi作为DiscoverySpi的默认实现，它使用TCP/IP来作为节点发现的实现，可以配置成基于组播的或者基于静态IP的。 所以在同一个网络内的ignite节点都会天然的自">
-<meta name="twitter:image" content="https://hhbbz.coding.me/blog/2019/07/13/ignite踩坑录-2-节点集群/001.png">
+<meta name="twitter:image" content="https://hhbbz.github.io/2019/07/13/ignite踩坑录-2-节点集群/001.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://hhbbz.coding.me/blog/2019/07/13/ignite踩坑录-2-节点集群/"/>
+  <link rel="canonical" href="https://hhbbz.github.io/2019/07/13/ignite踩坑录-2-节点集群/"/>
 
 
 
@@ -197,7 +197,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/blog/" class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">hhbbz-Blog</span>
         <span class="logo-line-after"><i></i></span>
@@ -230,7 +230,7 @@
         
           
           <li class="menu-item menu-item-home">
-    <a href="/blog/" rel="section">
+    <a href="/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
   </li>
         
@@ -238,7 +238,7 @@
         
           
           <li class="menu-item menu-item-about">
-    <a href="/blog/about/" rel="section">
+    <a href="/about/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
   </li>
         
@@ -246,7 +246,7 @@
         
           
           <li class="menu-item menu-item-tags">
-    <a href="/blog/tags/" rel="section">
+    <a href="/tags/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
         
@@ -254,7 +254,7 @@
         
           
           <li class="menu-item menu-item-categories">
-    <a href="/blog/categories/" rel="section">
+    <a href="/categories/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
   </li>
         
@@ -262,7 +262,7 @@
         
           
           <li class="menu-item menu-item-archives">
-    <a href="/blog/archives/" rel="section">
+    <a href="/archives/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
   </li>
 
@@ -345,12 +345,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hhbbz.coding.me/blog/blog/2019/07/13/ignite踩坑录-2-节点集群/">
+    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2019/07/13/ignite踩坑录-2-节点集群/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="hhbbz">
       <meta itemprop="description" content="摘抄和记录的地方">
-      <meta itemprop="image" content="/blog/images/TOM.jpg">
+      <meta itemprop="image" content="/images/TOM.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -421,7 +421,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/blog/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
 
                 
                 
@@ -467,7 +467,7 @@
 <p>Ignite具有非常先进的集群能力，包括逻辑集群组和自动发现。
 Ignite是一个以内存为中心的分布式数据库，通过DiscoverySpi节点可以彼此发现对方，而且提供了TcpDiscoverySpi作为DiscoverySpi的默认实现，它使用TCP/IP来作为节点发现的实现，可以配置成基于组播的或者基于静态IP的。
 所以在同一个网络内的ignite节点都会天然的自动的互相发现。如下图所示</p>
-<p><img src="/blog/2019/07/13/ignite踩坑录-2-节点集群/001.png" title="图片"></p>
+<p><img src="/2019/07/13/ignite踩坑录-2-节点集群/001.png" title="图片"></p>
 <blockquote>
 <p>第一坑：如果服务器中无法使用root账户，或者不是使用root账号进行ignite的启动的话，ignite节点之间是无法自动互相发现的，这时候需要使用TcpDiscoveryVmIpFinder来指定url和端口，去进行集群处理。</p>
 </blockquote>
@@ -496,21 +496,21 @@ Ignite是一个以内存为中心的分布式数据库，通过DiscoverySpi节�
 <p>Ignite的部署模式非常的灵活，在实际的场景中可以针对实际需要采用不同的部署方式，下面做简单的总结和对比：</p>
 <h2>独立式Ignite集群</h2>
 <p>这种情况下，集群的部署完全独立于应用，这个集群可以用于分布式计算，分布式缓存，分布式服务等，这时应用以客户端模式接入集群进行相关的操作，大体是如下的部署模式：</p>
-<p><img src="/blog/2019/07/13/ignite踩坑录-2-节点集群/002.png" title="图片"></p>
+<p><img src="/2019/07/13/ignite踩坑录-2-节点集群/002.png" title="图片"></p>
 <ul>
 <li>优点：对已有的应用运行环境影响小，并且这个集群可以共享，为多个应用提供服务，对整个应用来说，额外增加了很多的计算和负载能力。</li>
 <li>缺点：需要单独的一组机器，相对成本要高些，如果缓存操作并发不高或者计算不饱和，存在资源利用率低的情况。整体架构也变得复杂，维护成本也要高些。</li>
 </ul>
 <h2>嵌入式Ignite集群</h2>
 <p>这种情况下，可以将必要的jar包嵌入已有应用的内部，利用Ignite的发现机制，自动建立集群，大体是如下的部署模式：</p>
-<p><img src="/blog/2019/07/13/ignite踩坑录-2-节点集群/003.png" title="图片"></p>
+<p><img src="/2019/07/13/ignite踩坑录-2-节点集群/003.png" title="图片"></p>
 <ul>
 <li>优点：无需额外增加机器，成本最低，Ignite可以和应用无缝集成，所有节点都为服务端节点，可以充分利用Ignite的丰富功能。这个模式可扩展性最好，简单增加节点即可快速扩充整个系统的计算和负载能力。</li>
 <li>缺点：Ignite占用了服务器的部分资源，对应用整体性能有影响，可能需要进行有针对性的优化，应用更新时，集群可能需要重启，这时如果Ignite需要加载大量的数据，重启的时间可能变长，甚至无法忍受。</li>
 </ul>
 <h2>混合式Ignite集群</h2>
 <p>这种情况下，将上述2种模式混合在一起，即同时增加机器部署独立集群，同时又将Ignite嵌入应用内部以服务端模式运行，通过逻辑集群组进行资源的分配，整体上形成更大的集群，大体是如下的部署模式：</p>
-<p><img src="/blog/2019/07/13/ignite踩坑录-2-节点集群/004.png" title="图片"></p>
+<p><img src="/2019/07/13/ignite踩坑录-2-节点集群/004.png" title="图片"></p>
 <p>这种模式更为灵活，调优后能做到成本、功能、性能的平衡，综合效果最佳。这时可以将缓存的数据通过集群组部署到应用外部的节点上，这样可以避免频繁的冷启动导致缓存数据频繁的长时间加载，对于计算，也能够动态地充分利用所有计算节点的资源。</p>
 <p><a href="https://my.oschina.net/liyuj/blog/651036" target="_blank" rel="noopener">Ignite的集群部署方式段落来源于</a></p>
 
@@ -536,7 +536,7 @@ Ignite是一个以内存为中心的分布式数据库，通过DiscoverySpi节�
 
     
       <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/blog/images/wechat.png" alt="hhbbz 微信支付"/>
+        <img id="wechat_qr" src="/images/wechat.png" alt="hhbbz 微信支付"/>
         <p>微信支付</p>
       </div>
     
@@ -557,11 +557,11 @@ Ignite是一个以内存为中心的分布式数据库，通过DiscoverySpi节�
       
         <div class="post-tags">
           
-            <a href="/blog/tags/Java/" rel="tag"># Java</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
           
-            <a href="/blog/tags/Ignite/" rel="tag"># Ignite</a>
+            <a href="/tags/Ignite/" rel="tag"># Ignite</a>
           
-            <a href="/blog/tags/分布式/" rel="tag"># 分布式</a>
+            <a href="/tags/分布式/" rel="tag"># 分布式</a>
           
         </div>
       
@@ -574,7 +574,7 @@ Ignite是一个以内存为中心的分布式数据库，通过DiscoverySpi节�
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2019/05/19/Ignite踩坑录-1-简介与持久化/" rel="next" title="Ignite踩坑录(1) 简介与持久化">
+              <a href="/2019/05/19/Ignite踩坑录-1-简介与持久化/" rel="next" title="Ignite踩坑录(1) 简介与持久化">
                 <i class="fa fa-chevron-left"></i> Ignite踩坑录(1) 简介与持久化
               </a>
             
@@ -584,7 +584,7 @@ Ignite是一个以内存为中心的分布式数据库，通过DiscoverySpi节�
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blog/2019/09/23/ignite踩坑录-3-数据平衡分布/" rel="prev" title="ignite踩坑录(3) 数据平衡分布">
+              <a href="/2019/09/23/ignite踩坑录-3-数据平衡分布/" rel="prev" title="ignite踩坑录(3) 数据平衡分布">
                 ignite踩坑录(3) 数据平衡分布 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -641,7 +641,7 @@ Ignite是一个以内存为中心的分布式数据库，通过DiscoverySpi节�
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
-                src="/blog/images/TOM.jpg"
+                src="/images/TOM.jpg"
                 alt="hhbbz" />
             
               <p class="site-author-name" itemprop="name">hhbbz</p>
@@ -653,7 +653,7 @@ Ignite是一个以内存为中心的分布式数据库，通过DiscoverySpi节�
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/blog/archives/">
+                  <a href="/archives/">
                 
                     <span class="site-state-item-count">39</span>
                     <span class="site-state-item-name">日志</span>
@@ -665,7 +665,7 @@ Ignite是一个以内存为中心的分布式数据库，通过DiscoverySpi节�
                 
                 
                 <div class="site-state-item site-state-categories">
-                  <a href="/blog/categories/index.html">
+                  <a href="/categories/index.html">
                     
                     
                       
@@ -682,7 +682,7 @@ Ignite是一个以内存为中心的分布式数据库，通过DiscoverySpi节�
                 
                 
                 <div class="site-state-item site-state-tags">
-                  <a href="/blog/tags/index.html">
+                  <a href="/tags/index.html">
                     
                     
                       
@@ -876,49 +876,49 @@ Ignite是一个以内存为中心的分布式数据库，通过DiscoverySpi节�
 
   
   
-    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
   
 
   
   
-    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
   
   
-    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
-
-
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.3.0"></script>
-
-  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.3.0"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/affix.js?v=6.3.0"></script>
-
-  <script type="text/javascript" src="/blog/js/src/schemes/pisces.js?v=6.3.0"></script>
-
-
-
-  
-  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=6.3.0"></script>
-<script type="text/javascript" src="/blog/js/src/post-details.js?v=6.3.0"></script>
-
 
 
   
 
 
-  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.3.0"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
 
 
 
@@ -962,7 +962,7 @@ Ignite是一个以内存为中心的分布式数据库，通过DiscoverySpi节�
     } else if (/json$/i.test(search_path)) {
       isXml = false;
     }
-    var path = "/blog/" + search_path;
+    var path = "/" + search_path;
     // monitor main search box;
 
     var onPopupClose = function (e) {
