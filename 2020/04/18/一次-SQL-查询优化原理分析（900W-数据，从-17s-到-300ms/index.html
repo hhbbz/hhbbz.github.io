@@ -108,23 +108,28 @@
 
 
 
-  <meta name="description" content="摘抄和记录的地方">
-<meta property="og:type" content="website">
-<meta property="og:title" content="hhbbz-Blog">
-<meta property="og:url" content="https://hhbbz.github.io/tags/Redis/index.html">
+  <meta name="description" content="场景描述 有一张财务流水表，未分库分表，目前的数据量为9555695，分页查询使用到了limit，优化之前的查询耗时16 s 938 ms (execution: 16 s 831 ms, fetching: 107 ms)，按照下文的方式调整SQL后，耗时347 ms (execution: 163 ms, fetching: 184 ms)；  操作： 查询条件放到子查询中，子查询只查主键ID">
+<meta name="keywords" content="Mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一次 SQL 查询优化原理分析（900W+ 数据，从 17s 到 300ms">
+<meta property="og:url" content="https://hhbbz.github.io/2020/04/18/一次-SQL-查询优化原理分析（900W-数据，从-17s-到-300ms/index.html">
 <meta property="og:site_name" content="hhbbz-Blog">
-<meta property="og:description" content="摘抄和记录的地方">
+<meta property="og:description" content="场景描述 有一张财务流水表，未分库分表，目前的数据量为9555695，分页查询使用到了limit，优化之前的查询耗时16 s 938 ms (execution: 16 s 831 ms, fetching: 107 ms)，按照下文的方式调整SQL后，耗时347 ms (execution: 163 ms, fetching: 184 ms)；  操作： 查询条件放到子查询中，子查询只查主键ID">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://hhbbz.github.io/2020/04/18/一次-SQL-查询优化原理分析（900W-数据，从-17s-到-300ms/1.jpg">
+<meta property="og:image" content="https://hhbbz.github.io/2020/04/18/一次-SQL-查询优化原理分析（900W-数据，从-17s-到-300ms/2.jpg">
+<meta property="og:updated_time" content="2020-04-18T09:45:24.679Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hhbbz-Blog">
-<meta name="twitter:description" content="摘抄和记录的地方">
+<meta name="twitter:title" content="一次 SQL 查询优化原理分析（900W+ 数据，从 17s 到 300ms">
+<meta name="twitter:description" content="场景描述 有一张财务流水表，未分库分表，目前的数据量为9555695，分页查询使用到了limit，优化之前的查询耗时16 s 938 ms (execution: 16 s 831 ms, fetching: 107 ms)，按照下文的方式调整SQL后，耗时347 ms (execution: 163 ms, fetching: 184 ms)；  操作： 查询条件放到子查询中，子查询只查主键ID">
+<meta name="twitter:image" content="https://hhbbz.github.io/2020/04/18/一次-SQL-查询优化原理分析（900W-数据，从-17s-到-300ms/1.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="https://hhbbz.github.io/tags/Redis/"/>
+  <link rel="canonical" href="https://hhbbz.github.io/2020/04/18/一次-SQL-查询优化原理分析（900W-数据，从-17s-到-300ms/"/>
 
 
 
@@ -134,7 +139,7 @@
   };
 </script>
 
-  <title>标签: Redis | hhbbz-Blog</title>
+  <title>一次 SQL 查询优化原理分析（900W+ 数据，从 17s 到 300ms | hhbbz-Blog</title>
   
 
 
@@ -181,7 +186,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -238,7 +243,7 @@
         
         
           
-          <li class="menu-item menu-item-tags menu-item-active">
+          <li class="menu-item menu-item-tags">
     <a href="/tags/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
@@ -318,140 +323,299 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block tag">
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h2>Redis<small>标签</small>
-        </h2>
-      </div>
-
-      
-        
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2020/04/18/一次-SQL-查询优化原理分析（900W-数据，从-17s-到-300ms/">
 
-      <h3 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="hhbbz">
+      <meta itemprop="description" content="摘抄和记录的地方">
+      <meta itemprop="image" content="/images/TOM.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hhbbz-Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/01/26/Redis缓存穿透、并发、失效/" itemprop="url">
-              
-                <span itemprop="name">Redis缓存穿透、并发、失效</span>
-              
-            </a>
         
-      </h3>
+          <h2 class="post-title" itemprop="name headline">一次 SQL 查询优化原理分析（900W+ 数据，从 17s 到 300ms
+              
+            
+          </h2>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-26T21:08:18+08:00"
-              content="2018-01-26" >
-          01-26
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
 
-    </header>
-  </article>
+            
+            
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-04-18 17:32:50" itemprop="dateCreated datePublished" datetime="2020-04-18T17:32:50+08:00">2020-04-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-04-18 17:45:24" itemprop="dateModified" datetime="2020-04-18T17:45:24+08:00">17:45:24</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/18/一次-SQL-查询优化原理分析（900W-数据，从-17s-到-300ms/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2020/04/18/一次-SQL-查询优化原理分析（900W-数据，从-17s-到-300ms/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/17/Redis分布式锁及优化/" itemprop="url">
-              
-                <span itemprop="name">Redis分布式锁及优化</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-17T22:59:05+08:00"
-              content="2018-01-17" >
-          01-17
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2017/09/06/Redis简介以及使用场景/" itemprop="url">
-              
-                <span itemprop="name">Redis简介以及使用场景</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-09-06T20:28:54+08:00"
-              content="2017-09-06" >
-          09-06
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+        <h1>场景描述</h1>
+<p>有一张财务流水表，未分库分表，目前的数据量为9555695，分页查询使用到了limit，优化之前的查询耗时<strong>16 s 938 ms</strong> (execution: 16 s 831 ms, fetching: 107 ms)，按照下文的方式调整SQL后，耗时<strong>347 ms</strong> (execution: 163 ms, fetching: 184 ms)；</p>
+<blockquote>
+<p>操作： 查询条件放到子查询中，子查询只查主键ID，然后使用子查询中确定的主键关联查询其他的属性字段；</p>
+<p>原理： 减少回表操作;</p>
+</blockquote>
+<p><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 优化前SQL</span></span><br><span class="line"><span class="keyword">SELECT</span>  各种字段</span><br><span class="line"><span class="keyword">FROM</span> <span class="string">`table_name`</span></span><br><span class="line"><span class="keyword">WHERE</span> 各种条件</span><br><span class="line"><span class="keyword">LIMIT</span> <span class="number">0</span>,<span class="number">10</span>;</span><br></pre></td></tr></table></figure></p>
+<p><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 优化后SQL</span></span><br><span class="line"><span class="keyword">SELECT</span>  各种字段</span><br><span class="line"><span class="keyword">FROM</span> <span class="string">`table_name`</span> main_tale</span><br><span class="line"><span class="keyword">RIGHT</span> <span class="keyword">JOIN</span></span><br><span class="line">(</span><br><span class="line"><span class="keyword">SELECT</span>  子查询只查主键</span><br><span class="line"><span class="keyword">FROM</span> <span class="string">`table_name`</span></span><br><span class="line"><span class="keyword">WHERE</span> 各种条件</span><br><span class="line"><span class="keyword">LIMIT</span> <span class="number">0</span>,<span class="number">10</span>;</span><br><span class="line">) temp_table ON temp_table.主键 = main_table.主键</span><br></pre></td></tr></table></figure></p>
+<p>找到的原理分析：MySQL 用 limit 为什么会影响性能？</p>
+<h1>前言</h1>
+<p>首先说明一下MySQL的版本：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span> select version();</span><br><span class="line">+-----------+</span><br><span class="line">| version() |</span><br><span class="line">+-----------+</span><br><span class="line">| 5.7.17    |</span><br><span class="line">+-----------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure></p>
+<p>表结构：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span> desc test;</span><br><span class="line">+--------+---------------------+------+-----+---------+----------------+</span><br><span class="line">| Field  | Type                | Null | Key | Default | Extra          |</span><br><span class="line">+--------+---------------------+------+-----+---------+----------------+</span><br><span class="line">| id     | bigint(20) unsigned | NO   | PRI | NULL    | auto_increment |</span><br><span class="line">| val    | int(10) unsigned    | NO   | MUL | 0       |                |</span><br><span class="line">| source | int(10) unsigned    | NO   |     | 0       |                |</span><br><span class="line">+--------+---------------------+------+-----+---------+----------------+</span><br><span class="line">3 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure></p>
+<p>id为自增主键，val为非唯一索引。</p>
+<p>灌入大量数据，共500万：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span> select count(*) from test;</span><br><span class="line">+----------+</span><br><span class="line">| count(*) |</span><br><span class="line">+----------+</span><br><span class="line">|  5242882 |</span><br><span class="line">+----------+</span><br><span class="line">1 row in set (4.25 sec)</span><br></pre></td></tr></table></figure></p>
+<p>我们知道，当limit offset rows中的offset很大时，会出现效率问题：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span> select * from test where val=4 limit 300000,5;</span><br><span class="line">+---------+-----+--------+</span><br><span class="line">| id      | val | source |</span><br><span class="line">+---------+-----+--------+</span><br><span class="line">| 3327622 |   4 |      4 |</span><br><span class="line">| 3327632 |   4 |      4 |</span><br><span class="line">| 3327642 |   4 |      4 |</span><br><span class="line">| 3327652 |   4 |      4 |</span><br><span class="line">| 3327662 |   4 |      4 |</span><br><span class="line">+---------+-----+--------+</span><br><span class="line">5 rows in set (15.98 sec)</span><br></pre></td></tr></table></figure></p>
+<p>为了达到相同的目的，我们一般会改写成如下语句：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span> select * from test a inner join (select id from test where val=4 limit 300000,5) b on a.id=b.id;</span><br><span class="line">+---------+-----+--------+---------+</span><br><span class="line">| id      | val | source | id      |</span><br><span class="line">+---------+-----+--------+---------+</span><br><span class="line">| 3327622 |   4 |      4 | 3327622 |</span><br><span class="line">| 3327632 |   4 |      4 | 3327632 |</span><br><span class="line">| 3327642 |   4 |      4 | 3327642 |</span><br><span class="line">| 3327652 |   4 |      4 | 3327652 |</span><br><span class="line">| 3327662 |   4 |      4 | 3327662 |</span><br><span class="line">+---------+-----+--------+---------+</span><br><span class="line">5 rows in set (0.38 sec)</span><br></pre></td></tr></table></figure></p>
+<p>时间相差很明显。</p>
+<p>为什么会出现上面的结果？我们看一下select * from test where val=4 limit 300000,5;的查询过程：</p>
+<p>查询到索引叶子节点数据。根据叶子节点上的主键值去聚簇索引上查询需要的全部字段值。</p>
+<p>类似于下面这张图：</p>
+<p><img src="/2020/04/18/一次-SQL-查询优化原理分析（900W-数据，从-17s-到-300ms/1.jpg" title="图片"></p>
+<p>像上面这样，需要查询300005次索引节点，查询300005次聚簇索引的数据，最后再将结果过滤掉前300000条，取出最后5条。MySQL耗费了大量随机I/O在查询聚簇索引的数据上，而有300000次随机I/O查询到的数据是不会出现在结果集当中的。</p>
+<p>肯定会有人问：既然一开始是利用索引的，为什么不先沿着索引叶子节点查询到最后需要的5个节点，然后再去聚簇索引中查询实际数据。这样只需要5次随机I/O，类似于下面图片的过程：</p>
+<p><img src="/2020/04/18/一次-SQL-查询优化原理分析（900W-数据，从-17s-到-300ms/2.jpg" title="图片"></p>
+<p>其实我也想问这个问题。</p>
+<h1>证实</h1>
+<p>下面我们实际操作一下来证实上述的推论：</p>
+<p>为了证实<strong>select * from test where val=4 limit 300000,5</strong>是扫描300005个索引节点和300005个聚簇索引上的数据节点，我们需要知道MySQL有没有办法统计在一个sql中通过索引节点查询数据节点的次数。我先试了Handler_read_*系列，很遗憾没有一个变量能满足条件。</p>
+<p>我只能通过间接的方式来证实：</p>
+<p>InnoDB中有buffer pool。里面存有最近访问过的数据页，包括数据页和索引页。所以我们需要运行两个sql，来比较buffer pool中的数据页的数量。预测结果是运行<strong>select * from test a inner join (select id from test where val=4 limit 300000,5);</strong> 之后，buffer pool中的数据页的数量远远少于**select * from test where val=4 limit 300000,5;**对应的数量，因为前一个sql只访问5次数据页，而后一个sql访问300005次数据页。</p>
+<p><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> val=<span class="number">4</span> <span class="keyword">limit</span> <span class="number">300000</span>,<span class="number">5</span></span><br></pre></td></tr></table></figure></p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span> select index_name,count(*) from information_schema.INNODB_BUFFER_PAGE where INDEX_NAME in('val','primary') and TABLE_NAME like '%test%' group by index_name;Empty set (0.04 sec)</span><br></pre></td></tr></table></figure></p>
+<p>可以看出，目前buffer pool中没有关于test表的数据页。</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span> select * from test where val=4 limit 300000,5;</span><br><span class="line">+---------+-----+--------+</span><br><span class="line">| id      | val | source |</span><br><span class="line">+---------+-----+--------+|</span><br><span class="line">3327622 |   4 |      4 |</span><br><span class="line">| 3327632 |   4 |      4 |</span><br><span class="line">| 3327642 |   4 |      4 |</span><br><span class="line">| 3327652 |   4 |      4 |</span><br><span class="line">| 3327662 |   4 |      4 |</span><br><span class="line">+---------+-----+--------+</span><br><span class="line">5 rows in set (26.19 sec)</span><br><span class="line"></span><br><span class="line"><span class="meta">mysql&gt;</span> select index_name,count(*) from information_schema.INNODB_BUFFER_PAGE where INDEX_NAME in('val','primary') and TABLE_NAME like '%test%' group by index_name;</span><br><span class="line">+------------+----------+</span><br><span class="line">| index_name | count(*) |</span><br><span class="line">+------------+----------+</span><br><span class="line">| PRIMARY    |     4098 |</span><br><span class="line">| val        |      208 |</span><br><span class="line">+------------+----------+2 rows in set (0.04 sec)</span><br></pre></td></tr></table></figure></p>
+<p>可以看出，此时buffer pool中关于test表有4098个数据页，208个索引页。</p>
+<p><strong>select * from test a inner join (select id from test where val=4 limit 300000,5);</strong> 为了防止上次试验的影响，我们需要清空buffer pool，重启mysql。</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysqladmin shutdown</span><br><span class="line">/usr/local/bin/mysqld_safe &amp;</span><br><span class="line"></span><br><span class="line"><span class="meta">mysql&gt;</span> select index_name,count(*) from information_schema.INNODB_BUFFER_PAGE where INDEX_NAME in('val','primary') and TABLE_NAME like '%test%' group by index_name;</span><br><span class="line"></span><br><span class="line">Empty set (0.03 sec)</span><br></pre></td></tr></table></figure></p>
+<p>运行sql：</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span> select * from test a inner join (select id from test where val=4 limit 300000,5) b on a.id=b.id;</span><br><span class="line">+---------+-----+--------+---------+</span><br><span class="line">| id      | val | source | id      |</span><br><span class="line">+---------+-----+--------+---------+</span><br><span class="line">| 3327622 |   4 |      4 | 3327622 |</span><br><span class="line">| 3327632 |   4 |      4 | 3327632 |</span><br><span class="line">| 3327642 |   4 |      4 | 3327642 |</span><br><span class="line">| 3327652 |   4 |      4 | 3327652 |</span><br><span class="line">| 3327662 |   4 |      4 | 3327662 |</span><br><span class="line">+---------+-----+--------+---------+</span><br><span class="line">5 rows in set (0.09 sec)</span><br><span class="line"></span><br><span class="line"><span class="meta">mysql&gt;</span> select index_name,count(*) from information_schema.INNODB_BUFFER_PAGE where INDEX_NAME in('val','primary') and TABLE_NAME like '%test%' group by index_name;</span><br><span class="line">+------------+----------+</span><br><span class="line">| index_name | count(*) |</span><br><span class="line">+------------+----------+</span><br><span class="line">| PRIMARY    |        5 |</span><br><span class="line">| val        |      390 |</span><br><span class="line">+------------+----------+</span><br><span class="line">2 rows in set (0.03 sec)</span><br></pre></td></tr></table></figure></p>
+<p>我们可以看明显的看出两者的差别：第一个sql加载了4098个数据页到buffer pool，而第二个sql只加载了5个数据页到buffer pool。符合我们的预测。也证实了为什么第一个sql会慢：读取大量的无用数据行（300000），最后却抛弃掉。而且这会造成一个问题：加载了很多热点不是很高的数据页到buffer pool，会造成buffer pool的污染，占用buffer pool的空间。 遇到的问题</p>
+<p>为了在每次重启时确保清空buffer pool，我们需要关闭innodb_buffer_pool_dump_at_shutdown和innodb_buffer_pool_load_at_startup，这两个选项能够控制数据库关闭时dump出buffer pool中的数据和在数据库开启时载入在磁盘上备份buffer pool的数据。</p>
+<p>来源：Muscleape
+jianshu.com/p/0768ebc4e28d</p>
 
       
     </div>
 
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechat.png" alt="hhbbz 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Mysql/" rel="tag"># Mysql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/21/ignite踩坑录-4-数据一致性/" rel="next" title="ignite踩坑录(4) 数据一致性">
+                <i class="fa fa-chevron-left"></i> ignite踩坑录(4) 数据一致性
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -747,6 +911,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
 
   
 
