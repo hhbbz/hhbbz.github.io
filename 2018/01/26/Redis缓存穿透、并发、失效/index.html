@@ -56,21 +56,21 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+<link href="/blog/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32*32.ico?v=6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.3.0">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16*16.ico?v=6.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32*32.ico?v=6.3.0">
 
 
-  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16*16.ico?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.3.0" color="#222">
 
 
 
@@ -83,7 +83,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '/',
+    root: '/blog/',
     scheme: 'Pisces',
     version: '6.3.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
@@ -112,31 +112,31 @@
 <meta name="keywords" content="Redis">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis缓存穿透、并发、失效">
-<meta property="og:url" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/index.html">
+<meta property="og:url" content="https://hhbbz.coding.me/blog/2018/01/26/Redis缓存穿透、并发、失效/index.html">
 <meta property="og:site_name" content="hhbbz-Blog">
 <meta property="og:description" content="初次谈穿透、并发、失效 缓存穿透    注： 上面三个图会有什么问题呢？ 我们在项目中使用缓存通常都是先检查缓存中是否存在，如果存在直接返回缓存内容，如果不存在就直接查询数据库然后再缓存查询结果返回。这个时候如果我们查询的某一个数据在缓存中一直不存在，就会造成每一次请求都查询DB，这样缓存就失去了意义，在流量大时，可能DB就挂掉了。 那这种问题有什么好办法解决呢？ 要是有人利用不存在的key频繁攻">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/1.png">
-<meta property="og:image" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/2.png">
-<meta property="og:image" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/3.png">
-<meta property="og:image" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/4.png">
-<meta property="og:image" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/5.png">
-<meta property="og:image" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/6.png">
-<meta property="og:image" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/7.png">
-<meta property="og:image" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/8.png">
-<meta property="og:image" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/9.png">
+<meta property="og:image" content="https://hhbbz.coding.me/blog/2018/01/26/Redis缓存穿透、并发、失效/1.png">
+<meta property="og:image" content="https://hhbbz.coding.me/blog/2018/01/26/Redis缓存穿透、并发、失效/2.png">
+<meta property="og:image" content="https://hhbbz.coding.me/blog/2018/01/26/Redis缓存穿透、并发、失效/3.png">
+<meta property="og:image" content="https://hhbbz.coding.me/blog/2018/01/26/Redis缓存穿透、并发、失效/4.png">
+<meta property="og:image" content="https://hhbbz.coding.me/blog/2018/01/26/Redis缓存穿透、并发、失效/5.png">
+<meta property="og:image" content="https://hhbbz.coding.me/blog/2018/01/26/Redis缓存穿透、并发、失效/6.png">
+<meta property="og:image" content="https://hhbbz.coding.me/blog/2018/01/26/Redis缓存穿透、并发、失效/7.png">
+<meta property="og:image" content="https://hhbbz.coding.me/blog/2018/01/26/Redis缓存穿透、并发、失效/8.png">
+<meta property="og:image" content="https://hhbbz.coding.me/blog/2018/01/26/Redis缓存穿透、并发、失效/9.png">
 <meta property="og:updated_time" content="2018-01-27T02:30:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis缓存穿透、并发、失效">
 <meta name="twitter:description" content="初次谈穿透、并发、失效 缓存穿透    注： 上面三个图会有什么问题呢？ 我们在项目中使用缓存通常都是先检查缓存中是否存在，如果存在直接返回缓存内容，如果不存在就直接查询数据库然后再缓存查询结果返回。这个时候如果我们查询的某一个数据在缓存中一直不存在，就会造成每一次请求都查询DB，这样缓存就失去了意义，在流量大时，可能DB就挂掉了。 那这种问题有什么好办法解决呢？ 要是有人利用不存在的key频繁攻">
-<meta name="twitter:image" content="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/1.png">
+<meta name="twitter:image" content="https://hhbbz.coding.me/blog/2018/01/26/Redis缓存穿透、并发、失效/1.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/"/>
+  <link rel="canonical" href="https://hhbbz.coding.me/blog/2018/01/26/Redis缓存穿透、并发、失效/"/>
 
 
 
@@ -202,7 +202,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
+      <a href="/blog/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">hhbbz-Blog</span>
         <span class="logo-line-after"><i></i></span>
@@ -235,7 +235,7 @@
         
           
           <li class="menu-item menu-item-home">
-    <a href="/" rel="section">
+    <a href="/blog/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
   </li>
         
@@ -243,7 +243,7 @@
         
           
           <li class="menu-item menu-item-about">
-    <a href="/about/" rel="section">
+    <a href="/blog/about/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
   </li>
         
@@ -251,7 +251,7 @@
         
           
           <li class="menu-item menu-item-tags">
-    <a href="/tags/" rel="section">
+    <a href="/blog/tags/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
         
@@ -259,7 +259,7 @@
         
           
           <li class="menu-item menu-item-categories">
-    <a href="/categories/" rel="section">
+    <a href="/blog/categories/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
   </li>
         
@@ -267,7 +267,7 @@
         
           
           <li class="menu-item menu-item-archives">
-    <a href="/archives/" rel="section">
+    <a href="/blog/archives/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
   </li>
 
@@ -350,12 +350,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2018/01/26/Redis缓存穿透、并发、失效/">
+    <link itemprop="mainEntityOfPage" href="https://hhbbz.coding.me/blog/blog/2018/01/26/Redis缓存穿透、并发、失效/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="hhbbz">
       <meta itemprop="description" content="摘抄和记录的地方">
-      <meta itemprop="image" content="/images/TOM.jpg">
+      <meta itemprop="image" content="/blog/images/TOM.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -426,7 +426,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/blog/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
 
                 
                 
@@ -441,8 +441,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/01/26/Redis缓存穿透、并发、失效/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/01/26/Redis缓存穿透、并发、失效/" itemprop="commentCount"></span>
+                <a href="/blog/2018/01/26/Redis缓存穿透、并发、失效/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/blog/2018/01/26/Redis缓存穿透、并发、失效/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -480,9 +480,9 @@
       
         <h1>初次谈穿透、并发、失效</h1>
 <h2>缓存穿透</h2>
-<p><img src="/2018/01/26/Redis缓存穿透、并发、失效/1.png" title="图片"></p>
-<p><img src="/2018/01/26/Redis缓存穿透、并发、失效/2.png" title="图片"></p>
-<p><img src="/2018/01/26/Redis缓存穿透、并发、失效/3.png" title="图片"></p>
+<p><img src="/blog/2018/01/26/Redis缓存穿透、并发、失效/1.png" title="图片"></p>
+<p><img src="/blog/2018/01/26/Redis缓存穿透、并发、失效/2.png" title="图片"></p>
+<p><img src="/blog/2018/01/26/Redis缓存穿透、并发、失效/3.png" title="图片"></p>
 <p><strong>注：</strong></p>
 <h3>上面三个图会有什么问题呢？</h3>
 <p>我们在项目中使用缓存通常都是先检查缓存中是否存在，如果存在直接返回缓存内容，如果不存在就直接查询数据库然后再缓存查询结果返回。这个时候如果我们查询的某一个数据在缓存中一直不存在，就会造成每一次请求都查询DB，这样缓存就失去了意义，在流量大时，可能DB就挂掉了。</p>
@@ -517,13 +517,13 @@
 <p>如果缓存是因为网络问题没有更新成功数据，那么建议重试几次，如果依然没有更新成功则认为缓存系统出错不可用，这时候客户端会将数据的KEY插入到消息系统中，消息系统可以过滤相同的KEY，只需保证消息系统不存在相同的KEY，当缓存系统恢复可用的时候，依次从mq中取出KEY值然后从数据库中读取最新的数据更新缓存。</p>
 <p>**注意：**更新缓存之前，缓存中依然有旧数据，所以不会造成缓存穿透。</p>
 <h2>下图展示了整个思路的过程：</h2>
-<p><img src="/2018/01/26/Redis缓存穿透、并发、失效/4.png" title="图片"></p>
+<p><img src="/blog/2018/01/26/Redis缓存穿透、并发、失效/4.png" title="图片"></p>
 <p>看完上面的方案以后，又会有不少朋友提出疑问，如果我是第一次使用缓存或者缓存中暂时没有我需要的数据，那又该如何处理呢？</p>
 <h3>解决问题的思路：</h3>
 <p>在这种场景下，客户端从缓存中根据KEY读取数据，如果读到了数据则流程结束，如果没有读到数据（可能会有多个并发都没有读到数据），这时候使用缓存系统中的setNX方法设置一个值（这种方法类似加个锁），没有设置成功的请求则sleep一段时间，设置成功的请求读取数据库获取值，如果获取到则更新缓存，流程结束，之前sleep的请求这时候唤醒后直接再从缓存中读取数据，此时流程结束。</p>
 <p>在看完这个流程后，我想这里面会有一个漏洞，如果数据库中没有我们需要的数据该怎么处理，如果不处理则请求会造成死循环，不断的在缓存和数据库中查询，这时候我们会沿用我之前文章中的如果没有读到数据则往缓存中插入一个NULL字符串的思路，这样其他请求直接就可以根据“NULL”进行处理，直到后台系统在数据库成功插入数据后同步更新清理NULL数据和更新缓存。</p>
 <p>流程图如下所示：</p>
-<p><img src="/2018/01/26/Redis缓存穿透、并发、失效/5.png" title="图片"></p>
+<p><img src="/blog/2018/01/26/Redis缓存穿透、并发、失效/5.png" title="图片"></p>
 <h2>总结：</h2>
 <p>在实际工作中，我们往往将上面二个方案组合使用才能达到最佳效果，虽然第二种方案也会造成请求阻塞，但是只是在第一次使用或者缓存暂时没有数据的情况下才会产生，在生产中经过检验在TPS没有上万的情况下是不会造成问题的。</p>
 <h1>热点缓存解决方案</h1>
@@ -540,12 +540,12 @@
 <li>如果有一个用户频繁刷新读取项目，那么对数据库本身也会造成较大压力，当然我们也会有相关的保护机制来确实恶意攻击，可以从前端控制，也可以有采黑名单等机制，这里不在赘述。如果用缓存的话，我们又该如何控制同一用户繁重读取用户信息呢。</li>
 </ul>
 <p>请看下图：</p>
-<p><img src="/2018/01/26/Redis缓存穿透、并发、失效/6.png" title="图片"></p>
+<p><img src="/blog/2018/01/26/Redis缓存穿透、并发、失效/6.png" title="图片"></p>
 <p>我们会通过缓存系统做一个排序队列，比如1000个用户，系统会根据用户的访问时间更新用户信息的时间，越是最近访问的用户排名越排前，系统会定期过滤掉排名最后的200个用户，然后再从数据库中随机取出200个用户加入队列，这样请求每次到达的时候，会先从队列中获取用户信息，如果命中则根据userId，再从另一个缓存数据结构中读取用户信息，如果没有命中则说明该用户请求频率不高。</p>
 <h1>实现缓存最终一致性的二种方案</h1>
 <h2>重客户端</h2>
 <h3>写入缓存：</h3>
-<p><img src="/2018/01/26/Redis缓存穿透、并发、失效/7.png" title="图片"></p>
+<p><img src="/blog/2018/01/26/Redis缓存穿透、并发、失效/7.png" title="图片"></p>
 <ul>
 <li>应用同时更新数据库和缓存</li>
 <li>如果数据库更新成功，则开始更新缓存，否则如果数据库更新失败，则整个更新过程失败。</li>
@@ -556,10 +556,10 @@
 <p>**问题点：**如果更新Redis失败，同时在将数据发到MQ之前的时间，应用重启了，这时候MQ就没有需要更新的数据，如果Redis对所有数据没有设置过期时间，同时在读多写少的场景下，只能通过人工介入来更新缓存。</p>
 <h3>读缓存：</h3>
 <p>如何来解决这个问题？那么在写入Redis数据的时候，在数据中增加一个时间戳插入到Redis中。在从Redis中读取数据的时候，首先要判断一下当前时间有没有过期，如果没有则从缓存中读取，如果过期了则从数据库中读取最新数据覆盖当前Redis数据并更新时间戳。具体过程如下图所示：</p>
-<p><img src="/2018/01/26/Redis缓存穿透、并发、失效/8.png" title="图片"></p>
+<p><img src="/blog/2018/01/26/Redis缓存穿透、并发、失效/8.png" title="图片"></p>
 <h2>客户端数据库与缓存解耦</h2>
 <p>上述方案对于应用的研发人员来讲比较重，需要研发人员同时考虑数据库和Redis是否成功来做不同方案，如何让研发人员只关注数据库层面，而不用关心缓存层呢？请看下图：</p>
-<p><img src="/2018/01/26/Redis缓存穿透、并发、失效/9.png" title="图片"></p>
+<p><img src="/blog/2018/01/26/Redis缓存穿透、并发、失效/9.png" title="图片"></p>
 <ul>
 <li>应用直接写数据到数据库中。</li>
 <li>数据库更新binlog日志。</li>
@@ -592,7 +592,7 @@
 
     
       <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/images/wechat.png" alt="hhbbz 微信支付"/>
+        <img id="wechat_qr" src="/blog/images/wechat.png" alt="hhbbz 微信支付"/>
         <p>微信支付</p>
       </div>
     
@@ -613,7 +613,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Redis/" rel="tag"># Redis</a>
+            <a href="/blog/tags/Redis/" rel="tag"># Redis</a>
           
         </div>
       
@@ -626,7 +626,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/17/Redis分布式锁及优化/" rel="next" title="Redis分布式锁及优化">
+              <a href="/blog/2018/01/17/Redis分布式锁及优化/" rel="next" title="Redis分布式锁及优化">
                 <i class="fa fa-chevron-left"></i> Redis分布式锁及优化
               </a>
             
@@ -636,7 +636,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/03/14/消息队列简介及使用场景/" rel="prev" title="消息队列简介及使用场景">
+              <a href="/blog/2018/03/14/消息队列简介及使用场景/" rel="prev" title="消息队列简介及使用场景">
                 消息队列简介及使用场景 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -696,7 +696,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
-                src="/images/TOM.jpg"
+                src="/blog/images/TOM.jpg"
                 alt="hhbbz" />
             
               <p class="site-author-name" itemprop="name">hhbbz</p>
@@ -708,7 +708,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/blog/archives/">
                 
                     <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">日志</span>
@@ -720,7 +720,7 @@
                 
                 
                 <div class="site-state-item site-state-categories">
-                  <a href="/categories/index.html">
+                  <a href="/blog/categories/index.html">
                     
                     
                       
@@ -737,7 +737,7 @@
                 
                 
                 <div class="site-state-item site-state-tags">
-                  <a href="/tags/index.html">
+                  <a href="/blog/tags/index.html">
                     
                     
                       
@@ -931,49 +931,49 @@
 
   
   
-    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
   
 
   
   
-    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
   
   
-    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
-
-
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
-
 
 
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/blog/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.3.0"></script>
 
 
 
@@ -1041,7 +1041,7 @@
     } else if (/json$/i.test(search_path)) {
       isXml = false;
     }
-    var path = "/" + search_path;
+    var path = "/blog/" + search_path;
     // monitor main search box;
 
     var onPopupClose = function (e) {

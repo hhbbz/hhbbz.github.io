@@ -56,21 +56,21 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+<link href="/blog/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32*32.ico?v=6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.3.0">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16*16.ico?v=6.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32*32.ico?v=6.3.0">
 
 
-  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16*16.ico?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.3.0" color="#222">
 
 
 
@@ -83,7 +83,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '/',
+    root: '/blog/',
     scheme: 'Pisces',
     version: '6.3.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
@@ -109,26 +109,26 @@
 
 
   <meta name="description" content="简介 Elasticsearch 是一款稳定高效的分布式搜索和分析引擎，它的底层基于 Lucene，并提供了友好的 RESTful API 来对数据进行操作，还有比较重要的一点是， Elasticsearch 开箱即可用，上手也比较容易。 目前 Elasticsearch 在搭建企业级搜索（如日志搜索、商品搜索等）平台中很广泛，官网也提供了不少案例，比如： * GitHub 使用 Elastics">
-<meta name="keywords" content="Linux,Elasticsearch">
+<meta name="keywords" content="Elasticsearch,Linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Elasticsearch初体验">
-<meta property="og:url" content="https://hhbbz.github.io/2018/08/20/Elasticsearch初体验/index.html">
+<meta property="og:url" content="https://hhbbz.coding.me/blog/2018/08/20/Elasticsearch初体验/index.html">
 <meta property="og:site_name" content="hhbbz-Blog">
 <meta property="og:description" content="简介 Elasticsearch 是一款稳定高效的分布式搜索和分析引擎，它的底层基于 Lucene，并提供了友好的 RESTful API 来对数据进行操作，还有比较重要的一点是， Elasticsearch 开箱即可用，上手也比较容易。 目前 Elasticsearch 在搭建企业级搜索（如日志搜索、商品搜索等）平台中很广泛，官网也提供了不少案例，比如： * GitHub 使用 Elastics">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://hhbbz.github.io/2018/08/20/Elasticsearch初体验/1.png">
+<meta property="og:image" content="https://hhbbz.coding.me/blog/2018/08/20/Elasticsearch初体验/1.png">
 <meta property="og:updated_time" content="2018-08-20T12:17:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Elasticsearch初体验">
 <meta name="twitter:description" content="简介 Elasticsearch 是一款稳定高效的分布式搜索和分析引擎，它的底层基于 Lucene，并提供了友好的 RESTful API 来对数据进行操作，还有比较重要的一点是， Elasticsearch 开箱即可用，上手也比较容易。 目前 Elasticsearch 在搭建企业级搜索（如日志搜索、商品搜索等）平台中很广泛，官网也提供了不少案例，比如： * GitHub 使用 Elastics">
-<meta name="twitter:image" content="https://hhbbz.github.io/2018/08/20/Elasticsearch初体验/1.png">
+<meta name="twitter:image" content="https://hhbbz.coding.me/blog/2018/08/20/Elasticsearch初体验/1.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://hhbbz.github.io/2018/08/20/Elasticsearch初体验/"/>
+  <link rel="canonical" href="https://hhbbz.coding.me/blog/2018/08/20/Elasticsearch初体验/"/>
 
 
 
@@ -194,7 +194,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
+      <a href="/blog/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">hhbbz-Blog</span>
         <span class="logo-line-after"><i></i></span>
@@ -227,7 +227,7 @@
         
           
           <li class="menu-item menu-item-home">
-    <a href="/" rel="section">
+    <a href="/blog/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
   </li>
         
@@ -235,7 +235,7 @@
         
           
           <li class="menu-item menu-item-about">
-    <a href="/about/" rel="section">
+    <a href="/blog/about/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
   </li>
         
@@ -243,7 +243,7 @@
         
           
           <li class="menu-item menu-item-tags">
-    <a href="/tags/" rel="section">
+    <a href="/blog/tags/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
         
@@ -251,7 +251,7 @@
         
           
           <li class="menu-item menu-item-categories">
-    <a href="/categories/" rel="section">
+    <a href="/blog/categories/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
   </li>
         
@@ -259,7 +259,7 @@
         
           
           <li class="menu-item menu-item-archives">
-    <a href="/archives/" rel="section">
+    <a href="/blog/archives/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
   </li>
 
@@ -342,12 +342,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2018/08/20/Elasticsearch初体验/">
+    <link itemprop="mainEntityOfPage" href="https://hhbbz.coding.me/blog/blog/2018/08/20/Elasticsearch初体验/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="hhbbz">
       <meta itemprop="description" content="摘抄和记录的地方">
-      <meta itemprop="image" content="/images/TOM.jpg">
+      <meta itemprop="image" content="/blog/images/TOM.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -418,7 +418,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/blog/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
 
                 
                 
@@ -433,8 +433,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/08/20/Elasticsearch初体验/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/08/20/Elasticsearch初体验/" itemprop="commentCount"></span>
+                <a href="/blog/2018/08/20/Elasticsearch初体验/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/blog/2018/08/20/Elasticsearch初体验/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -560,7 +560,7 @@ Elasticsearch 启动后，也启动了两个端口 9200 和 9300：</p>
 <li>Document 有两个字段：name 和 actors</li>
 </ul>
 <p>我们使用 Elasticsearch 提供的 RESTful API 来执行上述操作，如图所示：</p>
-<p><img src="/2018/08/20/Elasticsearch初体验/1.png" title="图片"></p>
+<p><img src="/blog/2018/08/20/Elasticsearch初体验/1.png" title="图片"></p>
 <ul>
 <li>用 url 表示一个资源，比如 /movie/adventure/1 就表示一个 index 为 movie，type 为 adventure，id 为 1 的 document</li>
 <li>用 http 方法操作资源，如使用 GET 获取资源，使用 POST、PUT 新增或更新资源，使用 DELETE 删除资源等</li>
@@ -671,7 +671,7 @@ Elasticsearch 启动后，也启动了两个端口 9200 和 9300：</p>
 
     
       <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/images/wechat.png" alt="hhbbz 微信支付"/>
+        <img id="wechat_qr" src="/blog/images/wechat.png" alt="hhbbz 微信支付"/>
         <p>微信支付</p>
       </div>
     
@@ -692,9 +692,9 @@ Elasticsearch 启动后，也启动了两个端口 9200 和 9300：</p>
       
         <div class="post-tags">
           
-            <a href="/tags/Linux/" rel="tag"># Linux</a>
+            <a href="/blog/tags/Elasticsearch/" rel="tag"># Elasticsearch</a>
           
-            <a href="/tags/Elasticsearch/" rel="tag"># Elasticsearch</a>
+            <a href="/blog/tags/Linux/" rel="tag"># Linux</a>
           
         </div>
       
@@ -707,7 +707,7 @@ Elasticsearch 启动后，也启动了两个端口 9200 和 9300：</p>
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/12/ThreadLocal线程安全机制与坑/" rel="next" title="ThreadLocal线程安全机制与坑">
+              <a href="/blog/2018/08/12/ThreadLocal线程安全机制与坑/" rel="next" title="ThreadLocal线程安全机制与坑">
                 <i class="fa fa-chevron-left"></i> ThreadLocal线程安全机制与坑
               </a>
             
@@ -717,7 +717,7 @@ Elasticsearch 启动后，也启动了两个端口 9200 和 9300：</p>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/09/06/分布式事务的四种解决方案/" rel="prev" title="分布式事务的四种解决方案">
+              <a href="/blog/2018/09/06/分布式事务的四种解决方案/" rel="prev" title="分布式事务的四种解决方案">
                 分布式事务的四种解决方案 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -777,7 +777,7 @@ Elasticsearch 启动后，也启动了两个端口 9200 和 9300：</p>
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
-                src="/images/TOM.jpg"
+                src="/blog/images/TOM.jpg"
                 alt="hhbbz" />
             
               <p class="site-author-name" itemprop="name">hhbbz</p>
@@ -789,7 +789,7 @@ Elasticsearch 启动后，也启动了两个端口 9200 和 9300：</p>
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/blog/archives/">
                 
                     <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">日志</span>
@@ -801,7 +801,7 @@ Elasticsearch 启动后，也启动了两个端口 9200 和 9300：</p>
                 
                 
                 <div class="site-state-item site-state-categories">
-                  <a href="/categories/index.html">
+                  <a href="/blog/categories/index.html">
                     
                     
                       
@@ -818,7 +818,7 @@ Elasticsearch 启动后，也启动了两个端口 9200 和 9300：</p>
                 
                 
                 <div class="site-state-item site-state-tags">
-                  <a href="/tags/index.html">
+                  <a href="/blog/tags/index.html">
                     
                     
                       
@@ -1012,49 +1012,49 @@ Elasticsearch 启动后，也启动了两个端口 9200 和 9300：</p>
 
   
   
-    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
   
 
   
   
-    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
   
   
-    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
-
-
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
-
 
 
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/blog/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.3.0"></script>
 
 
 
@@ -1122,7 +1122,7 @@ Elasticsearch 启动后，也启动了两个端口 9200 和 9300：</p>
     } else if (/json$/i.test(search_path)) {
       isXml = false;
     }
-    var path = "/" + search_path;
+    var path = "/blog/" + search_path;
     // monitor main search box;
 
     var onPopupClose = function (e) {

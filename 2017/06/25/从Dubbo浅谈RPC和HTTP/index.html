@@ -56,21 +56,21 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+<link href="/blog/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32*32.ico?v=6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.3.0">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16*16.ico?v=6.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32*32.ico?v=6.3.0">
 
 
-  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16*16.ico?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.3.0" color="#222">
 
 
 
@@ -83,7 +83,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '/',
+    root: '/blog/',
     scheme: 'Pisces',
     version: '6.3.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
@@ -112,23 +112,23 @@
 <meta name="keywords" content="分布式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="从Dubbo浅谈RPC和HTTP">
-<meta property="og:url" content="https://hhbbz.github.io/2017/06/25/从Dubbo浅谈RPC和HTTP/index.html">
+<meta property="og:url" content="https://hhbbz.coding.me/blog/2017/06/25/从Dubbo浅谈RPC和HTTP/index.html">
 <meta property="og:site_name" content="hhbbz-Blog">
 <meta property="og:description" content="Dubbo协议 Dubbo是阿里集团开源的一个极为出名的RPC框架，在很多互联网公司和企业应用中广泛使用。协议和序列化框架都可以插拔是及其鲜明的特色。同样 的远程接口是基于Java Interface，并且依托于spring框架方便开发。可以方便的打包成单一文件，独立进程运行，和现在的微服务概念一致。 dubbo提供了多种协议，而协议本身不同有个几个指标  连接个数：1 or n 连接方式: 长连">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://hhbbz.github.io/2017/06/25/从Dubbo浅谈RPC和HTTP/1.jpg">
+<meta property="og:image" content="https://hhbbz.coding.me/blog/2017/06/25/从Dubbo浅谈RPC和HTTP/1.jpg">
 <meta property="og:updated_time" content="2017-06-27T03:21:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从Dubbo浅谈RPC和HTTP">
 <meta name="twitter:description" content="Dubbo协议 Dubbo是阿里集团开源的一个极为出名的RPC框架，在很多互联网公司和企业应用中广泛使用。协议和序列化框架都可以插拔是及其鲜明的特色。同样 的远程接口是基于Java Interface，并且依托于spring框架方便开发。可以方便的打包成单一文件，独立进程运行，和现在的微服务概念一致。 dubbo提供了多种协议，而协议本身不同有个几个指标  连接个数：1 or n 连接方式: 长连">
-<meta name="twitter:image" content="https://hhbbz.github.io/2017/06/25/从Dubbo浅谈RPC和HTTP/1.jpg">
+<meta name="twitter:image" content="https://hhbbz.coding.me/blog/2017/06/25/从Dubbo浅谈RPC和HTTP/1.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="https://hhbbz.github.io/2017/06/25/从Dubbo浅谈RPC和HTTP/"/>
+  <link rel="canonical" href="https://hhbbz.coding.me/blog/2017/06/25/从Dubbo浅谈RPC和HTTP/"/>
 
 
 
@@ -194,7 +194,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
+      <a href="/blog/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">hhbbz-Blog</span>
         <span class="logo-line-after"><i></i></span>
@@ -227,7 +227,7 @@
         
           
           <li class="menu-item menu-item-home">
-    <a href="/" rel="section">
+    <a href="/blog/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
   </li>
         
@@ -235,7 +235,7 @@
         
           
           <li class="menu-item menu-item-about">
-    <a href="/about/" rel="section">
+    <a href="/blog/about/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
   </li>
         
@@ -243,7 +243,7 @@
         
           
           <li class="menu-item menu-item-tags">
-    <a href="/tags/" rel="section">
+    <a href="/blog/tags/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
         
@@ -251,7 +251,7 @@
         
           
           <li class="menu-item menu-item-categories">
-    <a href="/categories/" rel="section">
+    <a href="/blog/categories/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
   </li>
         
@@ -259,7 +259,7 @@
         
           
           <li class="menu-item menu-item-archives">
-    <a href="/archives/" rel="section">
+    <a href="/blog/archives/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
   </li>
 
@@ -342,12 +342,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2017/06/25/从Dubbo浅谈RPC和HTTP/">
+    <link itemprop="mainEntityOfPage" href="https://hhbbz.coding.me/blog/blog/2017/06/25/从Dubbo浅谈RPC和HTTP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="hhbbz">
       <meta itemprop="description" content="摘抄和记录的地方">
-      <meta itemprop="image" content="/images/TOM.jpg">
+      <meta itemprop="image" content="/blog/images/TOM.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -418,7 +418,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/blog/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
 
                 
                 
@@ -433,8 +433,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/06/25/从Dubbo浅谈RPC和HTTP/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2017/06/25/从Dubbo浅谈RPC和HTTP/" itemprop="commentCount"></span>
+                <a href="/blog/2017/06/25/从Dubbo浅谈RPC和HTTP/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/blog/2017/06/25/从Dubbo浅谈RPC和HTTP/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -496,7 +496,7 @@
 <li>客户端存根，存放服务端的地址消息，再将客户端的请求参数打包成网络消息，然后通过网络远程发送给服务方。</li>
 <li>服务端存根，接收客户端发送过来的消息，将消息解包，并调用本地的方法。</li>
 </ul>
-<p><img src="/2017/06/25/从Dubbo浅谈RPC和HTTP/1.jpg" title="图片"></p>
+<p><img src="/blog/2017/06/25/从Dubbo浅谈RPC和HTTP/1.jpg" title="图片"></p>
 <p>RPC主要是用在大型企业里面，因为大型企业里面系统繁多，业务线复杂，而且效率优势非常重要的一块，这个时候RPC的优势就比较明显了。实际的开发当中是这么做的，项目一般使用maven来管理。比如我们有一个处理订单的系统服务，先声明它的所有的接口（这里就是具体指Java中的interface），然后将整个项目打包为一个jar包，服务端这边引入这个二方库，然后实现相应的功能，客户端这边也只需要引入这个二方库即可调用了。为什么这么做？主要是为了减少客户端这边的jar包大小，因为每一次打包发布的时候，jar包太多总是会影响效率。另外也是将客户端和服务端解耦，提高代码的可移植性。</p>
 <h1>HTTP服务</h1>
 <p>其实在很久以前，我对于企业开发的模式一直定性为HTTP接口开发，也就是我们常说的RESTful风格的服务接口。的确，对于在接口不多、系统与系统交互较少的情况下，解决信息孤岛初期常使用的一种通信手段；优点就是简单、直接、开发方便。利用现成的http协议进行传输。我们记得之前本科实习在公司做后台开发的时候，主要就是进行接口的开发，还要写一大份接口文档，严格地标明输入输出是什么？说清楚每一个接口的请求方法，以及请求参数需要注意的事项等。比如下面这个例子：</p>
@@ -538,7 +538,7 @@
 
     
       <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/images/wechat.png" alt="hhbbz 微信支付"/>
+        <img id="wechat_qr" src="/blog/images/wechat.png" alt="hhbbz 微信支付"/>
         <p>微信支付</p>
       </div>
     
@@ -559,7 +559,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/分布式/" rel="tag"># 分布式</a>
+            <a href="/blog/tags/分布式/" rel="tag"># 分布式</a>
           
         </div>
       
@@ -578,7 +578,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/07/03/springBoot-AOP的使用/" rel="prev" title="springBoot-AOP的使用">
+              <a href="/blog/2017/07/03/springBoot-AOP的使用/" rel="prev" title="springBoot-AOP的使用">
                 springBoot-AOP的使用 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -638,7 +638,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
-                src="/images/TOM.jpg"
+                src="/blog/images/TOM.jpg"
                 alt="hhbbz" />
             
               <p class="site-author-name" itemprop="name">hhbbz</p>
@@ -650,7 +650,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/blog/archives/">
                 
                     <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">日志</span>
@@ -662,7 +662,7 @@
                 
                 
                 <div class="site-state-item site-state-categories">
-                  <a href="/categories/index.html">
+                  <a href="/blog/categories/index.html">
                     
                     
                       
@@ -679,7 +679,7 @@
                 
                 
                 <div class="site-state-item site-state-tags">
-                  <a href="/tags/index.html">
+                  <a href="/blog/tags/index.html">
                     
                     
                       
@@ -873,49 +873,49 @@
 
   
   
-    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
   
 
   
   
-    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
   
   
-    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
-
-
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
-
 
 
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/blog/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.3.0"></script>
 
 
 
@@ -983,7 +983,7 @@
     } else if (/json$/i.test(search_path)) {
       isXml = false;
     }
-    var path = "/" + search_path;
+    var path = "/blog/" + search_path;
     // monitor main search box;
 
     var onPopupClose = function (e) {
