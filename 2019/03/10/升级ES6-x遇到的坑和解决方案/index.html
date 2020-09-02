@@ -56,21 +56,21 @@
 
 
 
-<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/blog/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.3.0">
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32*32.ico?v=6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16*16.ico?v=6.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32*32.ico?v=6.3.0">
 
 
-  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.3.0" color="#222">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16*16.ico?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
 
 
 
@@ -83,7 +83,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '/blog/',
+    root: '/',
     scheme: 'Pisces',
     version: '6.3.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
@@ -112,7 +112,7 @@
 <meta name="keywords" content="Java,Elasticsearch">
 <meta property="og:type" content="article">
 <meta property="og:title" content="升级ES6.x遇到的坑和解决方案">
-<meta property="og:url" content="https://gitee.com/hhbbz/blog/2019/03/10/升级ES6-x遇到的坑和解决方案/index.html">
+<meta property="og:url" content="https://hhbbz.github.io/2019/03/10/升级ES6-x遇到的坑和解决方案/index.html">
 <meta property="og:site_name" content="hhbbz-Blog">
 <meta property="og:description" content="问题描述 这星期公司要把es5.x升级到es6.x，因为是一个大版本的升级，所以坑肯定是不可避免的，详细的变更可以通过链接了解。ES各版本变更信息。 这里我主要讲对我有较大影响的两个地方：   ES官方建议通过Java Low Level REST Client来访问Elasticsearch，不建议通过TransportClient来访问。   ES6.x起，同个_index不再支持多个_typ">
 <meta property="og:locale" content="zh-CN">
@@ -126,7 +126,7 @@
 
 
 
-  <link rel="canonical" href="https://gitee.com/hhbbz/blog/2019/03/10/升级ES6-x遇到的坑和解决方案/"/>
+  <link rel="canonical" href="https://hhbbz.github.io/2019/03/10/升级ES6-x遇到的坑和解决方案/"/>
 
 
 
@@ -192,7 +192,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/blog/" class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">hhbbz-Blog</span>
         <span class="logo-line-after"><i></i></span>
@@ -225,7 +225,7 @@
         
           
           <li class="menu-item menu-item-home">
-    <a href="/blog/" rel="section">
+    <a href="/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
   </li>
         
@@ -233,7 +233,7 @@
         
           
           <li class="menu-item menu-item-about">
-    <a href="/blog/about/" rel="section">
+    <a href="/about/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
   </li>
         
@@ -241,7 +241,7 @@
         
           
           <li class="menu-item menu-item-tags">
-    <a href="/blog/tags/" rel="section">
+    <a href="/tags/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
         
@@ -249,7 +249,7 @@
         
           
           <li class="menu-item menu-item-categories">
-    <a href="/blog/categories/" rel="section">
+    <a href="/categories/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
   </li>
         
@@ -257,7 +257,7 @@
         
           
           <li class="menu-item menu-item-archives">
-    <a href="/blog/archives/" rel="section">
+    <a href="/archives/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
   </li>
 
@@ -340,12 +340,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://gitee.com/hhbbz/blog/blog/2019/03/10/升级ES6-x遇到的坑和解决方案/">
+    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2019/03/10/升级ES6-x遇到的坑和解决方案/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="hhbbz">
       <meta itemprop="description" content="摘抄和记录的地方">
-      <meta itemprop="image" content="/blog/images/TOM.jpg">
+      <meta itemprop="image" content="/images/TOM.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -416,7 +416,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/blog/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
 
                 
                 
@@ -431,8 +431,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/blog/2019/03/10/升级ES6-x遇到的坑和解决方案/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/blog/2019/03/10/升级ES6-x遇到的坑和解决方案/" itemprop="commentCount"></span>
+                <a href="/2019/03/10/升级ES6-x遇到的坑和解决方案/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/03/10/升级ES6-x遇到的坑和解决方案/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -552,7 +552,7 @@
 
     
       <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/blog/images/wechat.png" alt="hhbbz 微信支付"/>
+        <img id="wechat_qr" src="/images/wechat.png" alt="hhbbz 微信支付"/>
         <p>微信支付</p>
       </div>
     
@@ -573,9 +573,9 @@
       
         <div class="post-tags">
           
-            <a href="/blog/tags/Java/" rel="tag"># Java</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
           
-            <a href="/blog/tags/Elasticsearch/" rel="tag"># Elasticsearch</a>
+            <a href="/tags/Elasticsearch/" rel="tag"># Elasticsearch</a>
           
         </div>
       
@@ -588,7 +588,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2019/02/17/Disruptor初步使用/" rel="next" title="Disruptor初步使用">
+              <a href="/2019/02/17/Disruptor初步使用/" rel="next" title="Disruptor初步使用">
                 <i class="fa fa-chevron-left"></i> Disruptor初步使用
               </a>
             
@@ -598,7 +598,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blog/2019/03/31/jdbcTemplate高效率获取表结构，数据库元数据信息/" rel="prev" title="jdbcTemplate高效率获取表结构，数据库元数据信息">
+              <a href="/2019/03/31/jdbcTemplate高效率获取表结构，数据库元数据信息/" rel="prev" title="jdbcTemplate高效率获取表结构，数据库元数据信息">
                 jdbcTemplate高效率获取表结构，数据库元数据信息 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -658,7 +658,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
-                src="/blog/images/TOM.jpg"
+                src="/images/TOM.jpg"
                 alt="hhbbz" />
             
               <p class="site-author-name" itemprop="name">hhbbz</p>
@@ -670,7 +670,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/blog/archives/">
+                  <a href="/archives/">
                 
                     <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">日志</span>
@@ -682,7 +682,7 @@
                 
                 
                 <div class="site-state-item site-state-categories">
-                  <a href="/blog/categories/index.html">
+                  <a href="/categories/index.html">
                     
                     
                       
@@ -699,7 +699,7 @@
                 
                 
                 <div class="site-state-item site-state-tags">
-                  <a href="/blog/tags/index.html">
+                  <a href="/tags/index.html">
                     
                     
                       
@@ -893,49 +893,49 @@
 
   
   
-    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
   
 
   
   
-    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
   
   
-    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
-
-
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.3.0"></script>
-
-  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.3.0"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/affix.js?v=6.3.0"></script>
-
-  <script type="text/javascript" src="/blog/js/src/schemes/pisces.js?v=6.3.0"></script>
-
-
-
-  
-  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=6.3.0"></script>
-<script type="text/javascript" src="/blog/js/src/post-details.js?v=6.3.0"></script>
-
 
 
   
 
 
-  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.3.0"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
 
 
 
@@ -1003,7 +1003,7 @@
     } else if (/json$/i.test(search_path)) {
       isXml = false;
     }
-    var path = "/blog/" + search_path;
+    var path = "/" + search_path;
     // monitor main search box;
 
     var onPopupClose = function (e) {

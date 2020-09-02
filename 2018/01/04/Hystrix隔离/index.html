@@ -56,21 +56,21 @@
 
 
 
-<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/blog/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.3.0">
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32*32.ico?v=6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16*16.ico?v=6.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32*32.ico?v=6.3.0">
 
 
-  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.3.0" color="#222">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16*16.ico?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
 
 
 
@@ -83,7 +83,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '/blog/',
+    root: '/',
     scheme: 'Pisces',
     version: '6.3.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
@@ -112,26 +112,26 @@
 <meta name="keywords" content="Java,Hystrix">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hystrix隔离">
-<meta property="og:url" content="https://gitee.com/hhbbz/blog/2018/01/04/Hystrix隔离/index.html">
+<meta property="og:url" content="https://hhbbz.github.io/2018/01/04/Hystrix隔离/index.html">
 <meta property="og:site_name" content="hhbbz-Blog">
 <meta property="og:description" content="什么是Hystrix Hystrix是Netflix开源的一款容错框架，包含常用的容错方法：线程池隔离、信号量隔离、熔断、降级回退。在高并发访问下，系统所依赖的服务的稳定性对系统的影响非常大，依赖有很多不可控的因素，比如网络连接变慢，资源突然繁忙，暂时不可用，服务脱机等。我们要构建稳定、可靠的分布式系统，就必须要有这样一套容错方法。 本文将逐一分析线程池隔离、信号量隔离、熔断、降级回退这四种技术的">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://gitee.com/blog/2018/01/04/Hystrix隔离/1.jpg">
-<meta property="og:image" content="https://gitee.com/blog/2018/01/04/Hystrix隔离/2.jpg">
-<meta property="og:image" content="https://gitee.com/blog/2018/01/04/Hystrix隔离/3.jpg">
-<meta property="og:image" content="https://gitee.com/blog/2018/01/04/Hystrix隔离/4.jpg">
+<meta property="og:image" content="https://hhbbz.github.io/2018/01/04/Hystrix隔离/1.jpg">
+<meta property="og:image" content="https://hhbbz.github.io/2018/01/04/Hystrix隔离/2.jpg">
+<meta property="og:image" content="https://hhbbz.github.io/2018/01/04/Hystrix隔离/3.jpg">
+<meta property="og:image" content="https://hhbbz.github.io/2018/01/04/Hystrix隔离/4.jpg">
 <meta property="og:updated_time" content="2018-01-04T07:22:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hystrix隔离">
 <meta name="twitter:description" content="什么是Hystrix Hystrix是Netflix开源的一款容错框架，包含常用的容错方法：线程池隔离、信号量隔离、熔断、降级回退。在高并发访问下，系统所依赖的服务的稳定性对系统的影响非常大，依赖有很多不可控的因素，比如网络连接变慢，资源突然繁忙，暂时不可用，服务脱机等。我们要构建稳定、可靠的分布式系统，就必须要有这样一套容错方法。 本文将逐一分析线程池隔离、信号量隔离、熔断、降级回退这四种技术的">
-<meta name="twitter:image" content="https://gitee.com/blog/2018/01/04/Hystrix隔离/1.jpg">
+<meta name="twitter:image" content="https://hhbbz.github.io/2018/01/04/Hystrix隔离/1.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="https://gitee.com/hhbbz/blog/2018/01/04/Hystrix隔离/"/>
+  <link rel="canonical" href="https://hhbbz.github.io/2018/01/04/Hystrix隔离/"/>
 
 
 
@@ -197,7 +197,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/blog/" class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">hhbbz-Blog</span>
         <span class="logo-line-after"><i></i></span>
@@ -230,7 +230,7 @@
         
           
           <li class="menu-item menu-item-home">
-    <a href="/blog/" rel="section">
+    <a href="/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
   </li>
         
@@ -238,7 +238,7 @@
         
           
           <li class="menu-item menu-item-about">
-    <a href="/blog/about/" rel="section">
+    <a href="/about/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
   </li>
         
@@ -246,7 +246,7 @@
         
           
           <li class="menu-item menu-item-tags">
-    <a href="/blog/tags/" rel="section">
+    <a href="/tags/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
         
@@ -254,7 +254,7 @@
         
           
           <li class="menu-item menu-item-categories">
-    <a href="/blog/categories/" rel="section">
+    <a href="/categories/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
   </li>
         
@@ -262,7 +262,7 @@
         
           
           <li class="menu-item menu-item-archives">
-    <a href="/blog/archives/" rel="section">
+    <a href="/archives/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
   </li>
 
@@ -345,12 +345,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://gitee.com/hhbbz/blog/blog/2018/01/04/Hystrix隔离/">
+    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2018/01/04/Hystrix隔离/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="hhbbz">
       <meta itemprop="description" content="摘抄和记录的地方">
-      <meta itemprop="image" content="/blog/images/TOM.jpg">
+      <meta itemprop="image" content="/images/TOM.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -421,7 +421,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/blog/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
 
                 
                 
@@ -436,8 +436,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/blog/2018/01/04/Hystrix隔离/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/blog/2018/01/04/Hystrix隔离/" itemprop="commentCount"></span>
+                <a href="/2018/01/04/Hystrix隔离/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/01/04/Hystrix隔离/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -479,17 +479,17 @@
 <h2>线程隔离</h2>
 <h3>为什么要做线程隔离</h3>
 <p>比如我们现在有3个业务调用分别是查询订单、查询商品、查询用户，且这三个业务请求都是依赖第三方服务-订单服务、商品服务、用户服务。三个服务均是通过RPC调用。当查询订单服务，假如线程阻塞了，这个时候后续有大量的查询订单请求过来，那么容器中的线程数量则会持续增加直致CPU资源耗尽到100%，整个服务对外不可用，集群环境下就是雪崩。如下图</p>
-<p><img src="/blog/2018/01/04/Hystrix隔离/1.jpg" title="图片">
-<img src="/blog/2018/01/04/Hystrix隔离/2.jpg" title="图片"></p>
+<p><img src="/2018/01/04/Hystrix隔离/1.jpg" title="图片">
+<img src="/2018/01/04/Hystrix隔离/2.jpg" title="图片"></p>
 <h3>线程隔离-线程池</h3>
 <h4>Hystrix是如何通过线程池实现线程隔离的</h4>
 <p>Hystrix通过命令模式，将每个类型的业务请求封装成对应的命令请求，比如查询订单-&gt;订单Command，查询商品-&gt;商品Command，查询用户-&gt;用户Command。每个类型的Command对应一个线程池。创建好的线程池是被放入到ConcurrentHashMap中，比如查询订单：</p>
 <p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="keyword">static</span> ConcurrentHashMap&lt;String, HystrixThreadPool&gt; threadPools = <span class="keyword">new</span> ConcurrentHashMap&lt;String, HystrixThreadPool&gt;();</span><br><span class="line"></span><br><span class="line">threadPools.put(“hystrix-order”, <span class="keyword">new</span> HystrixThreadPoolDefault(threadPoolKey, propertiesBuilder));</span><br></pre></td></tr></table></figure></p>
 <p>当第二次查询订单请求过来的时候，则可以直接从Map中获取该线程池。具体流程如下图：</p>
-<p><img src="/blog/2018/01/04/Hystrix隔离/3.jpg" title="图片"></p>
+<p><img src="/2018/01/04/Hystrix隔离/3.jpg" title="图片"></p>
 <h4>线程隔离-线程池小结</h4>
 <p>执行依赖代码的线程与请求线程(比如Tomcat线程)分离，请求线程可以自由控制离开的时间，这也是我们通常说的异步编程，Hystrix是结合RxJava来实现的异步编程。通过设置线程池大小来控制并发访问量，当线程饱和的时候可以拒绝服务，防止依赖问题扩散。</p>
-<p><img src="/blog/2018/01/04/Hystrix隔离/4.jpg" title="图片"></p>
+<p><img src="/2018/01/04/Hystrix隔离/4.jpg" title="图片"></p>
 <h4>线程池隔离的优点</h4>
 <ol>
 <li>应用程序会被完全保护起来，即使依赖的一个服务的线程池满了，也不会影响到应用程序的其他部分。</li>
@@ -547,7 +547,7 @@
 
     
       <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/blog/images/wechat.png" alt="hhbbz 微信支付"/>
+        <img id="wechat_qr" src="/images/wechat.png" alt="hhbbz 微信支付"/>
         <p>微信支付</p>
       </div>
     
@@ -568,9 +568,9 @@
       
         <div class="post-tags">
           
-            <a href="/blog/tags/Java/" rel="tag"># Java</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
           
-            <a href="/blog/tags/Hystrix/" rel="tag"># Hystrix</a>
+            <a href="/tags/Hystrix/" rel="tag"># Hystrix</a>
           
         </div>
       
@@ -583,7 +583,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2017/12/06/gradle+jenkins+compose自动化集成持续交付/" rel="next" title="gradle+jenkins+compose自动化集成持续交付">
+              <a href="/2017/12/06/gradle+jenkins+compose自动化集成持续交付/" rel="next" title="gradle+jenkins+compose自动化集成持续交付">
                 <i class="fa fa-chevron-left"></i> gradle+jenkins+compose自动化集成持续交付
               </a>
             
@@ -593,7 +593,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blog/2018/01/17/Redis分布式锁及优化/" rel="prev" title="Redis分布式锁及优化">
+              <a href="/2018/01/17/Redis分布式锁及优化/" rel="prev" title="Redis分布式锁及优化">
                 Redis分布式锁及优化 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -653,7 +653,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
-                src="/blog/images/TOM.jpg"
+                src="/images/TOM.jpg"
                 alt="hhbbz" />
             
               <p class="site-author-name" itemprop="name">hhbbz</p>
@@ -665,7 +665,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/blog/archives/">
+                  <a href="/archives/">
                 
                     <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">日志</span>
@@ -677,7 +677,7 @@
                 
                 
                 <div class="site-state-item site-state-categories">
-                  <a href="/blog/categories/index.html">
+                  <a href="/categories/index.html">
                     
                     
                       
@@ -694,7 +694,7 @@
                 
                 
                 <div class="site-state-item site-state-tags">
-                  <a href="/blog/tags/index.html">
+                  <a href="/tags/index.html">
                     
                     
                       
@@ -888,49 +888,49 @@
 
   
   
-    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
   
 
   
   
-    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
   
   
-    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
-
-
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.3.0"></script>
-
-  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.3.0"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/affix.js?v=6.3.0"></script>
-
-  <script type="text/javascript" src="/blog/js/src/schemes/pisces.js?v=6.3.0"></script>
-
-
-
-  
-  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=6.3.0"></script>
-<script type="text/javascript" src="/blog/js/src/post-details.js?v=6.3.0"></script>
-
 
 
   
 
 
-  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.3.0"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
 
 
 
@@ -998,7 +998,7 @@
     } else if (/json$/i.test(search_path)) {
       isXml = false;
     }
-    var path = "/blog/" + search_path;
+    var path = "/" + search_path;
     // monitor main search box;
 
     var onPopupClose = function (e) {

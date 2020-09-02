@@ -56,21 +56,21 @@
 
 
 
-<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/blog/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.3.0">
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32*32.ico?v=6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16*16.ico?v=6.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32*32.ico?v=6.3.0">
 
 
-  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.3.0" color="#222">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16*16.ico?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
 
 
 
@@ -83,7 +83,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '/blog/',
+    root: '/',
     scheme: 'Pisces',
     version: '6.3.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
@@ -112,7 +112,7 @@
 <meta name="keywords" content="Java,Elasticsearch">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于ES字符串类型Text和keyword">
-<meta property="og:url" content="https://gitee.com/hhbbz/blog/2018/10/19/ES字符串类型Text和keyword/index.html">
+<meta property="og:url" content="https://hhbbz.github.io/2018/10/19/ES字符串类型Text和keyword/index.html">
 <meta property="og:site_name" content="hhbbz-Blog">
 <meta property="og:description" content="问题描述 今天在做es的聚合查询的时候，遇到了一个问题。 123456789101112131415161718192021222324252627282930&amp;#123;  &quot;error&quot;: &amp;#123;    &quot;root_cause&quot;: [      &amp;#123;        &quot;type&quot;: &quot;illegal_argument_exception&quot;,        &quot;reason&quot;: &quot;Fi">
 <meta property="og:locale" content="zh-CN">
@@ -126,7 +126,7 @@
 
 
 
-  <link rel="canonical" href="https://gitee.com/hhbbz/blog/2018/10/19/ES字符串类型Text和keyword/"/>
+  <link rel="canonical" href="https://hhbbz.github.io/2018/10/19/ES字符串类型Text和keyword/"/>
 
 
 
@@ -192,7 +192,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/blog/" class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">hhbbz-Blog</span>
         <span class="logo-line-after"><i></i></span>
@@ -225,7 +225,7 @@
         
           
           <li class="menu-item menu-item-home">
-    <a href="/blog/" rel="section">
+    <a href="/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
   </li>
         
@@ -233,7 +233,7 @@
         
           
           <li class="menu-item menu-item-about">
-    <a href="/blog/about/" rel="section">
+    <a href="/about/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
   </li>
         
@@ -241,7 +241,7 @@
         
           
           <li class="menu-item menu-item-tags">
-    <a href="/blog/tags/" rel="section">
+    <a href="/tags/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
         
@@ -249,7 +249,7 @@
         
           
           <li class="menu-item menu-item-categories">
-    <a href="/blog/categories/" rel="section">
+    <a href="/categories/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
   </li>
         
@@ -257,7 +257,7 @@
         
           
           <li class="menu-item menu-item-archives">
-    <a href="/blog/archives/" rel="section">
+    <a href="/archives/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
   </li>
 
@@ -340,12 +340,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://gitee.com/hhbbz/blog/blog/2018/10/19/ES字符串类型Text和keyword/">
+    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2018/10/19/ES字符串类型Text和keyword/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="hhbbz">
       <meta itemprop="description" content="摘抄和记录的地方">
-      <meta itemprop="image" content="/blog/images/TOM.jpg">
+      <meta itemprop="image" content="/images/TOM.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -416,7 +416,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/blog/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
 
                 
                 
@@ -431,8 +431,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/blog/2018/10/19/ES字符串类型Text和keyword/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/blog/2018/10/19/ES字符串类型Text和keyword/" itemprop="commentCount"></span>
+                <a href="/2018/10/19/ES字符串类型Text和keyword/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/10/19/ES字符串类型Text和keyword/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -528,7 +528,7 @@ ElasticSearch字符串将默认被同时映射成text和keyword类型，将会�
 
     
       <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/blog/images/wechat.png" alt="hhbbz 微信支付"/>
+        <img id="wechat_qr" src="/images/wechat.png" alt="hhbbz 微信支付"/>
         <p>微信支付</p>
       </div>
     
@@ -549,9 +549,9 @@ ElasticSearch字符串将默认被同时映射成text和keyword类型，将会�
       
         <div class="post-tags">
           
-            <a href="/blog/tags/Java/" rel="tag"># Java</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
           
-            <a href="/blog/tags/Elasticsearch/" rel="tag"># Elasticsearch</a>
+            <a href="/tags/Elasticsearch/" rel="tag"># Elasticsearch</a>
           
         </div>
       
@@ -564,7 +564,7 @@ ElasticSearch字符串将默认被同时映射成text和keyword类型，将会�
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2018/09/06/分布式事务的四种解决方案/" rel="next" title="分布式事务的四种解决方案">
+              <a href="/2018/09/06/分布式事务的四种解决方案/" rel="next" title="分布式事务的四种解决方案">
                 <i class="fa fa-chevron-left"></i> 分布式事务的四种解决方案
               </a>
             
@@ -574,7 +574,7 @@ ElasticSearch字符串将默认被同时映射成text和keyword类型，将会�
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blog/2018/11/04/ES5.x常用查询（javaAPI）/" rel="prev" title="ES5.x常用查询（javaAPI）">
+              <a href="/2018/11/04/ES5.x常用查询（javaAPI）/" rel="prev" title="ES5.x常用查询（javaAPI）">
                 ES5.x常用查询（javaAPI） <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -634,7 +634,7 @@ ElasticSearch字符串将默认被同时映射成text和keyword类型，将会�
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
-                src="/blog/images/TOM.jpg"
+                src="/images/TOM.jpg"
                 alt="hhbbz" />
             
               <p class="site-author-name" itemprop="name">hhbbz</p>
@@ -646,7 +646,7 @@ ElasticSearch字符串将默认被同时映射成text和keyword类型，将会�
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/blog/archives/">
+                  <a href="/archives/">
                 
                     <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">日志</span>
@@ -658,7 +658,7 @@ ElasticSearch字符串将默认被同时映射成text和keyword类型，将会�
                 
                 
                 <div class="site-state-item site-state-categories">
-                  <a href="/blog/categories/index.html">
+                  <a href="/categories/index.html">
                     
                     
                       
@@ -675,7 +675,7 @@ ElasticSearch字符串将默认被同时映射成text和keyword类型，将会�
                 
                 
                 <div class="site-state-item site-state-tags">
-                  <a href="/blog/tags/index.html">
+                  <a href="/tags/index.html">
                     
                     
                       
@@ -869,49 +869,49 @@ ElasticSearch字符串将默认被同时映射成text和keyword类型，将会�
 
   
   
-    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
   
 
   
   
-    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
   
   
-    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
-
-
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.3.0"></script>
-
-  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.3.0"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/affix.js?v=6.3.0"></script>
-
-  <script type="text/javascript" src="/blog/js/src/schemes/pisces.js?v=6.3.0"></script>
-
-
-
-  
-  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=6.3.0"></script>
-<script type="text/javascript" src="/blog/js/src/post-details.js?v=6.3.0"></script>
-
 
 
   
 
 
-  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.3.0"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
 
 
 
@@ -979,7 +979,7 @@ ElasticSearch字符串将默认被同时映射成text和keyword类型，将会�
     } else if (/json$/i.test(search_path)) {
       isXml = false;
     }
-    var path = "/blog/" + search_path;
+    var path = "/" + search_path;
     // monitor main search box;
 
     var onPopupClose = function (e) {
