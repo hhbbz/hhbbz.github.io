@@ -108,23 +108,30 @@
 
 
 
-  <meta name="description" content="摘抄和记录的地方">
-<meta property="og:type" content="website">
-<meta property="og:title" content="hhbbz-Blog">
-<meta property="og:url" content="https://hhbbz.github.io/categories/后端/page/4/index.html">
+  <meta name="description" content="简介 Zookeeper 和 Etcd 都是非常优秀的分布式协调系统，zookeeper 起源于 Hadoop 生态系统，起步比较早，而 etcd 算是后起之秀，它的流行是因为它是 kubernetes 的后台支撑。 Zookeeper 概述 zookeeper 起源于 Hadoop，后来进化为 Apache 的顶级项目。现在已经被广泛使用在 Apache 的项目中，例如 Hadoop，kafka">
+<meta name="keywords" content="Java,分布式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zookeeper和Etcd的对比">
+<meta property="og:url" content="https://hhbbz.github.io/2020/10/24/Zookeeper和Etcd的对比/index.html">
 <meta property="og:site_name" content="hhbbz-Blog">
-<meta property="og:description" content="摘抄和记录的地方">
+<meta property="og:description" content="简介 Zookeeper 和 Etcd 都是非常优秀的分布式协调系统，zookeeper 起源于 Hadoop 生态系统，起步比较早，而 etcd 算是后起之秀，它的流行是因为它是 kubernetes 的后台支撑。 Zookeeper 概述 zookeeper 起源于 Hadoop，后来进化为 Apache 的顶级项目。现在已经被广泛使用在 Apache 的项目中，例如 Hadoop，kafka">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://hhbbz.github.io/2020/10/24/Zookeeper和Etcd的对比/1.png">
+<meta property="og:image" content="https://hhbbz.github.io/2020/10/24/Zookeeper和Etcd的对比/2.png">
+<meta property="og:image" content="https://hhbbz.github.io/2020/10/24/Zookeeper和Etcd的对比/3.png">
+<meta property="og:image" content="https://hhbbz.github.io/2020/10/24/Zookeeper和Etcd的对比/4.png">
+<meta property="og:updated_time" content="2020-10-24T08:21:13.310Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hhbbz-Blog">
-<meta name="twitter:description" content="摘抄和记录的地方">
+<meta name="twitter:title" content="Zookeeper和Etcd的对比">
+<meta name="twitter:description" content="简介 Zookeeper 和 Etcd 都是非常优秀的分布式协调系统，zookeeper 起源于 Hadoop 生态系统，起步比较早，而 etcd 算是后起之秀，它的流行是因为它是 kubernetes 的后台支撑。 Zookeeper 概述 zookeeper 起源于 Hadoop，后来进化为 Apache 的顶级项目。现在已经被广泛使用在 Apache 的项目中，例如 Hadoop，kafka">
+<meta name="twitter:image" content="https://hhbbz.github.io/2020/10/24/Zookeeper和Etcd的对比/1.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://hhbbz.github.io/categories/后端/page/4/"/>
+  <link rel="canonical" href="https://hhbbz.github.io/2020/10/24/Zookeeper和Etcd的对比/"/>
 
 
 
@@ -134,7 +141,7 @@
   };
 </script>
 
-  <title>分类: 后端 | hhbbz-Blog</title>
+  <title>Zookeeper和Etcd的对比 | hhbbz-Blog</title>
   
 
 
@@ -181,7 +188,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -246,7 +253,7 @@
         
         
           
-          <li class="menu-item menu-item-categories menu-item-active">
+          <li class="menu-item menu-item-categories">
     <a href="/categories/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
   </li>
@@ -318,341 +325,345 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block category">
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h2>后端<small>分类</small>
-        </h2>
-      </div>
-
-      
-        
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hhbbz.github.io/2020/10/24/Zookeeper和Etcd的对比/">
 
-      <h3 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="hhbbz">
+      <meta itemprop="description" content="摘抄和记录的地方">
+      <meta itemprop="image" content="/images/TOM.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hhbbz-Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/01/26/Redis缓存穿透、并发、失效/" itemprop="url">
-              
-                <span itemprop="name">Redis缓存穿透、并发、失效</span>
-              
-            </a>
         
-      </h3>
+          <h2 class="post-title" itemprop="name headline">Zookeeper和Etcd的对比
+              
+            
+          </h2>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-26T21:08:18+08:00"
-              content="2018-01-26" >
-          01-26
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
 
-    </header>
-  </article>
+            
+            
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-10-24 16:02:52" itemprop="dateCreated datePublished" datetime="2020-10-24T16:02:52+08:00">2020-10-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-24 16:21:13" itemprop="dateModified" datetime="2020-10-24T16:21:13+08:00">16:21:13</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/10/24/Zookeeper和Etcd的对比/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2020/10/24/Zookeeper和Etcd的对比/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/17/Redis分布式锁及优化/" itemprop="url">
-              
-                <span itemprop="name">Redis分布式锁及优化</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-17T22:59:05+08:00"
-              content="2018-01-17" >
-          01-17
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/04/Hystrix隔离/" itemprop="url">
-              
-                <span itemprop="name">Hystrix隔离</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-04T10:11:54+08:00"
-              content="2018-01-04" >
-          01-04
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2017/12/06/gradle+jenkins+compose自动化集成持续交付/" itemprop="url">
-              
-                <span itemprop="name">gradle+jenkins+compose自动化集成持续交付</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-12-06T16:32:41+08:00"
-              content="2017-12-06" >
-          12-06
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2017/12/02/Mysql分库分表、主从复制简介/" itemprop="url">
-              
-                <span itemprop="name">Mysql分库分表、主从复制简介</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-12-02T19:58:05+08:00"
-              content="2017-12-02" >
-          12-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2017/11/29/Mysql死锁的产生和解决/" itemprop="url">
-              
-                <span itemprop="name">Mysql死锁的产生和解决</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-11-29T23:11:33+08:00"
-              content="2017-11-29" >
-          11-29
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2017/11/28/Mysql索引详解/" itemprop="url">
-              
-                <span itemprop="name">Mysql索引详解</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-11-28T21:29:08+08:00"
-              content="2017-11-28" >
-          11-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2017/11/27/锁与事务的问答对话/" itemprop="url">
-              
-                <span itemprop="name">锁与事务的问答对话</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-11-27T14:54:02+08:00"
-              content="2017-11-27" >
-          11-27
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2017/11/25/Mysql索引注意事项以及关键字优化/" itemprop="url">
-              
-                <span itemprop="name">Mysql索引注意事项以及关键字优化</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-11-25T18:08:46+08:00"
-              content="2017-11-25" >
-          11-25
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2017/11/07/gradle-distDocker插件构建SpringBoot的Docker镜像/" itemprop="url">
-              
-                <span itemprop="name">gradle-distDocker插件构建SpringBoot的Docker镜像</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-11-07T18:11:24+08:00"
-              content="2017-11-07" >
-          11-07
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+        <h1>简介</h1>
+<p>Zookeeper 和 Etcd 都是非常优秀的分布式协调系统，zookeeper 起源于 Hadoop 生态系统，起步比较早，而 etcd 算是后起之秀，它的流行是因为它是 kubernetes 的后台支撑。</p>
+<h1>Zookeeper</h1>
+<h2>概述</h2>
+<p>zookeeper 起源于 Hadoop，后来进化为 Apache 的顶级项目。现在已经被广泛使用在 Apache 的项目中，例如 Hadoop，kafka，solr 等等。</p>
+<p><img src="/2020/10/24/Zookeeper和Etcd的对比/1.png" title="图片"></p>
+<p>zookeeper 使用 ZAB 协议作为其一致性协议。 zookeeper 通过团队的形式工作，一组 node 一起工作，来提供分布式能力，这组 node 的数量需要是奇数。</p>
+<p>第一个节点与其他节点沟通，选举出一个 leader，获取多数票数的成为 leader，这就是为什么需要奇数个 node，其他节点被称为follower。</p>
+<p>client 连接 zookeeper 时可以连接任何一个，client 的读请求可以被任何一个节点处理，写请求只能被 leader 处理。所以，添加新节点可以提高读的速度，但不会提高写的速度。</p>
+<p>对于 CAP 模型，zookeeper 保障的是 CP。</p>
+<h2>ZNode</h2>
+<p><img src="/2020/10/24/Zookeeper和Etcd的对比/2.png" title="图片"></p>
+<p>存储数据时，zookeeper 使用树形结构，其中的每个节点称作 ZNode，访问一个 ZNode 时，需要提供从 root 开始的绝对路径。</p>
+<p>每个 ZNode 可以存储最多 1MB 的数据，用户可以：</p>
+<ul>
+<li>创建 ZNode</li>
+<li>删除 ZNode</li>
+<li>存储数据到指定 ZNode</li>
+<li>从 ZNode 中读取数据</li>
+</ul>
+<p>zookeeper 还提供了一个非常重要的特性：watcher API。</p>
+<h3>zookeeper watches</h3>
+<p>用户可以对一个 ZNode 设置 watch，当这个 ZNode 发生了变化时，例如 创建、删除、数据变更、添加或移除子节点，watch API 就会发出通知，这是 zookeeper 非常重要的功能。</p>
+<p>zookeeper 的 watch 有一个缺点，就是这个 watch 只能被触发一次，一旦发出了通知，如果还想对这个节点继续 watch，用户需要重新设置 watch。</p>
+<h2>优点</h2>
+<ul>
+<li>非阻塞全部快照（达成最终一致）</li>
+<li>高效的内存管理</li>
+<li>高可靠</li>
+<li>API 简单</li>
+<li>连接管理可以自动重试</li>
+<li>ZooKeeper recipes 的实现是经过完整良好的测试的。</li>
+<li>有一套框架使得写新的 ZooKeeper recipes 非常简单。</li>
+<li>支持监听事件</li>
+<li>发生网络分区时，各个区都会开始选举 leader，那么节点数少的那个分区将会停止运行</li>
+</ul>
+<h2>缺点</h2>
+<ul>
+<li>zookeeper 是 java 写的，那么自然就会继承 java 的缺点，例如 GC 暂停。</li>
+<li>如果开启了快照，数据会写入磁盘，此时 zookeeper 的读写操作会有一个暂时的停顿。</li>
+<li>对于每个 watch 请求，zookeeper 都会打开一个新的 socket 连接，这样 zookeeper 就需要实时管理很多 socket 连接，比较复杂。</li>
+</ul>
+<h1>Etcd</h1>
+<p><img src="/2020/10/24/Zookeeper和Etcd的对比/3.png" title="图片"></p>
+<h2>概述</h2>
+<p>etcd 是用 go 开发的，出现的时间并不长，不像 zookeeper 那么悠久和有名，但是前景非常好。</p>
+<p>etcd 是因为 kubernetes 而被人熟知的，kubernetes 的 kube master 使用 etcd 作为分布式存储获取分布式锁，这为 etcd 的强大做了背书。</p>
+<p><img src="/2020/10/24/Zookeeper和Etcd的对比/4.png" title="图片"></p>
+<p>etcd 使用 RAFT 算法实现的一致性，比 zookeeper 的 ZAB 算法更简单。</p>
+<p>etcd 没有使用 zookeeper 的树形结构，而是提供了一个分布式的 key-value 存储。</p>
+<p>特性：</p>
+<ul>
+<li>原子性</li>
+<li>一致性</li>
+<li>顺序一致性</li>
+<li>可串行化级别</li>
+<li>高可用</li>
+<li>可线性化</li>
+</ul>
+<h2>API</h2>
+<p>etcd3 提供了如下操作接口：</p>
+<ul>
+<li>put - 添加一个新的 key-value 到存储中</li>
+<li>get - 获取一个 key 的 value</li>
+<li>range - 获取一个范围的 key 的 value，例如：key1 - key10</li>
+<li>transaction - 读、对比、修改、写的组合</li>
+<li>watch - 监控一个或一个范围的 key，发生变化后就会得到通知</li>
+</ul>
+<h2>优点</h2>
+<p></p>
+<ul>
+<li>支持增量快照，避免了 zookeeper 的快照暂停问题</li>
+<li>堆外存储，没有垃圾回收暂停问题</li>
+<li>无需像 zookeeper 那样为每个 watch 都做个 socket 连接，可以复用</li>
+<li>zookeeper 每个 watch 只能收到一次事件通知，etcd 可以持续监控，在一次 watch 触发之后无需再次设置一次 watch</li>
+<li>zookeeper 会丢弃事件，etcd3 持有一个事件窗口，在 client 断开连接后不会丢失所有事件</li>
+</ul>
+<h2>缺点</h2>
+<ul>
+<li>如果超时，或者 client 与 etcd 网络中断，client 不会明确的知道当前操作的状态</li>
+<li>在 leader 选举时，etcd 会放弃操作，并且不会给 client 发送放弃响应</li>
+<li>在网络分区时，当 leader 处于小分区时，读请求会继续被处理</li>
+</ul>
+<h1>总结</h1>
+<p>zookeeper 是用 java 开发的，被 Apache 很多项目采用。</p>
+<p>etcd 是用 go 开发的，主要是被 Kubernetes 采用。</p>
+<p>zookeeper 非常稳定，是一个著名的分布式协调系统，etcd 是后起之秀，前景广阔。</p>
+<p>因为 etcd 是用 go 写的，现在还没有很好的 java 客户端库，需要通过 http 方式调用。</p>
+<p>而 zookeeper 在这方面就成熟很多，对于 java 之外的其他开发语言都有很好的客户端库。</p>
+<p>具体选择 zookeeper 还是 etcd，需要根据您的需求结合它们各自的特性进行判断，还有您所使用的开发语言。</p>
+<p>翻译整理自：
+摘抄于 <a href="https://medium.com/@Imesha94/apache-curator-vs-etcd3-9c1362600b26" target="_blank" rel="noopener">Medium</a></p>
 
       
     </div>
 
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechat.png" alt="hhbbz 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/分布式/" rel="tag"># 分布式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/18/一次-SQL-查询优化原理分析（900W-数据，从-17s-到-300ms/" rel="next" title="一次 SQL 查询优化原理分析（900W+ 数据，从 17s 到 300ms">
+                <i class="fa fa-chevron-left"></i> 一次 SQL 查询优化原理分析（900W+ 数据，从 17s 到 300ms
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/categories/后端/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/categories/后端/">1</a><span class="space">&hellip;</span><a class="page-number" href="/categories/后端/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/categories/后端/page/5/">5</a><a class="extend next" rel="next" href="/categories/后端/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
+  </article>
 
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -948,6 +959,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
 
   
 

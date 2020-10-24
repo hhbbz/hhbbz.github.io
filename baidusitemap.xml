@@ -4,6 +4,28 @@
 
     
   <url>
+    <loc>https://hhbbz.github.io/2020/10/24/Zookeeper%E5%92%8CEtcd%E7%9A%84%E5%AF%B9%E6%AF%94/</loc>
+    <lastmod>2020-10-24T08:21:13.310Z</lastmod>
+    <data>
+        <display>
+        <title>Zookeeper和Etcd的对比</title>
+        <pubTime>2020-10-24T08:02:52.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+        <tag>分布式</tag>
+         
+         
+           
+             
+              <breadCrumb title="后端" url="https://hhbbz.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://hhbbz.github.io/2020/03/21/ignite%E8%B8%A9%E5%9D%91%E5%BD%95-4-%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/</loc>
     <lastmod>2020-04-22T01:56:30.278Z</lastmod>
     <data>
@@ -388,9 +410,9 @@
         <title>分布式事务的四种解决方案</title>
         <pubTime>2018-09-06T10:50:40.000Z</pubTime>
         
-        <tag>分布式</tag>
-         
         <tag>MQ</tag>
+         
+        <tag>分布式</tag>
          
          
            
@@ -597,9 +619,9 @@
         
         <tag>Java</tag>
          
-        <tag>分布式</tag>
-         
         <tag>MQ</tag>
+         
+        <tag>分布式</tag>
          
         <tag>Spring</tag>
          
@@ -621,9 +643,9 @@
         <title>十分钟入门RocketMQ</title>
         <pubTime>2018-03-20T02:23:54.000Z</pubTime>
         
-        <tag>分布式</tag>
-         
         <tag>MQ</tag>
+         
+        <tag>分布式</tag>
          
          
            
